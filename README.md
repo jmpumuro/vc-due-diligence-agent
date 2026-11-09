@@ -34,24 +34,6 @@ Self-hosted Compose stack: partners use the Research UI; agents run on Temporal;
   <img src="docs/media/architecture-flow.jpg" alt="Thesis architecture — partners, Temporal screening spine, L1–L3 levels, data plane, and partner decision loop" width="920" />
 </p>
 
-```mermaid
-flowchart LR
-  UI[Research app] --> API[FastAPI]
-  CON[Agent console] --> API
-  API --> T[Temporal screening]
-  T --> P[Plan]
-  P --> R[Research]
-  R --> V[Validate]
-  V --> E[Evaluate]
-  E --> C[Critic]
-  C --> M[Memo]
-  M --> A[Awaiting review]
-  R -.-> SX[SearXNG]
-  R -.-> SF[SafeFetch]
-  A --> D[Partner decision]
-  D --> API
-```
-
 **Flow:** partner starts diligence → API enqueues Temporal screening → worker discovers/fetches public sources → writes claims & memo → partner decides on that revision (private docs stay ClamAV/OCR-gated).
 
 ## Quick start
