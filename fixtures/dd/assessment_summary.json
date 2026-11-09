@@ -1,0 +1,292 @@
+{
+  "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+  "company": {
+    "company_id": "d43d2887-a216-55fd-985f-bc12e5ce26b2",
+    "canonical_name": "Lattice Grid",
+    "primary_domain": "latticegrid.io",
+    "aliases": [
+      {
+        "value": "Lattice Grid GmbH",
+        "kind": "name",
+        "source": "commercial register",
+        "confidence": "0.99"
+      }
+    ]
+  },
+  "revision": 4,
+  "level": 3,
+  "state": "AWAITING_REVIEW",
+  "stage": null,
+  "status_copy_key": "awaiting_review",
+  "recommendation": "advance",
+  "conditions": [
+    "Resolve the ARR difference between the deck and the KPI workbook",
+    "Obtain a signed IP assignment from the CTO covering pre-incorporation work",
+    "Reference calls with both confirmed utilities to test concentration risk"
+  ],
+  "headline": "Strong fit with your climate thesis and a proven team. Resolve the ARR difference, the CTO IP assignment and customer concentration before a term sheet.",
+  "measures": {
+    "source_reliability": {
+      "label": "good",
+      "independent_share": "0.62",
+      "company_only_share": "0.38"
+    },
+    "claim_confidence": {
+      "label": "medium",
+      "verified": 31,
+      "source_supported": 18,
+      "inference": 4
+    },
+    "evidence_coverage": {
+      "domains_sufficient": 6,
+      "domains_partial": 5,
+      "domains_insufficient": 1,
+      "domains_not_run": 0
+    },
+    "attractiveness": {
+      "score": "3.8",
+      "range": [
+        "3.2",
+        "4.4"
+      ],
+      "advance_threshold": "3.5"
+    }
+  },
+  "domains": [
+    {
+      "domain_id": "company",
+      "status": "complete",
+      "gate_result": "sufficient",
+      "reason": "Registry record and incorporation documents agree",
+      "sources_found": 6,
+      "sources_required": 4,
+      "findings": 7,
+      "contradictions": 0,
+      "risks": 0,
+      "requests": 0,
+      "can_retry": false
+    },
+    {
+      "domain_id": "team",
+      "status": "complete",
+      "gate_result": "sufficient",
+      "reason": "Each founder confirmed by an independent source",
+      "sources_found": 8,
+      "sources_required": 6,
+      "findings": 7,
+      "contradictions": 0,
+      "risks": 0,
+      "requests": 0,
+      "can_retry": false
+    },
+    {
+      "domain_id": "market",
+      "status": "complete",
+      "gate_result": "partial",
+      "reason": "Only one independent market estimate",
+      "sources_found": 3,
+      "sources_required": 4,
+      "findings": 5,
+      "contradictions": 0,
+      "risks": 0,
+      "requests": 0,
+      "can_retry": false
+    },
+    {
+      "domain_id": "competition",
+      "status": "complete",
+      "gate_result": "sufficient",
+      "reason": "Five competitors, pricing checked",
+      "sources_found": 6,
+      "sources_required": 5,
+      "findings": 6,
+      "contradictions": 0,
+      "risks": 1,
+      "requests": 0,
+      "can_retry": false
+    },
+    {
+      "domain_id": "product",
+      "status": "complete",
+      "gate_result": "partial",
+      "reason": "Forecast-accuracy claim could not be verified",
+      "sources_found": 5,
+      "sources_required": 6,
+      "findings": 7,
+      "contradictions": 0,
+      "risks": 0,
+      "requests": 0,
+      "can_retry": false
+    },
+    {
+      "domain_id": "traction",
+      "status": "complete",
+      "gate_result": "partial",
+      "reason": "2 of 3 customers confirmed by the customer",
+      "sources_found": 5,
+      "sources_required": 6,
+      "findings": 8,
+      "contradictions": 1,
+      "risks": 1,
+      "requests": 0,
+      "can_retry": false
+    },
+    {
+      "domain_id": "financials",
+      "status": "partial",
+      "gate_result": "partial",
+      "reason": "validation_pending: 1 table waiting for validation (does not block the report)",
+      "sources_found": 9,
+      "sources_required": 12,
+      "findings": 9,
+      "contradictions": 1,
+      "risks": 2,
+      "requests": 1,
+      "can_retry": false
+    },
+    {
+      "domain_id": "capitalization",
+      "status": "complete",
+      "gate_result": "sufficient",
+      "reason": "Cap table reconciles to registry",
+      "sources_found": 5,
+      "sources_required": 4,
+      "findings": 5,
+      "contradictions": 1,
+      "risks": 0,
+      "requests": 0,
+      "can_retry": false
+    },
+    {
+      "domain_id": "legal",
+      "status": "complete",
+      "gate_result": "partial",
+      "reason": "IP assignment missing for CTO",
+      "sources_found": 7,
+      "sources_required": 9,
+      "findings": 7,
+      "contradictions": 0,
+      "risks": 1,
+      "requests": 1,
+      "can_retry": false
+    },
+    {
+      "domain_id": "security",
+      "status": "failed",
+      "gate_result": "insufficient",
+      "reason": "search_unavailable: web search was unavailable during the run",
+      "sources_found": 2,
+      "sources_required": 7,
+      "findings": 2,
+      "contradictions": 0,
+      "risks": 0,
+      "requests": 1,
+      "can_retry": true
+    },
+    {
+      "domain_id": "governance",
+      "status": "complete",
+      "gate_result": "sufficient",
+      "reason": "Board minutes for 4 quarters",
+      "sources_found": 4,
+      "sources_required": 4,
+      "findings": 4,
+      "contradictions": 0,
+      "risks": 0,
+      "requests": 0,
+      "can_retry": false
+    },
+    {
+      "domain_id": "thesis_fit",
+      "status": "complete",
+      "gate_result": "sufficient",
+      "reason": "Every required criterion answered",
+      "sources_found": 9,
+      "sources_required": 6,
+      "findings": 9,
+      "contradictions": 0,
+      "risks": 0,
+      "requests": 0,
+      "can_retry": false
+    }
+  ],
+  "finding_counts": {
+    "verified_fact": 31,
+    "source_supported": 18,
+    "derived_calculation": 9,
+    "inference": 4,
+    "contradictory": 3,
+    "missing": 6,
+    "unresolved_risk": 5
+  },
+  "open_risks": 4,
+  "open_requests": 4,
+  "advance_threshold": "3.5",
+  "thesis_fit": "strong",
+  "scorecard": [
+    {
+      "criterion_id": "team",
+      "score": 4,
+      "weight": "0.25",
+      "facts_count": 7,
+      "evidence_strength": "strong",
+      "rationale": "Deep grid-operations experience; prior forecasting product.",
+      "revised_after_critique": false,
+      "finding_ids": [
+        "da2d216d-5532-5057-9c68-ad7b38eca6fd"
+      ]
+    },
+    {
+      "criterion_id": "market",
+      "score": 4,
+      "weight": "0.20",
+      "facts_count": 4,
+      "evidence_strength": "good",
+      "rationale": "Regulation pushes ~900 operators toward forecasting.",
+      "revised_after_critique": false,
+      "finding_ids": [
+        "78e4933c-b160-5095-a6dd-b05b786904f4"
+      ]
+    },
+    {
+      "criterion_id": "product",
+      "score": 4,
+      "weight": "0.20",
+      "facts_count": 6,
+      "evidence_strength": "mixed",
+      "rationale": "Live at two utilities; accuracy claim unverified.",
+      "revised_after_critique": false,
+      "finding_ids": [
+        "0bfaf32b-d263-548e-98c1-ba4c3673ed6c"
+      ]
+    },
+    {
+      "criterion_id": "traction",
+      "score": 2,
+      "weight": "0.20",
+      "facts_count": 8,
+      "evidence_strength": "weak",
+      "rationale": "Concentrated revenue; deck ARR not reconciled.",
+      "revised_after_critique": true,
+      "finding_ids": [
+        "bcd8afa6-5242-59c7-9895-d01e2c9c89c7",
+        "8a3e334a-de04-5ee4-af38-06b81a0e4f17"
+      ]
+    },
+    {
+      "criterion_id": "thesis_fit",
+      "score": 5,
+      "weight": "0.15",
+      "facts_count": 9,
+      "evidence_strength": "strong",
+      "rationale": "Climate B2B, Europe, seed, regulated buyers.",
+      "revised_after_critique": false,
+      "finding_ids": [
+        "31671a27-7c4a-5fdd-80db-c343a94cb568"
+      ]
+    }
+  ],
+  "progress": null,
+  "can_decide": true,
+  "report_version_id": "ec8b03bf-dc0c-5292-b38b-aea1a2a092ef"
+}

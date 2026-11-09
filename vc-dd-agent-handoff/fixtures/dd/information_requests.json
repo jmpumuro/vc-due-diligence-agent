@@ -1,0 +1,46 @@
+[
+  {
+    "request_id": "0928509c-aac3-5662-8fea-48c4ed28d0b4",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "domain_id": "financials",
+    "requested_item": "Sales and marketing spend by month, last 12 months",
+    "reason": "Needed for CAC and payback",
+    "blocking": false,
+    "status": "sent",
+    "linked_document_ids": [],
+    "created_by": "system"
+  },
+  {
+    "request_id": "29a712b1-130d-540e-9f4e-27cc21899875",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "domain_id": "legal",
+    "requested_item": "Signed IP assignment from the CTO covering pre-incorporation work",
+    "reason": "Legal checklist IP-03",
+    "blocking": true,
+    "status": "draft",
+    "linked_document_ids": [],
+    "created_by": "system"
+  },
+  {
+    "request_id": "58f324ed-8a09-5dbd-892d-c12d61ef6e03",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "domain_id": "financials",
+    "requested_item": "Which ARR definition the deck uses, with the calculation",
+    "reason": "Contradiction: deck vs KPI workbook",
+    "blocking": true,
+    "status": "sent",
+    "linked_document_ids": [],
+    "created_by": "user"
+  },
+  {
+    "request_id": "3b8ac631-57cd-5a40-a0c2-4bd098a03da4",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "domain_id": "security",
+    "requested_item": "Latest penetration test summary",
+    "reason": "Security checklist SEC-07",
+    "blocking": false,
+    "status": "draft",
+    "linked_document_ids": [],
+    "created_by": "system"
+  }
+]

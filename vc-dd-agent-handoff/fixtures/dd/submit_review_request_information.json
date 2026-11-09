@@ -1,0 +1,17 @@
+{
+  "target": {
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "assessment_revision": 4,
+    "evidence_snapshot_id": "15ca666d-85e7-5f9b-884c-76879237bdf5",
+    "evaluation_id": "888b6b09-df61-5c8e-b2a1-3831cad908d1",
+    "memo_version_id": "ec8b03bf-dc0c-5292-b38b-aea1a2a092ef",
+    "review_policy_version": "single-reviewer@1"
+  },
+  "decision": "request_information",
+  "comment": "Need the IP assignment and the ARR definition before IC.",
+  "requested_items": [
+    "Signed IP assignment from the CTO covering pre-incorporation work",
+    "Which ARR definition the deck uses, with the calculation"
+  ],
+  "idempotency_key": "ik_e039e171"
+}

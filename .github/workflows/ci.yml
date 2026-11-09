@@ -1,0 +1,30 @@
+name: ci
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+        with:
+          version: "0.6.14"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Sync and test
+        run: |
+          uv sync --all-packages
+          uv run pytest -q
+          uv run python scripts/run_research_eval.py
+      - name: Licence gate
+        run: |
+          test -f LICENSE
+          test -f NOTICE
+          test -f CONTRIBUTING.md
+          test -f SECURITY.md
+          uv run python scripts/licence_gate.py

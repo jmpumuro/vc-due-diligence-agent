@@ -1,0 +1,15 @@
+PASSED test_d4.py::test_native_pdf_uses_native_text_only
+PASSED test_d4.py::test_scanned_pdf_falls_back_to_ocr_with_provenance
+PASSED test_d4.py::test_mixed_pdf_ocr_only_where_needed
+PASSED test_d4.py::test_image_dominated_page_is_ocred
+PASSED test_d4.py::test_image_coverage_rule_triggers_ocr_despite_some_native_text
+PASSED test_d4.py::test_garbled_text_layer_triggers_ocr
+PASSED test_d4.py::test_garbled_text_layer_rule_alone
+PASSED test_d4.py::test_noisy_scan_reports_confidence
+PASSED test_d4.py::test_page_limit_skips_and_warns
+PASSED test_d4.py::test_malformed_pdf_fails_closed
+PASSED test_d4.py::test_encrypted_pdf_rejected
+PASSED test_d4.py::test_fixtures_are_deterministic
+12 passed in 7.32s
+2026-11-07T23:40:12Z
+tesseract 5.3.4

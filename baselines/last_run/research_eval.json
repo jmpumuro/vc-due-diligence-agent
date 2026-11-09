@@ -1,0 +1,93 @@
+{
+  "harness_version": "research-eval@1.0.0",
+  "dataset_id": "d6-false-claims",
+  "dataset_version": "d6-false-claims@1.0.0",
+  "mode": "fixture",
+  "started_at": "2026-11-08T05:16:21.502813+00:00",
+  "finished_at": "2026-11-08T05:16:21.504779+00:00",
+  "metrics": [
+    {
+      "name": "identity_resolution_ok",
+      "value": 1.0,
+      "numerator": 1,
+      "denominator": 1,
+      "undefined_reason": null
+    },
+    {
+      "name": "contradiction_recall",
+      "value": 1.0,
+      "numerator": 5,
+      "denominator": 5,
+      "undefined_reason": null
+    },
+    {
+      "name": "unsupported_claim_recall",
+      "value": 1.0,
+      "numerator": 2,
+      "denominator": 2,
+      "undefined_reason": null
+    },
+    {
+      "name": "citation_presence",
+      "value": 1.0,
+      "numerator": 5,
+      "denominator": 5,
+      "undefined_reason": null
+    },
+    {
+      "name": "url_dedupe_correct",
+      "value": 1.0,
+      "numerator": 1.0,
+      "denominator": 1.0,
+      "undefined_reason": null
+    },
+    {
+      "name": "syndicated_not_counted_independent",
+      "value": 1.0,
+      "numerator": 1.0,
+      "denominator": 1.0,
+      "undefined_reason": null
+    },
+    {
+      "name": "contradiction_preserved_low_rank",
+      "value": 1.0,
+      "numerator": 1.0,
+      "denominator": 1.0,
+      "undefined_reason": null
+    },
+    {
+      "name": "conflicting_claims_recorded",
+      "value": 1.0,
+      "numerator": 1.0,
+      "denominator": 1.0,
+      "undefined_reason": null
+    },
+    {
+      "name": "numeric_grounding_contract",
+      "value": 1.0,
+      "numerator": 1.0,
+      "denominator": 1.0,
+      "undefined_reason": null
+    },
+    {
+      "name": "claim_fixture_coverage",
+      "value": 1.0,
+      "numerator": 7,
+      "denominator": 7,
+      "undefined_reason": null
+    }
+  ],
+  "skipped": [
+    "public_pages_https: optional \u2014 use D6_FIXTURE_URL / compose d6-fixture (ci-local); never invent Pages URL",
+    "live_model_claim_extraction: not run in fixture mode",
+    "financial_calc_live: N/A for D6 HTML fixture",
+    "prompt_injection_live: deferred to adversarial suite"
+  ],
+  "details": {
+    "company": "Plinthwick Synthetic Analytics",
+    "claim_count": 7,
+    "independent_count_sample": 2,
+    "canonical_sample": "https://example.com/x",
+    "thresholds_rationale": "No arbitrary pass bar: fixture mode expects contradiction_recall=1.0 and syndicated_not_counted_independent=1.0 as structural correctness; live score deltas compare against baselines/research_eval_baseline.json."
+  }
+}

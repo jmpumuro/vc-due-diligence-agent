@@ -1,0 +1,9 @@
+**/.venv
+**/node_modules
+**/.next
+**/__pycache__
+**/.git
+**/vc-dd-agent-handoff
+**/*.pyc
+**/.pytest_cache
+**/baselines/last_run

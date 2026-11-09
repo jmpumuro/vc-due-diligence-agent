@@ -1,0 +1,33 @@
+[project]
+name = "thesis"
+version = "0.1.0"
+description = "Open-source VC due diligence agent (Thesis)"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.12"
+dependencies = [
+  "thesis-contracts",
+]
+
+[tool.uv.workspace]
+members = [
+    "packages/contracts",
+    "apps/api",
+]
+
+[tool.uv.sources]
+thesis-contracts = { workspace = true }
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3",
+  "ruff>=0.8",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["packages/contracts/tests", "apps/api/tests"]
+pythonpath = ["packages/contracts/src", "apps/api/src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

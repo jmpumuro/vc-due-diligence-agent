@@ -1,0 +1,337 @@
+{
+  "financial_table_id": "50b5850f-a035-598b-b282-871db58d582a",
+  "version": 2,
+  "document_id": "93291db3-a7b0-57ff-921f-60201a4e53f6",
+  "statement": "kpi",
+  "currency": "EUR",
+  "periods": [
+    {
+      "start": "2026-06-01",
+      "end": "2026-06-30",
+      "granularity": "month"
+    },
+    {
+      "start": "2026-07-01",
+      "end": "2026-07-31",
+      "granularity": "month"
+    },
+    {
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "granularity": "month"
+    },
+    {
+      "start": "2026-09-01",
+      "end": "2026-09-30",
+      "granularity": "month"
+    }
+  ],
+  "rows": [
+    {
+      "line": "New MRR",
+      "cells": [
+        {
+          "period": {
+            "start": "2026-06-01",
+            "end": "2026-06-30",
+            "granularity": "month"
+          },
+          "value": "3900",
+          "raw": "3,900",
+          "locator": {
+            "kind": "sheet",
+            "sheet": "MRR",
+            "cell": "B2"
+          },
+          "confidence": "0.98"
+        },
+        {
+          "period": {
+            "start": "2026-07-01",
+            "end": "2026-07-31",
+            "granularity": "month"
+          },
+          "value": "4400",
+          "raw": "4,400",
+          "locator": {
+            "kind": "sheet",
+            "sheet": "MRR",
+            "cell": "C2"
+          },
+          "confidence": "0.98"
+        },
+        {
+          "period": {
+            "start": "2026-08-01",
+            "end": "2026-08-31",
+            "granularity": "month"
+          },
+          "value": "3100",
+          "raw": "3,100",
+          "locator": {
+            "kind": "sheet",
+            "sheet": "MRR",
+            "cell": "D2"
+          },
+          "confidence": "0.98"
+        },
+        {
+          "period": {
+            "start": "2026-09-01",
+            "end": "2026-09-30",
+            "granularity": "month"
+          },
+          "value": "2100",
+          "raw": "2,100",
+          "locator": {
+            "kind": "sheet",
+            "sheet": "MRR",
+            "cell": "E2"
+          },
+          "confidence": "0.98"
+        }
+      ]
+    },
+    {
+      "line": "Expansion MRR",
+      "cells": [
+        {
+          "period": {
+            "start": "2026-06-01",
+            "end": "2026-06-30",
+            "granularity": "month"
+          },
+          "value": "1200",
+          "raw": "1,200",
+          "locator": {
+            "kind": "sheet",
+            "sheet": "MRR",
+            "cell": "B3"
+          },
+          "confidence": "0.98"
+        },
+        {
+          "period": {
+            "start": "2026-07-01",
+            "end": "2026-07-31",
+            "granularity": "month"
+          },
+          "value": "1050",
+          "raw": "1,050",
+          "locator": {
+            "kind": "sheet",
+            "sheet": "MRR",
+            "cell": "C3"
+          },
+          "confidence": "0.98"
+        },
+        {
+          "period": {
+            "start": "2026-08-01",
+            "end": "2026-08-31",
+            "granularity": "month"
+          },
+          "value": "1400",
+          "raw": "1,400",
+          "locator": {
+            "kind": "sheet",
+            "sheet": "MRR",
+            "cell": "D3"
+          },
+          "confidence": "0.98"
+        },
+        {
+          "period": {
+            "start": "2026-09-01",
+            "end": "2026-09-30",
+            "granularity": "month"
+          },
+          "value": "600",
+          "raw": "600",
+          "locator": {
+            "kind": "sheet",
+            "sheet": "MRR",
+            "cell": "E3"
+          },
+          "confidence": "0.71"
+        }
+      ]
+    },
+    {
+      "line": "Churned MRR",
+      "cells": [
+        {
+          "period": {
+            "start": "2026-06-01",
+            "end": "2026-06-30",
+            "granularity": "month"
+          },
+          "value": "-1800",
+          "raw": "-1,800",
+          "locator": {
+            "kind": "sheet",
+            "sheet": "MRR",
+            "cell": "B4"
+          },
+          "confidence": "0.98"
+        },
+        {
+          "period": {
+            "start": "2026-07-01",
+            "end": "2026-07-31",
+            "granularity": "month"
+          },
+          "value": "-4100",
+          "raw": "-4,100",
+          "locator": {
+            "kind": "sheet",
+            "sheet": "MRR",
+            "cell": "C4"
+          },
+          "confidence": "1"
+        },
+        {
+          "period": {
+            "start": "2026-08-01",
+            "end": "2026-08-31",
+            "granularity": "month"
+          },
+          "value": "-900",
+          "raw": "-900",
+          "locator": {
+            "kind": "sheet",
+            "sheet": "MRR",
+            "cell": "D4"
+          },
+          "confidence": "0.98"
+        },
+        {
+          "period": {
+            "start": "2026-09-01",
+            "end": "2026-09-30",
+            "granularity": "month"
+          },
+          "value": "-2100",
+          "raw": "-2,100",
+          "locator": {
+            "kind": "sheet",
+            "sheet": "MRR",
+            "cell": "E4"
+          },
+          "confidence": "0.98"
+        }
+      ]
+    },
+    {
+      "line": "Total MRR",
+      "cells": [
+        {
+          "period": {
+            "start": "2026-06-01",
+            "end": "2026-06-30",
+            "granularity": "month"
+          },
+          "value": "47800",
+          "raw": "47,800",
+          "locator": {
+            "kind": "sheet",
+            "sheet": "MRR",
+            "cell": "B5"
+          },
+          "confidence": "0.98"
+        },
+        {
+          "period": {
+            "start": "2026-07-01",
+            "end": "2026-07-31",
+            "granularity": "month"
+          },
+          "value": "49150",
+          "raw": "49,150",
+          "locator": {
+            "kind": "sheet",
+            "sheet": "MRR",
+            "cell": "C5"
+          },
+          "confidence": "1"
+        },
+        {
+          "period": {
+            "start": "2026-08-01",
+            "end": "2026-08-31",
+            "granularity": "month"
+          },
+          "value": "52750",
+          "raw": "52,750",
+          "locator": {
+            "kind": "sheet",
+            "sheet": "MRR",
+            "cell": "D5"
+          },
+          "confidence": "0.98"
+        },
+        {
+          "period": {
+            "start": "2026-09-01",
+            "end": "2026-09-30",
+            "granularity": "month"
+          },
+          "value": "53350",
+          "raw": "53,350",
+          "locator": {
+            "kind": "sheet",
+            "sheet": "MRR",
+            "cell": "E5"
+          },
+          "confidence": "0.98"
+        }
+      ],
+      "is_total": true,
+      "total_of": [
+        "New MRR",
+        "Expansion MRR",
+        "Churned MRR"
+      ],
+      "total_rule": "rollforward"
+    }
+  ],
+  "checks": [
+    {
+      "check": "foots",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "contiguous_periods",
+      "passed": true
+    },
+    {
+      "check": "single_currency",
+      "passed": true
+    },
+    {
+      "check": "sign_convention",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "low_confidence_cells",
+      "passed": true,
+      "detail": null
+    }
+  ],
+  "status": "validated",
+  "validated_by": "2dcced4f-c6c2-5a68-b9a9-3d1a6c27a178",
+  "corrections": [
+    {
+      "correction_id": "682e4061-0635-53a6-a991-c0eb45fc1397",
+      "author": "2dcced4f-c6c2-5a68-b9a9-3d1a6c27a178",
+      "line": "Churned MRR",
+      "period_start": "2026-07-01",
+      "old_value": "4100",
+      "new_value": "-4100",
+      "reason": "Source sheet shows −4,100; minus sign was read as a hyphen",
+      "at": "2026-11-07T16:33:00Z"
+    }
+  ]
+}

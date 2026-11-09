@@ -1,0 +1,386 @@
+{
+  "product": "thesis",
+  "updated_at": "2026-11-08T03:30:00Z",
+  "stage": 7,
+  "production_ready": false,
+  "baseline": "implementation-baseline.json",
+  "remediation": "docs/remediation-backlog.md",
+  "standing_order": "Continue on existing architecture. Do not restart. Preserve passing tests. Address P0 before dependent features. No production-ready until remediation Verified.",
+  "entries": [
+    {
+      "id": "S1-CONTRACTS",
+      "name": "Stage 1 typed contracts and lifecycle",
+      "owner": "lead",
+      "status": "IMPLEMENTED",
+      "dependencies": [],
+      "required_gates": [
+        "schema_review"
+      ],
+      "executed_gates": [
+        "unit"
+      ],
+      "results": {
+        "unit": {
+          "status": "passed",
+          "command": "uv run pytest -q",
+          "artifact": "packages/contracts/tests (18+)"
+        }
+      },
+      "not_applicable": {},
+      "blockers": [],
+      "verified_by": null,
+      "verified_at": null
+    },
+    {
+      "id": "FIX-01",
+      "name": "Seed fixtures validate against contracts",
+      "owner": "lead",
+      "status": "IMPLEMENTED",
+      "dependencies": [
+        "S1-CONTRACTS"
+      ],
+      "required_gates": [],
+      "executed_gates": [
+        "ci-local"
+      ],
+      "results": {
+        "ci-local": {
+          "status": "passed",
+          "command": "uv run pytest packages/contracts/tests/test_fixtures_fix01.py -q",
+          "artifact": "included in pytest suite"
+        }
+      },
+      "not_applicable": {},
+      "blockers": [],
+      "verified_by": null,
+      "verified_at": null
+    },
+    {
+      "id": "S2-SHELL",
+      "name": "Stage 2 runnable Compose shell + auth/setup",
+      "owner": "lead",
+      "status": "IMPLEMENTED",
+      "dependencies": [
+        "S1-CONTRACTS"
+      ],
+      "required_gates": [
+        "C",
+        "E2E-01"
+      ],
+      "executed_gates": [
+        "smoke"
+      ],
+      "results": {
+        "smoke": {
+          "status": "passed",
+          "command": "demo-session + /me + /assessments; /setup /signin UI 200",
+          "artifact": "session cookie auth; Argon2id; setup token logged; SearXNG canary ok"
+        }
+      },
+      "not_applicable": {},
+      "blockers": [
+        "REM-P1-01 B1 owner confirm",
+        "CSRF token + rate limits still thin"
+      ],
+      "verified_by": null,
+      "verified_at": null
+    },
+    {
+      "id": "RES-P0-FOUNDATIONS",
+      "name": "Research P0: identity, lineage, contradictions, sufficiency, VoI, SearXNG normalize",
+      "owner": "lead",
+      "status": "IMPLEMENTED",
+      "dependencies": [
+        "S1-CONTRACTS"
+      ],
+      "blocks_features": [],
+      "required_gates": [
+        "unit"
+      ],
+      "executed_gates": [
+        "unit"
+      ],
+      "results": {
+        "unit": {
+          "status": "passed",
+          "command": "uv run pytest apps/api/tests/test_research_p0.py -q",
+          "artifact": "included in 31 passed; docs/research-agent-integration.md"
+        }
+      },
+      "not_applicable": {},
+      "blockers": [
+        "Persistence/API wiring for Claim/Contradiction tables still Stage 4\u20135",
+        "SSE research progress UI still Stage 5",
+        "Full research eval harness still Stage 5"
+      ],
+      "verified_by": null,
+      "verified_at": null
+    },
+    {
+      "id": "S3-WORKER-LEDGER",
+      "name": "Stage 3 Temporal worker + ledger/budget schema",
+      "owner": "lead",
+      "status": "TESTING",
+      "dependencies": [
+        "S2-SHELL",
+        "REM-P0-01",
+        "REM-P0-02"
+      ],
+      "required_gates": [
+        "E2E-07",
+        "E2E-08"
+      ],
+      "executed_gates": [
+        "smoke"
+      ],
+      "results": {
+        "smoke": {
+          "status": "passed",
+          "command": "docker compose logs worker",
+          "artifact": "worker polling q.system; migrations 0003 ledger/budgets"
+        }
+      },
+      "not_applicable": {},
+      "blockers": [
+        "Agent activities and atomic budget runtime not yet"
+      ],
+      "verified_by": null,
+      "verified_at": null
+    },
+    {
+      "id": "REM-P0-01",
+      "name": "D1 private-doc / external AI restrictions",
+      "owner": "lead",
+      "status": "TESTING",
+      "dependencies": [],
+      "blocks_features": [
+        "Stage 6 private model steps",
+        "private embeddings",
+        "Level 3 external drafting"
+      ],
+      "required_gates": [
+        "D1-01",
+        "release"
+      ],
+      "executed_gates": [
+        "unit"
+      ],
+      "results": {
+        "unit": {
+          "status": "passed",
+          "command": "uv run pytest apps/api/tests/test_p0_gates.py -q",
+          "artifact": "PolicyEnforcedProvider default-deny for private"
+        }
+      },
+      "not_applicable": {},
+      "blockers": [
+        "Full PolicyEnforcedProvider + OpenAI client wiring still ahead"
+      ],
+      "verified_by": null,
+      "verified_at": null
+    },
+    {
+      "id": "REM-P0-02",
+      "name": "Workspace isolation and evidence provenance",
+      "owner": "lead",
+      "status": "TESTED",
+      "dependencies": [],
+      "blocks_features": [
+        "Stage 4 shared evidence",
+        "Stage 5 multi-tenant research",
+        "Stage 6 private spans"
+      ],
+      "required_gates": [
+        "isolation_tests",
+        "release"
+      ],
+      "executed_gates": [
+        "unit",
+        "isolation_tests"
+      ],
+      "results": {
+        "unit": {
+          "status": "passed",
+          "command": "uv run pytest apps/api/tests/test_p0_gates.py -q",
+          "artifact": "TenantContext firm assert + deal-team private gate"
+        },
+        "isolation_tests": {
+          "status": "passed",
+          "command": "uv run python scripts/smoke_rls_two_firm.py",
+          "artifact": "2 passed; Gate H Verified still open"
+        }
+      },
+      "not_applicable": {},
+      "blockers": [
+        "Gate H independent Verified still open"
+      ],
+      "verified_by": null,
+      "verified_at": null
+    },
+    {
+      "id": "REM-P1-01",
+      "name": "Object storage provider (B1)",
+      "owner": "owner",
+      "status": "TESTED",
+      "dependencies": [],
+      "blocks_features": [
+        "Deep storage coupling"
+      ],
+      "required_gates": [
+        "owner_decision"
+      ],
+      "executed_gates": [
+        "owner_decision",
+        "s3_smoke"
+      ],
+      "results": {
+        "note": "SeaweedFS + :8333; smoke_b1_seaweed green (2026-11-08)"
+      },
+      "not_applicable": {},
+      "blockers": [],
+      "verified_by": null,
+      "verified_at": null
+    },
+    {
+      "id": "REM-P1-02",
+      "name": "OCR fixture reproducibility (D4)",
+      "owner": "lead",
+      "status": "TESTING",
+      "dependencies": [],
+      "blocks_features": [
+        "D4 product Tested claims"
+      ],
+      "required_gates": [
+        "HAR-D4",
+        "D4-12"
+      ],
+      "executed_gates": [],
+      "results": {
+        "note": "q.docs workflow + smoke_d4_product path; verified flag off by default"
+      },
+      "not_applicable": {},
+      "blockers": [
+        "OCR_PRODUCT_VERIFIED / full HAR-D4 matrix + L3 screening still open"
+      ],
+      "verified_by": null,
+      "verified_at": null
+    },
+    {
+      "id": "REM-P1-03",
+      "name": "Documentation errata E1\u2013E6 sync",
+      "owner": "lead",
+      "status": "SPECIFIED",
+      "dependencies": [],
+      "blocks_features": [],
+      "required_gates": [
+        "doc_sync"
+      ],
+      "executed_gates": [],
+      "results": {},
+      "not_applicable": {},
+      "blockers": [],
+      "verified_by": null,
+      "verified_at": null
+    },
+    {
+      "id": "REM-P1-04",
+      "name": "OFAC SDN.XML host verification (B3)",
+      "owner": "owner",
+      "status": "TESTED",
+      "dependencies": [],
+      "blocks_features": [
+        "sanctions_check live ingest"
+      ],
+      "required_gates": [
+        "D3-02"
+      ],
+      "executed_gates": [
+        "D3-02-fixture"
+      ],
+      "results": {
+        "note": "Allowlist + fixture path; auto_sanctioned false"
+      },
+      "not_applicable": {},
+      "blockers": [
+        "Live SDN.XML host ingest remains opportunistic"
+      ],
+      "verified_by": null,
+      "verified_at": null
+    },
+    {
+      "id": "REM-P1-05",
+      "name": "Local-model deployment contract (B4)",
+      "owner": "lead",
+      "status": "TESTED",
+      "dependencies": [
+        "REM-P0-01"
+      ],
+      "blocks_features": [
+        "Private AI without external transmission"
+      ],
+      "required_gates": [
+        "local-llm profile"
+      ],
+      "executed_gates": [
+        "deny_path"
+      ],
+      "results": {
+        "note": "Private path fail-closed; no silent OpenAI fallback"
+      },
+      "not_applicable": {},
+      "blockers": [
+        "Verified local /v1/models route still open"
+      ],
+      "verified_by": null,
+      "verified_at": null
+    },
+    {
+      "id": "REM-P1-06",
+      "name": "Dependency and asset licence audit (D5)",
+      "owner": "lead",
+      "status": "SPECIFIED",
+      "dependencies": [],
+      "blocks_features": [
+        "Stage 9 public release"
+      ],
+      "required_gates": [
+        "D5-01",
+        "D5-05"
+      ],
+      "executed_gates": [],
+      "results": {},
+      "not_applicable": {},
+      "blockers": [],
+      "verified_by": null,
+      "verified_at": null
+    },
+    {
+      "id": "REM-P2-01",
+      "name": "D6 live false-claims website (B2)",
+      "owner": "owner",
+      "status": "TESTED",
+      "dependencies": [],
+      "blocks_features": [
+        "D6-04",
+        "D6-05",
+        "final research verification"
+      ],
+      "required_gates": [
+        "D6-04",
+        "D6-05"
+      ],
+      "executed_gates": [
+        "ci-local-fixture"
+      ],
+      "results": {
+        "note": "ci-local d6-fixture is the acceptance path; Pages optional"
+      },
+      "not_applicable": {},
+      "blockers": [
+        "Public GitHub Pages deploy optional \u2014 do not invent URL"
+      ],
+      "verified_by": null,
+      "verified_at": null
+    }
+  ]
+}

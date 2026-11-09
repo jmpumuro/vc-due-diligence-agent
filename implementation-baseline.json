@@ -1,0 +1,65 @@
+{
+  "recorded_at": "2026-11-08T13:18:48Z",
+  "commit_note": "pre-git baseline; workspace not initialized as git repo yet",
+  "stage": 5,
+  "preserve": true,
+  "completed": {
+    "stage_1_contracts": {
+      "status": "IMPLEMENTED",
+      "tests": "uv run pytest -q (contracts + api unit)"
+    },
+    "stage_2_shell_smoke": {
+      "status": "TESTED",
+      "compose": "docker compose up --build",
+      "api_host": "http://localhost:8001",
+      "ui": "http://localhost:3000"
+    },
+    "finish_line_local": {
+      "status": "TESTED",
+      "command": "FINISH_LINE_E2E=1 uv run python scripts/run_finish_line.py",
+      "passed": [
+        "licence_gate",
+        "rem_gates",
+        "pytest_unit",
+        "two_firm_rls_live",
+        "e2e_sondermind"
+      ],
+      "artifact": "/tmp/thesis_finish_line.json",
+      "gate_h": "not_run",
+      "production_ready": false
+    },
+    "numeric_grounding": {
+      "status": "TESTED",
+      "notes": "Claim contract demotes ungrounded metrics; Notion value re-run harmful=0"
+    },
+    "ui_ink_cobalt": {
+      "status": "IMPLEMENTED",
+      "prototype": "docs/prototypes/thesis-diligence-app.html"
+    },
+    "private_pipeline_upload": {
+      "status": "TESTED",
+      "notes": "ClamAV INSTREAM + worker-docs /ocr on PDF upload; harness self-test in readiness"
+    },
+    "q_docs_ingest": {
+      "status": "IMPLEMENTED",
+      "notes": "DocumentIngestionWorkflow + worker-docs-temporal; upload queues parse"
+    },
+    "retention_delete": {
+      "status": "TESTED",
+      "notes": "object_store delete_prefix + retention.execute_deletion when flag set"
+    }
+  },
+  "known_failures_and_gaps": [
+    "Host API published on 8001 not 8000 (environment conflict)",
+    "Gate H independent verification not run \u2014 cannot mark Verified/production-ready",
+    "q.docs DocumentIngestionWorkflow shipped; OCR_PRODUCT_VERIFIED default false; L3 screening fail-closed",
+    "Full transitive dep/image SPDX reuse audit still open (licence_gate covers LICENSE/NOTICE/THIRD_PARTY_NOTICES + SPDX seed)",
+    "DD-03 L2 / DD-04 L3 acceptance matrix largely NOT_RUN",
+    "SearXNG often degraded \u2192 company-site heuristics; source diversity incomplete",
+    "D6 public Pages optional/blocked; ci-local fixture is the acceptance path",
+    "Retention object-store delete loop wired behind RETENTION_DESTRUCTIVE_DELETE (default dry-run)"
+  ],
+  "remediation_index": "docs/remediation-backlog.md",
+  "production_ready": false,
+  "finish_line_command": "uv run python scripts/run_finish_line.py"
+}

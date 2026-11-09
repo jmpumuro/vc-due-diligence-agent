@@ -1,0 +1,219 @@
+{
+  "assessment_id": "ecd56625-fbd1-5498-9dfa-8a346ea99a67",
+  "company": {
+    "company_id": "e89d31f0-4428-5622-814e-2f07d63b7c7f",
+    "canonical_name": "Brightwater Labs",
+    "primary_domain": "brightwater.dev",
+    "aliases": []
+  },
+  "revision": 1,
+  "level": 1,
+  "state": "AWAITING_REVIEW",
+  "stage": null,
+  "status_copy_key": "awaiting_review",
+  "recommendation": "hold",
+  "conditions": [],
+  "headline": "Good fit but early; one public pilot. Level 2 would check legal, security and governance.",
+  "measures": {
+    "source_reliability": {
+      "label": "fair",
+      "independent_share": "0.48",
+      "company_only_share": "0.52"
+    },
+    "claim_confidence": {
+      "label": "low",
+      "verified": 11,
+      "source_supported": 7,
+      "inference": 2
+    },
+    "evidence_coverage": {
+      "domains_sufficient": 6,
+      "domains_partial": 2,
+      "domains_insufficient": 0,
+      "domains_not_run": 4
+    },
+    "attractiveness": {
+      "score": "3.3",
+      "range": [
+        "2.7",
+        "3.8"
+      ],
+      "advance_threshold": "3.5"
+    }
+  },
+  "domains": [
+    {
+      "domain_id": "company",
+      "status": "complete",
+      "gate_result": "sufficient",
+      "reason": "Screening depth · public sources",
+      "sources_found": 2,
+      "sources_required": 2,
+      "findings": 3,
+      "contradictions": 0,
+      "risks": 0,
+      "requests": 0,
+      "can_retry": false
+    },
+    {
+      "domain_id": "team",
+      "status": "complete",
+      "gate_result": "sufficient",
+      "reason": "Screening depth · public sources",
+      "sources_found": 2,
+      "sources_required": 2,
+      "findings": 3,
+      "contradictions": 0,
+      "risks": 0,
+      "requests": 0,
+      "can_retry": false
+    },
+    {
+      "domain_id": "market",
+      "status": "complete",
+      "gate_result": "partial",
+      "reason": "Screening depth · public sources",
+      "sources_found": 2,
+      "sources_required": 3,
+      "findings": 3,
+      "contradictions": 0,
+      "risks": 0,
+      "requests": 0,
+      "can_retry": false
+    },
+    {
+      "domain_id": "competition",
+      "status": "complete",
+      "gate_result": "sufficient",
+      "reason": "Screening depth · public sources",
+      "sources_found": 2,
+      "sources_required": 2,
+      "findings": 3,
+      "contradictions": 0,
+      "risks": 0,
+      "requests": 0,
+      "can_retry": false
+    },
+    {
+      "domain_id": "product",
+      "status": "complete",
+      "gate_result": "sufficient",
+      "reason": "Screening depth · public sources",
+      "sources_found": 2,
+      "sources_required": 2,
+      "findings": 3,
+      "contradictions": 0,
+      "risks": 0,
+      "requests": 0,
+      "can_retry": false
+    },
+    {
+      "domain_id": "traction",
+      "status": "complete",
+      "gate_result": "partial",
+      "reason": "Screening depth · public sources",
+      "sources_found": 2,
+      "sources_required": 3,
+      "findings": 3,
+      "contradictions": 0,
+      "risks": 0,
+      "requests": 0,
+      "can_retry": false
+    },
+    {
+      "domain_id": "financials",
+      "status": "skipped",
+      "gate_result": "unavailable_at_level",
+      "reason": "Runs from Level 2",
+      "sources_found": 0,
+      "sources_required": 0,
+      "findings": 0,
+      "contradictions": 0,
+      "risks": 0,
+      "requests": 0,
+      "can_retry": false
+    },
+    {
+      "domain_id": "capitalization",
+      "status": "complete",
+      "gate_result": "sufficient",
+      "reason": "Screening depth · public sources",
+      "sources_found": 2,
+      "sources_required": 2,
+      "findings": 3,
+      "contradictions": 0,
+      "risks": 0,
+      "requests": 0,
+      "can_retry": false
+    },
+    {
+      "domain_id": "legal",
+      "status": "skipped",
+      "gate_result": "unavailable_at_level",
+      "reason": "Runs from Level 2",
+      "sources_found": 0,
+      "sources_required": 0,
+      "findings": 0,
+      "contradictions": 0,
+      "risks": 0,
+      "requests": 0,
+      "can_retry": false
+    },
+    {
+      "domain_id": "security",
+      "status": "skipped",
+      "gate_result": "unavailable_at_level",
+      "reason": "Runs from Level 2",
+      "sources_found": 0,
+      "sources_required": 0,
+      "findings": 0,
+      "contradictions": 0,
+      "risks": 0,
+      "requests": 0,
+      "can_retry": false
+    },
+    {
+      "domain_id": "governance",
+      "status": "skipped",
+      "gate_result": "unavailable_at_level",
+      "reason": "Runs from Level 2",
+      "sources_found": 0,
+      "sources_required": 0,
+      "findings": 0,
+      "contradictions": 0,
+      "risks": 0,
+      "requests": 0,
+      "can_retry": false
+    },
+    {
+      "domain_id": "thesis_fit",
+      "status": "complete",
+      "gate_result": "sufficient",
+      "reason": "Screening depth · public sources",
+      "sources_found": 2,
+      "sources_required": 2,
+      "findings": 3,
+      "contradictions": 0,
+      "risks": 0,
+      "requests": 0,
+      "can_retry": false
+    }
+  ],
+  "finding_counts": {
+    "verified_fact": 11,
+    "source_supported": 7,
+    "derived_calculation": 0,
+    "inference": 2,
+    "contradictory": 1,
+    "missing": 2,
+    "unresolved_risk": 1
+  },
+  "open_risks": 0,
+  "open_requests": 0,
+  "advance_threshold": "3.5",
+  "thesis_fit": "moderate",
+  "scorecard": [],
+  "progress": null,
+  "can_decide": true,
+  "report_version_id": "f23d42e2-a3c3-5ddd-ab22-7d467e4fe9f1"
+}

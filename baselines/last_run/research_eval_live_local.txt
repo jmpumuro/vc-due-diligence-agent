@@ -1,0 +1,14 @@
+Research eval d6-false-claims (live-local) harness=research-eval@1.0.0
+dataset_version=d6-false-claims@1.0.0
+  identity_resolution_ok: 1.0000 (1/1)
+  contradiction_recall: 1.0000 (5/5)
+  unsupported_claim_recall: 1.0000 (2/2)
+  citation_presence: 1.0000 (5/5)
+  url_dedupe_correct: 1.0000 (1/1)
+  syndicated_not_counted_independent: 1.0000 (1/1)
+  contradiction_preserved_low_rank: 1.0000 (1/1)
+  conflicting_claims_recorded: 1.0000 (1/1)
+  claim_fixture_coverage: 1.0000 (7/7)
+  http_manifest_ok: 1.0000 (1/1)
+  evidence_http_retrieval: 1.0000 (5/5)
+  SKIPPED: public_github_pages: not authorized — ci-local nginx is the acceptance path

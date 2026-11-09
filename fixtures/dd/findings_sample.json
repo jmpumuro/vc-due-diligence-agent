@@ -1,0 +1,198 @@
+[
+  {
+    "finding_id": "31671a27-7c4a-5fdd-80db-c343a94cb568",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "revision": 4,
+    "domain_id": "company",
+    "kind": "verified_fact",
+    "statement": "Lattice Grid GmbH is registered in Berlin, incorporated 14 March 2024.",
+    "claim_ids": [
+      "3d7f326f-4167-5bf9-bfb9-e68ddf6167e0"
+    ],
+    "calculation_id": null,
+    "based_on_finding_ids": [],
+    "claim_confidence": "high",
+    "materiality": "medium",
+    "evidence_scope": "public",
+    "access": "workspace"
+  },
+  {
+    "finding_id": "da2d216d-5532-5057-9c68-ad7b38eca6fd",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "revision": 4,
+    "domain_id": "team",
+    "kind": "verified_fact",
+    "statement": "CEO led grid-operations software at a German utility for eight years.",
+    "claim_ids": [
+      "7eba7e9c-7e06-57a3-bd77-79da9cb6e54c"
+    ],
+    "calculation_id": null,
+    "based_on_finding_ids": [],
+    "claim_confidence": "high",
+    "materiality": "high",
+    "evidence_scope": "public",
+    "access": "workspace"
+  },
+  {
+    "finding_id": "78e4933c-b160-5095-a6dd-b05b786904f4",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "revision": 4,
+    "domain_id": "market",
+    "kind": "verified_fact",
+    "statement": "About 900 electricity distribution operators work in Germany.",
+    "claim_ids": [
+      "8e0f9d2d-0cfa-5de9-830d-a53cc9e41cfd"
+    ],
+    "calculation_id": null,
+    "based_on_finding_ids": [],
+    "claim_confidence": "high",
+    "materiality": "medium",
+    "evidence_scope": "public",
+    "access": "workspace"
+  },
+  {
+    "finding_id": "0bfaf32b-d263-548e-98c1-ba4c3673ed6c",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "revision": 4,
+    "domain_id": "traction",
+    "kind": "source_supported",
+    "statement": "The company lists three municipal utilities as customers; two confirm it publicly.",
+    "claim_ids": [
+      "5c445412-0827-5147-82de-207be945b330"
+    ],
+    "calculation_id": null,
+    "based_on_finding_ids": [],
+    "claim_confidence": "medium",
+    "materiality": "high",
+    "evidence_scope": "public",
+    "access": "workspace"
+  },
+  {
+    "finding_id": "983f906c-c422-549b-9a7c-11d5ed25cb12",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "revision": 4,
+    "domain_id": "capitalization",
+    "kind": "contradictory",
+    "statement": "Seed round reported as €4.2M (company) and €3.5M (news aggregator).",
+    "claim_ids": [
+      "b92ae31a-cac6-584c-a2b1-5ba8b10e0a5a"
+    ],
+    "calculation_id": null,
+    "based_on_finding_ids": [],
+    "claim_confidence": "medium",
+    "materiality": "medium",
+    "evidence_scope": "public",
+    "access": "workspace"
+  },
+  {
+    "finding_id": "8753a4d1-7844-54f0-8495-7116790cfd32",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "revision": 4,
+    "domain_id": "financials",
+    "kind": "derived_calculation",
+    "statement": "Runway is 19.0 months at the Jul–Sep 2026 average net burn.",
+    "claim_ids": [],
+    "calculation_id": "0a07e55c-30c5-5ec0-8295-fc73da84ad35",
+    "based_on_finding_ids": [],
+    "claim_confidence": "high",
+    "materiality": "high",
+    "evidence_scope": "private",
+    "access": "deal_team"
+  },
+  {
+    "finding_id": "8a3e334a-de04-5ee4-af38-06b81a0e4f17",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "revision": 4,
+    "domain_id": "financials",
+    "kind": "contradictory",
+    "statement": "Deck ARR €900k vs KPI workbook 12 × MRR = €640k.",
+    "claim_ids": [
+      "cf34379a-50a0-5c7f-9666-dc11ab827bbc"
+    ],
+    "calculation_id": null,
+    "based_on_finding_ids": [],
+    "claim_confidence": "medium",
+    "materiality": "critical",
+    "evidence_scope": "private",
+    "access": "deal_team"
+  },
+  {
+    "finding_id": "bcd8afa6-5242-59c7-9895-d01e2c9c89c7",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "revision": 4,
+    "domain_id": "traction",
+    "kind": "derived_calculation",
+    "statement": "Largest customer is 58% of 2026 revenue.",
+    "claim_ids": [],
+    "calculation_id": "886986ef-9549-5dba-b0ea-15859b1db9a0",
+    "based_on_finding_ids": [],
+    "claim_confidence": "high",
+    "materiality": "high",
+    "evidence_scope": "private",
+    "access": "deal_team"
+  },
+  {
+    "finding_id": "04f8c837-8e3c-5c6a-9978-3b7038b9e7cf",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "revision": 4,
+    "domain_id": "financials",
+    "kind": "missing",
+    "statement": "Customer acquisition cost could not be calculated: sales and marketing spend not provided.",
+    "claim_ids": [],
+    "calculation_id": null,
+    "based_on_finding_ids": [],
+    "claim_confidence": "low",
+    "materiality": "medium",
+    "evidence_scope": "private",
+    "access": "deal_team"
+  },
+  {
+    "finding_id": "9eeec699-ffdd-58ae-af18-14715d3d1889",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "revision": 4,
+    "domain_id": "legal",
+    "kind": "unresolved_risk",
+    "statement": "No IP assignment found for code the CTO wrote before incorporation.",
+    "claim_ids": [
+      "8c5279a4-60f0-5f8e-ad29-566551e6823b"
+    ],
+    "calculation_id": null,
+    "based_on_finding_ids": [],
+    "claim_confidence": "medium",
+    "materiality": "critical",
+    "evidence_scope": "private",
+    "access": "deal_team"
+  },
+  {
+    "finding_id": "73b4bb46-a3b3-57d5-92c4-24b178b211aa",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "revision": 4,
+    "domain_id": "security",
+    "kind": "missing",
+    "statement": "No penetration test summary in the last 12 months.",
+    "claim_ids": [],
+    "calculation_id": null,
+    "based_on_finding_ids": [],
+    "claim_confidence": "low",
+    "materiality": "medium",
+    "evidence_scope": "private",
+    "access": "deal_team"
+  },
+  {
+    "finding_id": "96b965f7-a5a5-5e60-b8c1-d7b63ed434e7",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "revision": 4,
+    "domain_id": "market",
+    "kind": "inference",
+    "statement": "The 2027 regulatory deadline is likely to pull purchasing forward.",
+    "claim_ids": [],
+    "calculation_id": null,
+    "based_on_finding_ids": [
+      "78e4933c-b160-5095-a6dd-b05b786904f4"
+    ],
+    "claim_confidence": "low",
+    "materiality": "medium",
+    "evidence_scope": "public",
+    "access": "workspace"
+  }
+]

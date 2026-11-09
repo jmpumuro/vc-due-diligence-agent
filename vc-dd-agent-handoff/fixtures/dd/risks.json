@@ -1,0 +1,93 @@
+[
+  {
+    "risk_id": "0c5aafc6-c831-548b-a264-a16c659176a7",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "domain_ids": [
+      "traction",
+      "financials"
+    ],
+    "title": "Largest customer is 58% of revenue",
+    "description": "Largest customer is 58% of revenue.",
+    "severity": "high",
+    "likelihood": "likely",
+    "finding_ids": [
+      "bcd8afa6-5242-59c7-9895-d01e2c9c89c7"
+    ],
+    "mitigation_question": "Is the Nordhafen contract multi-year, and when does it renew?",
+    "status": "open",
+    "owner_user_id": "557f4d0d-2370-56f2-a53a-fe0ed56b0fcb",
+    "access": "deal_team"
+  },
+  {
+    "risk_id": "5f54a5d1-ec77-5169-951c-15c3f9165bad",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "domain_ids": [
+      "legal"
+    ],
+    "title": "No IP assignment for the CTO's pre-incorporation code",
+    "description": "No IP assignment for the CTO's pre-incorporation code.",
+    "severity": "critical",
+    "likelihood": "possible",
+    "finding_ids": [
+      "9eeec699-ffdd-58ae-af18-14715d3d1889"
+    ],
+    "mitigation_question": "Can the company provide a signed assignment covering 2023–2024 work?",
+    "status": "open",
+    "owner_user_id": "80fd3aab-9845-5a14-b24e-50ca19a07ae7",
+    "access": "deal_team"
+  },
+  {
+    "risk_id": "b22fc237-e8e4-526c-bfba-7bc20dc5bb39",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "domain_ids": [
+      "financials"
+    ],
+    "title": "Deck ARR is 40% higher than the KPI workbook",
+    "description": "Deck ARR is 40% higher than the KPI workbook.",
+    "severity": "high",
+    "likelihood": "likely",
+    "finding_ids": [
+      "8a3e334a-de04-5ee4-af38-06b81a0e4f17"
+    ],
+    "mitigation_question": "Which ARR definition does the deck use?",
+    "status": "open",
+    "owner_user_id": "2dcced4f-c6c2-5a68-b9a9-3d1a6c27a178",
+    "access": "deal_team"
+  },
+  {
+    "risk_id": "e84a61ca-0e9c-5cf2-8f37-03cf58ee1787",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "domain_ids": [
+      "security"
+    ],
+    "title": "No penetration test in the last 12 months",
+    "description": "No penetration test in the last 12 months.",
+    "severity": "medium",
+    "likelihood": "possible",
+    "finding_ids": [
+      "73b4bb46-a3b3-57d5-92c4-24b178b211aa"
+    ],
+    "mitigation_question": "Is a test planned before the next renewal?",
+    "status": "open",
+    "owner_user_id": null,
+    "access": "deal_team"
+  },
+  {
+    "risk_id": "cd9a8136-1ba7-5538-824f-896100a96580",
+    "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+    "domain_ids": [
+      "competition"
+    ],
+    "title": "Two well-funded incumbents with overlapping products",
+    "description": "Two well-funded incumbents with overlapping products.",
+    "severity": "medium",
+    "likelihood": "possible",
+    "finding_ids": [
+      "78e4933c-b160-5095-a6dd-b05b786904f4"
+    ],
+    "mitigation_question": "Win rate against incumbents in the last 4 quarters?",
+    "status": "accepted",
+    "owner_user_id": "557f4d0d-2370-56f2-a53a-fe0ed56b0fcb",
+    "access": "workspace"
+  }
+]

@@ -1,0 +1,289 @@
+{
+  "report_version_id": "ec8b03bf-dc0c-5292-b38b-aea1a2a092ef",
+  "assessment_id": "40885a01-99b6-5425-800b-a8f9e81be55c",
+  "revision": 4,
+  "level": 3,
+  "schema_version": "ddreport@1",
+  "evidence_snapshot_set_id": "15ca666d-85e7-5f9b-884c-76879237bdf5",
+  "recommendation": "advance",
+  "conditions": [
+    "Resolve the ARR difference between the deck and the KPI workbook",
+    "Obtain a signed IP assignment from the CTO covering pre-incorporation work",
+    "Reference calls with both confirmed utilities to test concentration risk"
+  ],
+  "measures": {
+    "source_reliability": {
+      "label": "good",
+      "independent_share": "0.62",
+      "company_only_share": "0.38"
+    },
+    "claim_confidence": {
+      "label": "medium",
+      "verified": 31,
+      "source_supported": 18,
+      "inference": 4
+    },
+    "evidence_coverage": {
+      "domains_sufficient": 6,
+      "domains_partial": 5,
+      "domains_insufficient": 1,
+      "domains_not_run": 0
+    },
+    "attractiveness": {
+      "score": "3.8",
+      "range": [
+        "3.2",
+        "4.4"
+      ],
+      "advance_threshold": "3.5"
+    }
+  },
+  "sections": [
+    {
+      "number": 1,
+      "key": "executive_summary",
+      "status": "supported",
+      "status_reason": null,
+      "body_md": "Strong fit with your climate thesis and a proven team. Resolve the ARR difference, the CTO IP assignment and customer concentration before a term sheet.",
+      "finding_ids": [
+        "da2d216d-5532-5057-9c68-ad7b38eca6fd",
+        "8a3e334a-de04-5ee4-af38-06b81a0e4f17",
+        "9eeec699-ffdd-58ae-af18-14715d3d1889",
+        "bcd8afa6-5242-59c7-9895-d01e2c9c89c7"
+      ],
+      "access": "deal_team"
+    },
+    {
+      "number": 2,
+      "key": "company_overview",
+      "status": "supported",
+      "status_reason": null,
+      "body_md": "Lattice Grid GmbH, registered in Berlin in March 2024 [finding:identity], sells load-forecasting software to distribution operators.",
+      "finding_ids": [
+        "31671a27-7c4a-5fdd-80db-c343a94cb568"
+      ],
+      "access": "workspace"
+    },
+    {
+      "number": 3,
+      "key": "thesis_alignment",
+      "status": "supported",
+      "status_reason": null,
+      "body_md": "Meets all six required criteria; no exclusion applies.",
+      "finding_ids": [
+        "31671a27-7c4a-5fdd-80db-c343a94cb568",
+        "78e4933c-b160-5095-a6dd-b05b786904f4"
+      ],
+      "access": "workspace"
+    },
+    {
+      "number": 4,
+      "key": "business_model",
+      "status": "supported",
+      "status_reason": null,
+      "body_md": "Annual licences priced per substation; deck pricing matches the public pricing page.",
+      "finding_ids": [
+        "0bfaf32b-d263-548e-98c1-ba4c3673ed6c"
+      ],
+      "access": "workspace"
+    },
+    {
+      "number": 5,
+      "key": "team",
+      "status": "supported",
+      "status_reason": null,
+      "body_md": "Both founders' prior roles confirmed by independent sources [finding:founders].",
+      "finding_ids": [
+        "da2d216d-5532-5057-9c68-ad7b38eca6fd"
+      ],
+      "access": "workspace"
+    },
+    {
+      "number": 6,
+      "key": "market",
+      "status": "incomplete",
+      "status_reason": "Only one independent market estimate",
+      "body_md": "Company model €310M vs one independent estimate €240M; shown as a range, not blended.",
+      "finding_ids": [
+        "78e4933c-b160-5095-a6dd-b05b786904f4",
+        "96b965f7-a5a5-5e60-b8c1-d7b63ed434e7"
+      ],
+      "access": "workspace"
+    },
+    {
+      "number": 7,
+      "key": "competition",
+      "status": "supported",
+      "status_reason": null,
+      "body_md": "Five competitors; two well-funded incumbents with overlapping products, both named in the deck.",
+      "finding_ids": [
+        "78e4933c-b160-5095-a6dd-b05b786904f4"
+      ],
+      "access": "workspace"
+    },
+    {
+      "number": 8,
+      "key": "product_technology",
+      "status": "incomplete",
+      "status_reason": "Forecast-accuracy claim could not be verified",
+      "body_md": "Live at two utilities with public API documentation.",
+      "finding_ids": [
+        "0bfaf32b-d263-548e-98c1-ba4c3673ed6c"
+      ],
+      "access": "workspace"
+    },
+    {
+      "number": 9,
+      "key": "traction",
+      "status": "incomplete",
+      "status_reason": "Third customer not confirmed",
+      "body_md": "Three paying customers; two confirmed publicly. Largest customer 58% of revenue [calc:top_customer_share].",
+      "finding_ids": [
+        "0bfaf32b-d263-548e-98c1-ba4c3673ed6c",
+        "bcd8afa6-5242-59c7-9895-d01e2c9c89c7"
+      ],
+      "access": "deal_team"
+    },
+    {
+      "number": 10,
+      "key": "financial_analysis",
+      "status": "incomplete",
+      "status_reason": "validation_pending: MRR table not yet validated; CAC inputs missing",
+      "body_md": "ARR €640,200 from 12 × MRR, flagged against the deck's €900k [calc:arr_from_mrr]; runway 19.0 months [calc:runway_months]. CAC, LTV and payback not computable.",
+      "finding_ids": [
+        "8753a4d1-7844-54f0-8495-7116790cfd32",
+        "8a3e334a-de04-5ee4-af38-06b81a0e4f17",
+        "04f8c837-8e3c-5c6a-9978-3b7038b9e7cf"
+      ],
+      "access": "deal_team"
+    },
+    {
+      "number": 11,
+      "key": "capitalization",
+      "status": "supported",
+      "status_reason": null,
+      "body_md": "Cap table reconciles to the registry share count; seed amount disputed in public sources.",
+      "finding_ids": [
+        "983f906c-c422-549b-9a7c-11d5ed25cb12"
+      ],
+      "access": "deal_team"
+    },
+    {
+      "number": 12,
+      "key": "legal_regulatory",
+      "status": "incomplete",
+      "status_reason": "IP assignment missing",
+      "body_md": "No IP assignment found for pre-incorporation code. No litigation or sanctions matches in public records.",
+      "finding_ids": [
+        "9eeec699-ffdd-58ae-af18-14715d3d1889"
+      ],
+      "access": "deal_team"
+    },
+    {
+      "number": 13,
+      "key": "security_operational",
+      "status": "incomplete",
+      "status_reason": "search_unavailable: public posture check did not run",
+      "body_md": "Policies reviewed; no penetration test in the last 12 months.",
+      "finding_ids": [
+        "73b4bb46-a3b3-57d5-92c4-24b178b211aa"
+      ],
+      "access": "deal_team"
+    },
+    {
+      "number": 14,
+      "key": "red_flags",
+      "status": "supported",
+      "status_reason": null,
+      "body_md": "Concentration, missing CTO IP assignment, deck ARR higher than the workbook.",
+      "finding_ids": [
+        "bcd8afa6-5242-59c7-9895-d01e2c9c89c7",
+        "9eeec699-ffdd-58ae-af18-14715d3d1889",
+        "8a3e334a-de04-5ee4-af38-06b81a0e4f17"
+      ],
+      "access": "deal_team"
+    },
+    {
+      "number": 15,
+      "key": "contradictions",
+      "status": "supported",
+      "status_reason": null,
+      "body_md": "Three open: seed amount, ARR, customer count.",
+      "finding_ids": [
+        "983f906c-c422-549b-9a7c-11d5ed25cb12",
+        "8a3e334a-de04-5ee4-af38-06b81a0e4f17"
+      ],
+      "access": "deal_team"
+    },
+    {
+      "number": 16,
+      "key": "coverage_confidence",
+      "status": "supported",
+      "status_reason": null,
+      "body_md": "6 of 12 domains sufficient, 5 partial, 1 insufficient. 38% of material findings rest only on company documents.",
+      "finding_ids": [
+        "31671a27-7c4a-5fdd-80db-c343a94cb568"
+      ],
+      "access": "workspace"
+    },
+    {
+      "number": 17,
+      "key": "missing_information",
+      "status": "supported",
+      "status_reason": null,
+      "body_md": "Four requests, two blocking a recommendation.",
+      "finding_ids": [
+        "04f8c837-8e3c-5c6a-9978-3b7038b9e7cf",
+        "9eeec699-ffdd-58ae-af18-14715d3d1889",
+        "73b4bb46-a3b3-57d5-92c4-24b178b211aa"
+      ],
+      "access": "deal_team"
+    },
+    {
+      "number": 18,
+      "key": "scenarios",
+      "status": "supported",
+      "status_reason": null,
+      "body_md": "Gross multiple on a €2M ticket: bear 0.6×, base 3.1×, bull 8.4×; assumptions labelled.",
+      "finding_ids": [
+        "8753a4d1-7844-54f0-8495-7116790cfd32"
+      ],
+      "access": "deal_team"
+    },
+    {
+      "number": 19,
+      "key": "next_actions",
+      "status": "supported",
+      "status_reason": null,
+      "body_md": "Reference calls; obtain CTO IP assignment; reconcile ARR definition; request a penetration test summary.",
+      "finding_ids": [],
+      "access": "deal_team"
+    },
+    {
+      "number": 20,
+      "key": "ic_considerations",
+      "status": "supported",
+      "status_reason": null,
+      "body_md": "Concentration and the IP assignment are suggested conditions for a term sheet. The decision is yours.",
+      "finding_ids": [],
+      "access": "deal_team"
+    },
+    {
+      "number": 21,
+      "key": "evidence_appendix",
+      "status": "supported",
+      "status_reason": null,
+      "body_md": "142 saved web sources and 9 documents; every finding links to its saved copy or document page.",
+      "finding_ids": [
+        "31671a27-7c4a-5fdd-80db-c343a94cb568"
+      ],
+      "access": "workspace"
+    }
+  ],
+  "disclaimers": [
+    "Sections 10, 12 and 13 identify issues and questions; they are not accounting, legal or security certification.",
+    "Level 3 export: confidential to the deal team."
+  ],
+  "created_at": "2026-11-07T16:12:00Z",
+  "approved_by": null
+}

@@ -1,0 +1,459 @@
+[
+  {
+    "calculation_id": "2a5809d6-15dc-53d1-b64e-5ba12b8e837e",
+    "metric": "revenue_growth_yoy",
+    "formula_version": "ddcalc@1",
+    "status": "computed",
+    "value": "1.8153",
+    "unit": "ratio",
+    "currency": null,
+    "period": {
+      "start": "2025-09-01",
+      "end": "2026-09-30",
+      "granularity": "year"
+    },
+    "inputs": [
+      {
+        "name": "mrr_start",
+        "value": "18950",
+        "unit": "EUR/month",
+        "period": {
+          "start": "2025-09-01",
+          "end": "2025-09-30",
+          "granularity": "month"
+        },
+        "document_id": "93291db3-a7b0-57ff-921f-60201a4e53f6",
+        "document_version": 1,
+        "locator": {
+          "kind": "sheet",
+          "sheet": "MRR_history",
+          "cell": "N5"
+        }
+      },
+      {
+        "name": "mrr_end",
+        "value": "53350",
+        "unit": "EUR/month",
+        "period": {
+          "start": "2026-09-01",
+          "end": "2026-09-30",
+          "granularity": "month"
+        },
+        "document_id": "93291db3-a7b0-57ff-921f-60201a4e53f6",
+        "document_version": 1,
+        "locator": {
+          "kind": "sheet",
+          "sheet": "MRR",
+          "cell": "E5"
+        }
+      }
+    ],
+    "assumptions": [
+      "MRR used as revenue proxy; Total MRR rows are not affected by the unvalidated July cell"
+    ],
+    "missing_inputs": [],
+    "validation_issues": []
+  },
+  {
+    "calculation_id": "c7b51e49-52da-5353-9561-2fa292c450d8",
+    "metric": "gross_margin",
+    "formula_version": "ddcalc@1",
+    "status": "computed",
+    "value": "0.7120",
+    "unit": "ratio",
+    "currency": null,
+    "period": {
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "granularity": "year"
+    },
+    "inputs": [
+      {
+        "name": "revenue",
+        "value": "412000",
+        "unit": "EUR",
+        "period": {
+          "start": "2025-01-01",
+          "end": "2025-12-31",
+          "granularity": "year"
+        },
+        "document_id": "6a7f5fa7-363f-53b0-be2f-aad73c1bccf8",
+        "document_version": 1,
+        "locator": {
+          "kind": "page",
+          "page": 3
+        }
+      },
+      {
+        "name": "cogs",
+        "value": "118650",
+        "unit": "EUR",
+        "period": {
+          "start": "2025-01-01",
+          "end": "2025-12-31",
+          "granularity": "year"
+        },
+        "document_id": "6a7f5fa7-363f-53b0-be2f-aad73c1bccf8",
+        "document_version": 1,
+        "locator": {
+          "kind": "page",
+          "page": 3
+        }
+      }
+    ],
+    "assumptions": [
+      "Hosting and implementation staff classified as COGS, as stated on p. 3"
+    ],
+    "missing_inputs": [],
+    "validation_issues": []
+  },
+  {
+    "calculation_id": "6472edc1-731c-5299-a2b4-8b59b34c3f3a",
+    "metric": "net_burn_monthly",
+    "formula_version": "ddcalc@1",
+    "status": "computed",
+    "value": "118000",
+    "unit": "EUR/month",
+    "currency": "EUR",
+    "period": {
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "granularity": "quarter"
+    },
+    "inputs": [
+      {
+        "name": "cash_start",
+        "value": "2594000",
+        "unit": "EUR",
+        "period": {
+          "start": "2026-06-30",
+          "end": "2026-06-30",
+          "granularity": "point"
+        },
+        "document_id": "93291db3-a7b0-57ff-921f-60201a4e53f6",
+        "document_version": 1,
+        "locator": {
+          "kind": "sheet",
+          "sheet": "Cash",
+          "cell": "B4"
+        }
+      },
+      {
+        "name": "cash_end",
+        "value": "2240000",
+        "unit": "EUR",
+        "period": {
+          "start": "2026-09-30",
+          "end": "2026-09-30",
+          "granularity": "point"
+        },
+        "document_id": "93291db3-a7b0-57ff-921f-60201a4e53f6",
+        "document_version": 1,
+        "locator": {
+          "kind": "sheet",
+          "sheet": "Cash",
+          "cell": "E4"
+        }
+      }
+    ],
+    "assumptions": [
+      "No financing inflows in the period (checked against bank summary)"
+    ],
+    "missing_inputs": [],
+    "validation_issues": []
+  },
+  {
+    "calculation_id": "0a07e55c-30c5-5ec0-8295-fc73da84ad35",
+    "metric": "runway_months",
+    "formula_version": "ddcalc@1",
+    "status": "computed",
+    "value": "19.0",
+    "unit": "months",
+    "currency": null,
+    "period": {
+      "start": "2026-09-30",
+      "end": "2026-09-30",
+      "granularity": "point"
+    },
+    "inputs": [
+      {
+        "name": "cash_end",
+        "value": "2240000",
+        "unit": "EUR",
+        "period": {
+          "start": "2026-09-30",
+          "end": "2026-09-30",
+          "granularity": "point"
+        },
+        "document_id": "6a7f5fa7-363f-53b0-be2f-aad73c1bccf8",
+        "document_version": 1,
+        "locator": {
+          "kind": "page",
+          "page": 4
+        }
+      },
+      {
+        "name": "net_burn_monthly",
+        "value": "118000",
+        "unit": "EUR/month",
+        "period": {
+          "start": "2026-07-01",
+          "end": "2026-09-30",
+          "granularity": "quarter"
+        },
+        "claim_id": "6472edc1-731c-5299-a2b4-8b59b34c3f3a"
+      }
+    ],
+    "assumptions": [
+      "Burn held at the Jul–Sep average"
+    ],
+    "missing_inputs": [],
+    "validation_issues": []
+  },
+  {
+    "calculation_id": "9e5b7b68-4e3d-5132-a261-648f7473eab8",
+    "metric": "arr_from_mrr",
+    "formula_version": "ddcalc@1",
+    "status": "flagged",
+    "value": "640200",
+    "unit": "EUR",
+    "currency": "EUR",
+    "period": {
+      "start": "2026-09-30",
+      "end": "2026-09-30",
+      "granularity": "point"
+    },
+    "inputs": [
+      {
+        "name": "mrr_end",
+        "value": "53350",
+        "unit": "EUR/month",
+        "period": {
+          "start": "2026-09-01",
+          "end": "2026-09-30",
+          "granularity": "month"
+        },
+        "document_id": "93291db3-a7b0-57ff-921f-60201a4e53f6",
+        "document_version": 1,
+        "locator": {
+          "kind": "sheet",
+          "sheet": "MRR",
+          "cell": "E5"
+        }
+      }
+    ],
+    "assumptions": [],
+    "missing_inputs": [],
+    "validation_issues": [
+      "Deck (Pitch deck Oct 2026.pdf, slide 9) states ARR €900,000; difference 40.6% exceeds 2% tolerance"
+    ]
+  },
+  {
+    "calculation_id": "322322fc-d8bf-5db0-bdc0-1e4b891f22de",
+    "metric": "net_revenue_retention",
+    "formula_version": "ddcalc@1",
+    "status": "not_computable",
+    "value": null,
+    "unit": "ratio",
+    "currency": null,
+    "period": {
+      "start": "2025-10-01",
+      "end": "2026-09-30",
+      "granularity": "year"
+    },
+    "inputs": [],
+    "assumptions": [],
+    "missing_inputs": [
+      "validated MRR table ftb (version ≥ 2)"
+    ],
+    "validation_issues": []
+  },
+  {
+    "calculation_id": "5efac074-1fa2-5693-b588-6e24a1f68eb9",
+    "metric": "gross_revenue_retention",
+    "formula_version": "ddcalc@1",
+    "status": "not_computable",
+    "value": null,
+    "unit": "ratio",
+    "currency": null,
+    "period": {
+      "start": "2025-10-01",
+      "end": "2026-09-30",
+      "granularity": "year"
+    },
+    "inputs": [],
+    "assumptions": [],
+    "missing_inputs": [
+      "validated MRR table ftb (version ≥ 2)"
+    ],
+    "validation_issues": []
+  },
+  {
+    "calculation_id": "df706e8e-5d9f-5ed7-90f3-42b2b972c574",
+    "metric": "cac",
+    "formula_version": "ddcalc@1",
+    "status": "not_computable",
+    "value": null,
+    "unit": "EUR",
+    "currency": null,
+    "period": {
+      "start": "2025-10-01",
+      "end": "2026-09-30",
+      "granularity": "year"
+    },
+    "inputs": [],
+    "assumptions": [],
+    "missing_inputs": [
+      "sales and marketing spend, last 12 months"
+    ],
+    "validation_issues": []
+  },
+  {
+    "calculation_id": "47a1b64d-6156-54f5-9613-c3c892eb326d",
+    "metric": "ltv",
+    "formula_version": "ddcalc@1",
+    "status": "not_computable",
+    "value": null,
+    "unit": "EUR",
+    "currency": null,
+    "period": {
+      "start": "2025-10-01",
+      "end": "2026-09-30",
+      "granularity": "year"
+    },
+    "inputs": [],
+    "assumptions": [],
+    "missing_inputs": [
+      "customer-level churn history"
+    ],
+    "validation_issues": []
+  },
+  {
+    "calculation_id": "6c7d35ca-f19b-57f0-9e09-2482eb611300",
+    "metric": "cac_payback_months",
+    "formula_version": "ddcalc@1",
+    "status": "not_computable",
+    "value": null,
+    "unit": "months",
+    "currency": null,
+    "period": {
+      "start": "2025-10-01",
+      "end": "2026-09-30",
+      "granularity": "year"
+    },
+    "inputs": [],
+    "assumptions": [],
+    "missing_inputs": [
+      "cac"
+    ],
+    "validation_issues": []
+  },
+  {
+    "calculation_id": "886986ef-9549-5dba-b0ea-15859b1db9a0",
+    "metric": "top_customer_share",
+    "formula_version": "ddcalc@1",
+    "status": "computed",
+    "value": "0.5800",
+    "unit": "ratio",
+    "currency": null,
+    "period": {
+      "start": "2026-01-01",
+      "end": "2026-09-30",
+      "granularity": "quarter"
+    },
+    "inputs": [
+      {
+        "name": "top_customer_revenue",
+        "value": "239105",
+        "unit": "EUR",
+        "period": {
+          "start": "2026-01-01",
+          "end": "2026-09-30",
+          "granularity": "quarter"
+        },
+        "document_id": "7d197ae5-8a6b-5540-a483-ba68137a0e04",
+        "document_version": 1,
+        "locator": {
+          "kind": "sheet",
+          "sheet": "Customer revenue 2026",
+          "cell": "C2:C1212"
+        }
+      },
+      {
+        "name": "total_revenue",
+        "value": "412250",
+        "unit": "EUR",
+        "period": {
+          "start": "2026-01-01",
+          "end": "2026-09-30",
+          "granularity": "quarter"
+        },
+        "document_id": "7d197ae5-8a6b-5540-a483-ba68137a0e04",
+        "document_version": 1,
+        "locator": {
+          "kind": "sheet",
+          "sheet": "Customer revenue 2026",
+          "cell": "C2:C1212"
+        }
+      }
+    ],
+    "assumptions": [
+      "Customer IDs merged where the same legal entity appears twice"
+    ],
+    "missing_inputs": [],
+    "validation_issues": []
+  },
+  {
+    "calculation_id": "a07cb3d8-1127-5206-875a-c45e8a4f31ef",
+    "metric": "forecast_vs_actual_q3",
+    "formula_version": "ddcalc@1",
+    "status": "computed",
+    "value": "-0.1400",
+    "unit": "ratio",
+    "currency": null,
+    "period": {
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "granularity": "quarter"
+    },
+    "inputs": [
+      {
+        "name": "actual",
+        "value": "154250",
+        "unit": "EUR",
+        "period": {
+          "start": "2026-07-01",
+          "end": "2026-09-30",
+          "granularity": "quarter"
+        },
+        "document_id": "93291db3-a7b0-57ff-921f-60201a4e53f6",
+        "document_version": 1,
+        "locator": {
+          "kind": "sheet",
+          "sheet": "Actuals",
+          "cell": "D9"
+        }
+      },
+      {
+        "name": "budget",
+        "value": "179360",
+        "unit": "EUR",
+        "period": {
+          "start": "2026-07-01",
+          "end": "2026-09-30",
+          "granularity": "quarter"
+        },
+        "document_id": "93291db3-a7b0-57ff-921f-60201a4e53f6",
+        "document_version": 1,
+        "locator": {
+          "kind": "sheet",
+          "sheet": "Budget 2026",
+          "cell": "D9"
+        }
+      }
+    ],
+    "assumptions": [],
+    "missing_inputs": [],
+    "validation_issues": []
+  }
+]

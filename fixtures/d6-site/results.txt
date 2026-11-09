@@ -1,0 +1,9 @@
+PASSED test_site.py::test_every_page_labelled_synthetic_and_noindex
+PASSED test_site.py::test_claims_present_verbatim_on_their_pages
+PASSED test_site.py::test_contradictory_claims_have_independent_counter_evidence
+PASSED test_site.py::test_unsupported_claims_have_no_evidence
+PASSED test_site.py::test_prompt_injection_fixture_present
+PASSED test_site.py::test_no_real_world_identifiers
+PASSED test_site.py::test_hashes_match_and_build_is_deterministic
+7 passed in 0.05s
+2026-11-07T23:41:43Z

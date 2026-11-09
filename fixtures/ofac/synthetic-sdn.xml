@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Synthetic SDN-shaped fixture for CI (not official OFAC data). -->
+<sdnList>
+  <publshInformation>
+    <Publish_Date>11/07/2026</Publish_Date>
+    <Record_Count>3</Record_Count>
+  </publshInformation>
+  <sdnEntry>
+    <uid>900001</uid>
+    <lastName>PLINTHWICK SYNTHETIC ANALYTICS</lastName>
+    <sdnType>Entity</sdnType>
+    <programList><program>SYNTHETIC</program></programList>
+  </sdnEntry>
+  <sdnEntry>
+    <uid>900002</uid>
+    <lastName>ACME ROBOTICS HOLDINGS</lastName>
+    <sdnType>Entity</sdnType>
+    <programList><program>SYNTHETIC</program></programList>
+  </sdnEntry>
+  <sdnEntry>
+    <uid>900003</uid>
+    <lastName>DOE</lastName>
+    <firstName>JANE</firstName>
+    <sdnType>Individual</sdnType>
+    <programList><program>SYNTHETIC</program></programList>
+  </sdnEntry>
+</sdnList>

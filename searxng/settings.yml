@@ -1,0 +1,33 @@
+use_default_settings: true
+server:
+  secret_key: "thesis-dev-searxng-change-me"
+  limiter: false
+  public_instance: false
+  image_proxy: false
+search:
+  safe_search: 0
+  autocomplete: ""
+  formats:
+    - html
+    - json
+outgoing:
+  request_timeout: 8.0
+  # Descriptive UA helps some engines; CAPTCHA/rate-limits still degrade SearXNG.
+  useragent_suffix: "ThesisDiligenceBot/0.1"
+engines:
+  - name: wikipedia
+    engine: wikipedia
+    shortcut: wp
+    disabled: false
+  - name: wikidata
+    engine: wikidata
+    shortcut: wd
+    disabled: false
+  - name: duckduckgo
+    engine: duckduckgo
+    shortcut: ddg
+    disabled: false
+  - name: brave
+    engine: brave
+    shortcut: br
+    disabled: false

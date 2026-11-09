@@ -1,0 +1,14 @@
+{
+  "_comment": "One record per test ID. Placeholders only; a record without real artifact links does not count.",
+  "id": "DD-30",
+  "environment": "real | ci-local | unit",
+  "commit_sha": "<40-char sha>",
+  "command": "<exact command run>",
+  "started_at": "<ISO-8601 UTC>",
+  "result": "passed | failed | skipped | blocked",
+  "skip_or_block_reason": null,
+  "artifacts": ["<CI job URL or path to captured log / Playwright report / screenshot>"],
+  "rerun_by": "<independent reviewer, Gate H>",
+  "rerun_result": "passed | failed | null",
+  "notes": ""
+}

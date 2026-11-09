@@ -1,0 +1,16 @@
+Thesis
+Copyright 2026 Thesis contributors
+
+This product is licensed under the Apache License, Version 2.0.
+See the LICENSE file for the full text.
+
+Third-party components (verify at pin; REM-P1-06 licence audit still open):
+
+- FastAPI, Starlette, Pydantic, SQLAlchemy, Alembic, HTTPX, Temporal Python SDK,
+  Next.js, and other runtime dependencies: see each package's metadata.
+- SearXNG (optional Compose search service): AGPL-3.0 — runs as a separate
+  process; not vendored into this repository's source tree.
+- SeaweedFS (optional object store image): see upstream licence.
+- Patterns adapted (clean-room / ideas only unless noted): GPT-Researcher and
+  II-Researcher (Apache-2.0); Agent Search (MIT). FirstSignal: ideas only — no
+  licence; no source copied.

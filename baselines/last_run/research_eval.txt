@@ -1,0 +1,16 @@
+Research eval d6-false-claims (fixture) harness=research-eval@1.0.0
+dataset_version=d6-false-claims@1.0.0
+  identity_resolution_ok: 1.0000 (1/1)
+  contradiction_recall: 1.0000 (5/5)
+  unsupported_claim_recall: 1.0000 (2/2)
+  citation_presence: 1.0000 (5/5)
+  url_dedupe_correct: 1.0000 (1/1)
+  syndicated_not_counted_independent: 1.0000 (1/1)
+  contradiction_preserved_low_rank: 1.0000 (1/1)
+  conflicting_claims_recorded: 1.0000 (1/1)
+  numeric_grounding_contract: 1.0000 (1/1)
+  claim_fixture_coverage: 1.0000 (7/7)
+  SKIPPED: public_pages_https: optional — use D6_FIXTURE_URL / compose d6-fixture (ci-local); never invent Pages URL
+  SKIPPED: live_model_claim_extraction: not run in fixture mode
+  SKIPPED: financial_calc_live: N/A for D6 HTML fixture
+  SKIPPED: prompt_injection_live: deferred to adversarial suite

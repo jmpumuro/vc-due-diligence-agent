@@ -1,0 +1,1275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Thesis — Due diligence</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Geist,Inter,system-ui,sans-serif;font-size:14px;line-height:1.5;font-feature-settings:'tnum' 1,'cv11' 1;background:#F6F6F7}
+.t-light{--bg:#F6F6F7;--surface:#FFFFFF;--surface-2:#F3F3F5;--sidebar:#FBFBFC;--border:#E6E6EA;--border-strong:#D4D4DA;--text:#18181B;--muted:#62626B;--brand:#5146E5;--brand-hover:#4338CA;--brand-soft:#EEEDFD;--brand-text:#4338CA;--green:#16794A;--amber:#A16207;--red:#C2302A;--blue:#2563EB;--gray:#8E8E96;--overlay:rgba(24,24,27,.32);--shadow:0 1px 2px rgba(24,24,27,.04),0 8px 24px rgba(24,24,27,.08)}
+.t-dark{--bg:#0C0D10;--surface:#131418;--surface-2:#1B1C21;--sidebar:#0F1013;--border:#25272D;--border-strong:#34373E;--text:#EDEDEF;--muted:#A1A1AA;--brand:#7C74FF;--brand-hover:#948DFF;--brand-soft:#232046;--brand-text:#B4AEFF;--green:#3FB871;--amber:#D9A23A;--red:#EF5A50;--blue:#5B8CFF;--gray:#71717A;--overlay:rgba(0,0,0,.55);--shadow:0 8px 32px rgba(0,0,0,.5)}
+a{color:inherit}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+h1{margin:0;font-size:22px;font-weight:600;letter-spacing:-0.015em}
+h2{margin:0;font-size:14px;font-weight:600}
+.app{background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-wrap:wrap;align-items:stretch;position:relative}
+.side{flex:1 1 236px;max-width:100%;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;gap:18px;padding:14px 12px;box-sizing:border-box}
+.navi{display:flex;align-items:center;gap:10px;width:100%;min-height:34px;padding:0 10px;border:0;border-radius:7px;background:transparent;color:var(--muted);cursor:pointer;text-align:left;font-weight:500;text-decoration:none;box-sizing:border-box}
+.navi:hover{background:var(--surface-2);color:var(--text)}
+.navi.on{background:var(--brand-soft);color:var(--brand-text);font-weight:600}
+.navi{transition:background .15s ease-out,color .15s ease-out}
+.sect{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 10px;margin:4px 0 2px}
+.switch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px;padding:3px;background:var(--surface-2);border-radius:8px}
+.sw{display:flex;align-items:center;justify-content:center;gap:6px;min-height:30px;border-radius:6px;font-size:12px;font-weight:600;color:var(--muted);text-decoration:none}
+.sw.on{background:var(--surface);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.sw:hover{color:var(--text)}
+.top{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 28px;border-bottom:1px solid var(--border);background:var(--surface);min-height:56px;box-sizing:border-box}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);flex:1 1 220px;min-width:0}
+.crumbs b{color:var(--text);font-weight:500}
+.search{display:flex;align-items:center;gap:8px;min-height:36px;padding:0 10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--muted);cursor:pointer;min-width:220px}
+.kbd{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;padding:1px 5px;border:1px solid var(--border);border-radius:4px;color:var(--muted);background:var(--surface)}
+.iconbtn{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;border:1px solid transparent;background:transparent;color:var(--muted);cursor:pointer;position:relative}
+.iconbtn:hover{background:var(--surface-2);color:var(--text)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:36px;padding:0 14px;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface);cursor:pointer;font-weight:500;text-decoration:none;color:var(--text)}
+.btn:hover{background:var(--surface-2)}
+.btn-primary{background:var(--brand);border-color:var(--brand);color:#FFFFFF}
+.btn-primary:hover{background:var(--brand-hover)}
+.btn-ghost{border-color:transparent;background:transparent}
+.btn-ghost:hover{background:var(--surface-2)}
+.page{padding:28px;display:flex;flex-direction:column;gap:24px;max-width:1200px;width:100%;box-sizing:border-box}
+.ph{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:flex-end}
+.sub{margin:4px 0 0;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:0 1px 2px rgba(16,16,20,.04)}
+.btn,.btn-primary{border-radius:10px;transition:background .15s ease-out,border-color .15s ease-out}
+.btn:focus-visible,.tab:focus-visible,.navi:focus-visible,.tr:focus-visible,.choice:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(63,184,113,.55)}70%{box-shadow:0 0 0 7px rgba(63,184,113,0)}100%{box-shadow:0 0 0 0 rgba(63,184,113,0)}}
+.pulse{animation:pulse 1.8s infinite}
+.toast{position:fixed;right:24px;bottom:24px;z-index:40;display:flex;gap:12px;align-items:flex-start;width:min(380px,calc(100% - 32px));padding:12px 14px;border-radius:12px;background:var(--text);color:var(--bg);box-shadow:var(--shadow);font-size:13px;box-sizing:border-box}
+@media (prefers-reduced-motion: reduce){.pulse{animation:none}.navi,.btn{transition:none}}
+.ch{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--border)}
+.cb{padding:16px 18px}
+.thd{display:grid;gap:14px;padding:9px 18px;font-size:12px;font-weight:500;color:var(--muted);background:var(--surface-2);border-bottom:1px solid var(--border)}
+.tr{display:grid;width:100%;gap:14px;align-items:center;padding:13px 18px;border:0;border-top:1px solid var(--border);background:transparent;text-align:left;cursor:pointer;box-sizing:border-box}
+.tr:first-of-type{border-top:0}
+.tr:hover{background:var(--surface-2)}
+.li{padding:13px 18px;border-top:1px solid var(--border)}
+.li:first-of-type{border-top:0}
+.mute{color:var(--muted)}
+.lbl{font-size:12px;color:var(--muted)}
+.mono{font-family:'Geist Mono',ui-monospace,monospace;font-size:12px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:99px;flex:none}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:3px 10px 3px 8px;border-radius:99px;background:var(--surface-2);font-size:12px;font-weight:500;white-space:nowrap}
+.badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:99px;background:var(--brand-soft);color:var(--brand-text);font-size:11px;font-weight:600;box-sizing:border-box}
+.logo{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:9px;background:var(--surface-2);border:1px solid var(--border);font-weight:600;font-size:12px;flex:none}
+.bar{height:6px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.tabs{display:inline-flex;gap:2px;padding:3px;border-radius:10px;background:var(--surface-2);overflow-x:auto;align-self:flex-start;max-width:100%;box-sizing:border-box}
+.tab{min-height:32px;padding:0 14px;border:0;border-radius:8px;background:transparent;cursor:pointer;color:var(--muted);font-weight:500;white-space:nowrap}
+.tab:hover{color:var(--text)}
+.tab.on{color:var(--text);background:var(--surface);box-shadow:0 1px 2px rgba(0,0,0,.1)}
+.input{min-height:38px;padding:0 12px;border:1px solid var(--border-strong);border-radius:8px;background:var(--surface);color:var(--text);box-sizing:border-box}
+.input:focus{outline:2px solid var(--brand);outline-offset:-1px}
+.choice{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 14px;border:1px solid var(--border-strong);border-radius:10px;background:var(--surface);cursor:pointer;text-align:left;flex:1 1 180px}
+.choice.on{border-color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand);background:var(--brand-soft)}
+.callout{padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);font-size:14px}
+.scroll{overflow-x:auto}
+.overlay{position:absolute;inset:0;background:var(--overlay);display:flex;justify-content:center;align-items:flex-start;padding-top:96px;z-index:20}
+.palette{width:min(560px,92%);background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.pitem{display:flex;align-items:center;gap:12px;width:100%;min-height:44px;padding:0 16px;border:0;background:transparent;cursor:pointer;text-align:left;color:var(--text);text-decoration:none;box-sizing:border-box}
+.pitem:hover{background:var(--surface-2)}
+.pop{position:absolute;right:28px;top:60px;width:min(360px,90%);background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);z-index:15}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:2px 9px;border-radius:6px;font-size:12px;font-weight:500;white-space:nowrap;border:1px solid var(--border);background:var(--surface)}
+.lvl{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:600;background:var(--text);color:var(--bg);white-space:nowrap}
+.choice.off{opacity:.55;cursor:not-allowed}
+.measure{flex:1 1 220px;min-width:0;padding:16px 18px;display:flex;flex-direction:column;gap:6px;border-right:1px solid var(--border)}
+.measure:last-child{border-right:0}
+.cells{display:grid;grid-template-columns:repeat(12,1fr);gap:3px}
+.cells span{height:10px;border-radius:2px}
+.steps{display:flex;align-items:center;gap:4px}
+.steps span{width:18px;height:4px;border-radius:99px;background:var(--surface-2)}
+.grid{display:grid;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-size:13px}
+.grid > span{padding:8px 10px;border-top:1px solid var(--border);border-left:1px solid var(--border);text-align:right;font-variant-numeric:tabular-nums}
+.toc{text-decoration:none;display:flex;align-items:center;gap:8px;width:100%;padding:6px 10px;border:0;border-radius:7px;background:transparent;cursor:pointer;text-align:left;color:var(--text);font-size:13px;box-sizing:border-box}
+.toc:hover{background:var(--surface-2)}
+.restricted{display:flex;gap:12px;align-items:center;padding:14px 16px;border:1px dashed var(--border-strong);border-radius:10px;color:var(--muted);font-size:13px}
+.disc{font-size:12px;color:var(--muted);padding:8px 12px;border-left:2px solid var(--border-strong);background:var(--surface-2);border-radius:0 6px 6px 0}
+.mx{display:grid;grid-template-columns:70px repeat(3,1fr);gap:3px;font-size:12px}
+.mx > span{min-height:34px;display:flex;align-items:center;justify-content:center;border-radius:6px}
+</style>
+</helmet>
+
+<div class="app {{themeClass}}">
+
+<aside class="side">
+<div style="display: flex; align-items: center; gap: 10px; padding: 4px 6px">
+<svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="8" fill="var(--brand)"></rect><path d="M8 9.5h12M14 9.5v10" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round"></path></svg>
+<div style="flex: 1; min-width: 0"><div style="font-weight: 600; font-size: 14px">Default workspace</div><div class="lbl">Free · self-hosted</div></div>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" aria-hidden="true"><path d="M8 9l4-4 4 4M8 15l4 4 4-4"></path></svg>
+</div>
+<div class="switch" role="navigation" aria-label="Product">
+<a class="sw on" href="Main.dc.html">Diligence</a>
+<a class="sw" href="Console.dc.html">Agent console</a>
+</div>
+<nav aria-label="Main" style="display: flex; flex-direction: column; gap: 2px">
+<div class="sect">Workspace</div>
+<sc-for list="{{navMain}}" as="n" hint-placeholder-count="4">
+<button class="navi {{n.cls}}" onClick="{{n.go}}">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"></path></svg>
+<span style="flex: 1">{{n.label}}</span>
+<sc-if value="{{n.hasBadge}}" hint-placeholder-val="{{false}}"><span class="badge">{{n.badge}}</span></sc-if>
+</button>
+</sc-for>
+<div class="sect" style="margin-top: 14px">Firm</div>
+<sc-for list="{{navFirm}}" as="n" hint-placeholder-count="1">
+<button class="navi {{n.cls}}" onClick="{{n.go}}">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"></path></svg>
+<span style="flex: 1">{{n.label}}</span>
+</button>
+</sc-for>
+</nav>
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 10px">
+<div class="card" style="padding: 12px; display: flex; flex-direction: column; gap: 4px">
+<span style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600"><span class="dot" style="background: {{status.dot}}"></span>{{status.label}}</span>
+<span class="lbl">{{status.line}}</span>
+</div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 4px 6px">
+<span style="width: 30px; height: 30px; border-radius: 99px; background: var(--brand-soft); color: var(--brand-text); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12px">AR</span>
+<span style="display: flex; flex-direction: column; line-height: 1.3"><span style="font-weight: 500; font-size: 13px">Ana Ruiz</span><span class="lbl">Partner · Admin</span></span>
+</div>
+</div>
+</aside>
+
+<main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<div class="top">
+<div class="crumbs"><span>Diligence</span><span>/</span><sc-for list="{{crumbs}}" as="c" hint-placeholder-count="2"><span style="display: inline-flex; gap: 8px"><sc-if value="{{c.notFirst}}" hint-placeholder-val="{{false}}"><span>/</span></sc-if><b>{{c.label}}</b></span></sc-for></div>
+<button class="search" onClick="{{openPalette}}" aria-label="Search and commands">
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+<span style="flex: 1; text-align: left; font-size: 13px">Search or jump to…</span><span class="kbd">⌘K</span>
+</button>
+<button class="iconbtn" onClick="{{toggleBell}}" aria-label="Notifications">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg>
+<span style="position: absolute; top: 8px; right: 9px; width: 7px; height: 7px; border-radius: 99px; background: var(--red); border: 2px solid var(--surface)"></span>
+</button>
+<button class="iconbtn" onClick="{{toggleTheme}}" aria-label="Switch light or dark theme">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="{{themeIcon}}"></path></svg>
+</button>
+<button class="btn btn-primary" onClick="{{goCompanies}}">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Start diligence</button>
+</div>
+
+<sc-if value="{{notice.show}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 10px 28px; border-bottom: 1px solid var(--border); background: var(--surface-2); font-size: 13px">
+<span class="dot" style="background: {{notice.dot}}"></span>
+<span style="flex: 1 1 320px">{{notice.text}}</span>
+<sc-if value="{{notice.canDemo}}" hint-placeholder-val="{{false}}"><button class="btn" style="min-height: 30px" onClick="{{notice.startDemo}}">Explore the demo workspace</button></sc-if>
+<a href="Console.dc.html" class="lbl">View in agent console →</a>
+</div>
+</sc-if>
+
+<div class="page">
+
+<!-- HOME -->
+<sc-if value="{{is.home}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; flex-direction: column; gap: 24px">
+<div class="ph"><div><h1>Good morning, Ana</h1><p class="sub">Three companies are ready for your decision.</p></div><span class="lbl">Saturday, 7 November</span></div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px">
+<sc-for list="{{kpis}}" as="k" hint-placeholder-count="4">
+<div class="card" style="padding: 16px 18px; display: flex; flex-direction: column; gap: 4px">
+<span class="lbl">{{k.label}}</span><span style="font-size: 26px; font-weight: 600; letter-spacing: -0.02em">{{k.value}}</span><span class="lbl">{{k.sub}}</span>
+</div>
+</sc-for>
+</div>
+
+<section class="card">
+<div class="ch"><h2>Ready for your decision</h2><button class="btn btn-ghost" style="min-height: 30px" onClick="{{goDecisions}}">Open decisions →</button></div>
+<sc-for list="{{decisionList}}" as="d" hint-placeholder-count="3">
+<button class="tr" style="grid-template-columns: 34px 1.3fr 3fr auto" onClick="{{d.go}}">
+<span class="logo">{{d.initials}}</span>
+<span style="display: flex; flex-direction: column"><span style="font-weight: 600">{{d.company}}</span><span class="lbl">{{d.sector}}</span></span>
+<span>{{d.line}}</span>
+<span class="pill"><span class="dot" style="background: {{d.dot}}"></span>{{d.verdict}}</span>
+</button>
+</sc-for>
+</section>
+
+<div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+<section class="card" style="flex: 1 1 420px; min-width: 0">
+<div class="ch"><h2>In progress</h2><span class="pill"><span class="dot {{live.cls}}" style="background: {{live.dot}}"></span>{{live.label}}</span></div>
+<sc-for list="{{inProgress}}" as="p" hint-placeholder-count="4">
+<div class="li" style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; gap: 12px; align-items: center"><span style="font-weight: 500">{{p.company}}</span><span class="pill"><span class="dot" style="background: {{p.dot}}"></span>{{p.status}}</span></div>
+<div class="bar"><span style="display: block; height: 100%; width: {{p.pct}}%; background: var(--brand)"></span></div>
+<span class="lbl">{{p.detail}}</span>
+</div>
+</sc-for>
+</section>
+<section class="card" style="flex: 1 1 340px; min-width: 0">
+<div class="ch"><h2>What changed</h2><button class="btn btn-ghost" style="min-height: 30px" onClick="{{goWatchlist}}">Watchlist →</button></div>
+<sc-for list="{{signals}}" as="e" hint-placeholder-count="3">
+<div class="li" style="display: flex; gap: 12px">
+<span class="dot" style="background: {{e.dot}}; margin-top: 7px"></span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 500">{{e.company}} <span class="lbl">· {{e.when}}</span></span><span>{{e.summary}}</span><span class="lbl">{{e.next}}</span></span>
+</div>
+</sc-for>
+</section>
+</div>
+</div>
+</sc-if>
+
+<!-- COMPANIES -->
+<sc-if value="{{is.companies}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 24px">
+<div class="ph"><div><h1>Companies</h1><p class="sub">Every company your firm has assessed or is watching.</p></div></div>
+
+<section class="card">
+<div class="ch"><h2>Start diligence</h2><span class="lbl">You can upgrade to a deeper level later without losing work</span></div>
+<div class="cb" style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<label for="cn" class="lbl" style="flex: 2 1 220px; display: flex; flex-direction: column; gap: 6px; font-weight: 500">Company name<input id="cn" class="input" placeholder="Try Lattice, Kestrel or any new name" value="{{form.name}}" onInput="{{form.setName}}"></label>
+<label for="cw" class="lbl" style="flex: 2 1 200px; display: flex; flex-direction: column; gap: 6px; font-weight: 500">Website<input id="cw" class="input" placeholder="example.com — helps us find the right company"></label>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span class="lbl" style="font-weight: 500">Diligence level</span>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{form.levels}}" as="l" hint-placeholder-count="3">
+<button class="choice {{l.cls}}" onClick="{{l.pick}}" aria-disabled="{{l.disabled}}"><span style="display: flex; gap: 8px; align-items: center"><span class="lvl">L{{l.n}}</span><span style="font-weight: 600">{{l.label}}</span></span><span class="lbl">{{l.hint}}</span><sc-if value="{{l.hasReason}}" hint-placeholder-val="{{false}}"><span class="lbl" style="color: var(--amber)">{{l.reason}}</span></sc-if></button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span class="lbl" style="font-weight: 500">If we already have an assessment of this company</span>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{form.policies}}" as="p" hint-placeholder-count="3">
+<button class="choice {{p.cls}}" onClick="{{p.pick}}"><span style="font-weight: 600">{{p.label}}</span><span class="lbl">{{p.hint}}</span></button>
+</sc-for>
+</div>
+</div>
+<div><button class="btn btn-primary" onClick="{{form.submit}}">Start Level {{form.level}} diligence</button></div>
+<sc-if value="{{form.show}}" hint-placeholder-val="{{false}}">
+<div class="callout" style="border-left: 3px solid {{form.color}}; display: flex; flex-direction: column; gap: 6px">
+<strong style="font-weight: 600">{{form.title}}</strong>
+<span class="mute">{{form.body}}</span>
+<sc-if value="{{form.hasCandidates}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px">
+<sc-for list="{{form.candidates}}" as="k" hint-placeholder-count="2">
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center"><span class="logo" style="width: 28px; height: 28px; font-size: 11px">KO</span><span style="font-weight: 500">{{k.name}}</span><span class="lbl">{{k.domain}}</span><button class="btn" style="min-height: 30px">This one</button></div>
+</sc-for>
+<button class="btn btn-ghost" style="align-self: flex-start; min-height: 30px">Neither — it's a different company</button>
+</div>
+</sc-if>
+</div>
+</sc-if>
+</div>
+</section>
+
+<section class="card">
+<div class="ch">
+<div style="display: flex; flex-wrap: wrap; gap: 6px"><span class="pill" style="background: var(--brand-soft); color: var(--brand-text)">All 9</span><span class="pill">Ready 3</span><span class="pill">In progress 4</span><span class="pill">Decided 2</span></div>
+<span class="lbl">Sorted by last update</span>
+</div>
+<div class="scroll"><div style="min-width: 760px">
+<div class="thd" style="grid-template-columns: 34px 1.5fr 1.2fr 0.5fr 1.8fr 0.8fr 0.8fr"><span></span><span>Company</span><span>Sector</span><span>Level</span><span>Status</span><span>Coverage</span><span>Attractiveness</span></div>
+<sc-for list="{{companies}}" as="c" hint-placeholder-count="9">
+<button class="tr" style="grid-template-columns: 34px 1.5fr 1.2fr 0.5fr 1.8fr 0.8fr 0.8fr" onClick="{{c.open}}">
+<span class="logo">{{c.initials}}</span>
+<span style="display: flex; flex-direction: column"><span style="font-weight: 600">{{c.name}}</span><span class="lbl">{{c.domain}} · {{c.hq}}</span></span>
+<span style="display: flex; flex-direction: column"><span>{{c.sector}}</span><span class="lbl">{{c.stage}}</span></span>
+<span><span class="chip">L{{c.level}}</span></span>
+<span><span class="pill"><span class="dot" style="background: {{c.dot}}"></span>{{c.status}}</span></span>
+<span class="mute">{{c.coverage}}</span>
+<span style="font-weight: 600">{{c.score}}</span>
+</button>
+</sc-for>
+</div></div>
+</section>
+</div>
+</sc-if>
+
+<!-- COMPANY -->
+<sc-if value="{{is.company}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 24px">
+<div class="ph">
+<div style="display: flex; gap: 16px; align-items: center">
+<span class="logo" style="width: 56px; height: 56px; border-radius: 14px; font-size: 18px; background: var(--brand-soft); color: var(--brand-text); border-color: transparent">LG</span>
+<div><h1 style="font-size: 26px">Lattice Grid</h1><p class="sub">Load forecasting for electricity grid operators · Seed · Berlin · <a href="#">latticegrid.io</a></p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px"><span class="lvl">Level {{co.level}} · {{co.levelName}}</span><span class="chip">Revision {{co.revision}}</span><sc-if value="{{co.isL3}}" hint-placeholder-val="{{true}}"><span class="chip" title="Deal team">Deal team: Ana Ruiz, Marco Lee, Priya Nair</span></sc-if></div>
+</div>
+</div>
+<div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap"><sc-if value="{{co.canUpgrade}}" hint-placeholder-val="{{false}}"><button class="btn" onClick="{{co.upgrade}}">Upgrade to Level {{co.nextLevel}}</button></sc-if><button class="btn">Watch</button><button class="btn btn-primary" onClick="{{goDecisions}}">Decide</button></div>
+</div>
+
+<section class="card" style="display: flex; flex-wrap: wrap">
+<div style="flex: 1 1 100%; padding: 18px 22px; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid var(--border)">
+<span class="pill" style="align-self: flex-start; background: var(--brand-soft); color: var(--brand-text)"><span class="dot" style="background: {{co.recDot}}"></span>{{co.rec}}</span>
+<span style="font-size: 16px; line-height: 1.55; max-width: 860px">{{co.headline}}</span>
+<sc-if value="{{co.hasConditions}}" hint-placeholder-val="{{true}}"><ul style="margin: 0; padding-left: 20px; font-size: 14px; display: flex; flex-direction: column; gap: 2px"><sc-for list="{{co.conditions}}" as="c" hint-placeholder-count="3"><li>{{c}}</li></sc-for></ul></sc-if>
+<sc-if value="{{co.hasLimit}}" hint-placeholder-val="{{false}}"><span class="lbl">Coverage limits: {{co.limit}}</span></sc-if>
+</div>
+<sc-for list="{{measures}}" as="m" hint-placeholder-count="4">
+<div class="measure">
+<span class="lbl" style="font-weight: 500">{{m.label}}</span>
+<span style="font-size: 20px; font-weight: 650">{{m.value}}</span>
+<sc-if value="{{m.isCells}}" hint-placeholder-val="{{false}}"><div class="cells" role="img" aria-label="{{m.aria}}"><sc-for list="{{m.cells}}" as="c" hint-placeholder-count="12"><span style="background: {{c.color}}" title="{{c.title}}"></span></sc-for></div></sc-if>
+<sc-if value="{{m.isRange}}" hint-placeholder-val="{{false}}">
+<div style="position: relative; height: 22px" role="img" aria-label="{{m.aria}}">
+<span style="position: absolute; left: 0; right: 0; top: 9px; height: 4px; border-radius: 99px; background: var(--surface-2)"></span>
+<span style="position: absolute; left: {{m.lo}}%; width: {{m.w}}%; top: 5px; height: 12px; border-radius: 99px; background: var(--brand-soft); box-shadow: inset 0 0 0 1px var(--brand)"></span>
+<span style="position: absolute; left: 62.5%; top: 0; height: 22px; border-left: 2px dashed var(--muted)"></span>
+<span style="position: absolute; left: {{m.pt}}%; top: 4px; width: 14px; height: 14px; margin-left: -7px; border-radius: 99px; background: var(--brand); border: 3px solid var(--surface); box-sizing: border-box"></span>
+</div>
+</sc-if>
+<sc-if value="{{m.isSplit}}" hint-placeholder-val="{{false}}"><div style="display: flex; height: 8px; gap: 2px; border-radius: 99px; overflow: hidden"><sc-for list="{{m.split}}" as="p" hint-placeholder-count="2"><span style="flex: {{p.n}} 1 0; background: {{p.color}}"></span></sc-for></div></sc-if>
+<span class="lbl">{{m.note}}</span>
+</div>
+</sc-for>
+</section>
+
+<section class="card cb" style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap"><h2>{{findTotal}} findings, by kind</h2><span class="lbl">Click a kind to see those findings</span></div>
+<div style="display: flex; height: 14px; gap: 2px; border-radius: 99px; overflow: hidden">
+<sc-for list="{{evBar}}" as="b" hint-placeholder-count="7"><button aria-label="{{b.aria}}" onClick="{{b.pick}}" style="flex: {{b.n}} 1 0; border: 0; padding: 0; cursor: pointer; background: {{b.color}}"></button></sc-for>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 6px 18px">
+<sc-for list="{{evBar}}" as="b" hint-placeholder-count="7"><button onClick="{{b.pick}}" style="display: inline-flex; align-items: center; gap: 7px; border: 0; background: transparent; padding: 2px 0; cursor: pointer; font-size: 13px; color: var(--text)"><span class="dot" style="background: {{b.color}}"></span><span style="font-weight: 600">{{b.n}}</span><span class="mute">{{b.label}}</span></button></sc-for>
+</div>
+</section>
+
+<div class="tabs" role="tablist"><sc-for list="{{tabs}}" as="t" hint-placeholder-count="9"><button class="tab {{t.cls}}" role="tab" onClick="{{t.select}}">{{t.label}}<sc-if value="{{t.hasCount}}" hint-placeholder-val="{{false}}"> <span class="badge" style="margin-left: 4px">{{t.count}}</span></sc-if></button></sc-for></div>
+
+<sc-if value="{{gate.show}}" hint-placeholder-val="{{false}}">
+<div class="callout" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.8" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+<span style="flex: 1 1 320px; display: flex; flex-direction: column; gap: 2px"><strong style="font-weight: 600">{{gate.title}}</strong><span class="mute">{{gate.text}}</span></span>
+<sc-if value="{{gate.canUpgrade}}" hint-placeholder-val="{{false}}"><button class="btn" onClick="{{co.upgrade}}">Upgrade to Level 3</button></sc-if>
+</div>
+</sc-if>
+
+<!-- REPORT -->
+<sc-if value="{{tab.report}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+<aside class="card" style="flex: 1 1 240px; min-width: 0; padding: 10px 8px; display: flex; flex-direction: column; gap: 1px">
+<div class="sect" style="padding: 6px 10px">21 sections</div>
+<sc-for list="{{report}}" as="r" hint-placeholder-count="21">
+<a class="toc" href="#sec-{{r.n}}"><span class="mono mute" style="width: 18px">{{r.n}}</span><span style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{r.title}}</span><span class="dot" style="background: {{r.dot}}" title="{{r.status}}"></span></a>
+</sc-for>
+</aside>
+<article class="card" style="flex: 999 1 520px; min-width: 0; padding: 26px 30px; display: flex; flex-direction: column; gap: 22px">
+<div style="display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: center">
+<span class="lbl">Due diligence report · Level {{co.level}} · revision {{co.revision}} · schema ddreport@1</span>
+<div style="display: flex; gap: 6px; flex-wrap: wrap"><sc-for list="{{exports}}" as="x" hint-placeholder-count="4"><button class="btn" style="min-height: 30px; padding: 0 10px" onClick="{{x.go}}">{{x.label}}</button></sc-for></div>
+</div>
+<div style="display: flex; gap: 14px; flex-wrap: wrap" class="lbl"><sc-for list="{{statusLegend}}" as="s" hint-placeholder-count="4"><span style="display: inline-flex; gap: 6px; align-items: center"><span class="dot" style="background: {{s.dot}}"></span>{{s.label}} {{s.n}}</span></sc-for></div>
+<sc-for list="{{report}}" as="r" hint-placeholder-count="21">
+<section id="sec-{{r.n}}" style="display: flex; flex-direction: column; gap: 6px; max-width: 700px">
+<div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap"><h2 style="font-size: 16px">{{r.n}}. {{r.title}}</h2><span class="chip"><span class="dot" style="background: {{r.dot}}"></span>{{r.status}}</span></div>
+<sc-if value="{{r.isRestricted}}" hint-placeholder-val="{{false}}"><div class="restricted">Restricted to the deal team.</div></sc-if>
+<sc-if value="{{r.isOpen}}" hint-placeholder-val="{{true}}">
+<p style="margin: 0; font-size: 15px; line-height: 1.7">{{r.body}}</p>
+<sc-if value="{{r.hasCite}}" hint-placeholder-val="{{true}}"><span class="lbl">{{r.cite}}</span></sc-if>
+<sc-if value="{{r.hasDisc}}" hint-placeholder-val="{{false}}"><span class="disc">{{r.disc}}</span></sc-if>
+</sc-if>
+</section>
+</sc-for>
+</article>
+</div>
+</sc-if>
+
+<!-- DOMAINS -->
+<sc-if value="{{tab.domains}}" hint-placeholder-val="{{false}}">
+<sc-if value="{{aiOff}}" hint-placeholder-val="{{false}}"><div class="callout" style="margin-bottom: 16px"><strong style="font-weight: 600">AI analysis of private documents is off (workspace setting).</strong> <span class="mute">Parsing, OCR, table validation, calculations and sanctions screening ran. 7 AI steps on data-room content were skipped; affected report sections are marked incomplete. An admin can add a local model or allow external processing in Settings.</span></div></sc-if>
+<section class="card">
+<div class="ch"><h2>Diligence domains</h2><span class="lbl">{{domainSummary}}</span></div>
+<div class="scroll"><div style="min-width: 900px">
+<div class="thd" style="grid-template-columns: 1.7fr 0.9fr 1.9fr 1.1fr 0.5fr 0.6fr 0.5fr 0.6fr 0.7fr"><span>Domain</span><span>Status</span><span>Evidence check</span><span>Coverage</span><span>Findings</span><span>Disputed</span><span>Risks</span><span>Requests</span><span></span></div>
+<sc-for list="{{domains}}" as="d" hint-placeholder-count="12">
+<div class="tr" style="grid-template-columns: 1.7fr 0.9fr 1.9fr 1.1fr 0.5fr 0.6fr 0.5fr 0.6fr 0.7fr; cursor: default">
+<span style="display: flex; flex-direction: column"><span style="font-weight: 600">{{d.name}}</span><span class="lbl">{{d.scope}}</span></span>
+<span><span class="pill"><span class="dot" style="background: {{d.statusDot}}"></span>{{d.status}}</span></span>
+<span style="display: flex; flex-direction: column"><span>{{d.gate}}</span><span class="lbl">{{d.reason}}</span></span>
+<span style="display: flex; flex-direction: column; gap: 4px"><span class="bar"><span style="display: block; height: 100%; width: {{d.pct}}%; background: {{d.dot}}"></span></span><span class="lbl">{{d.cov}}</span></span>
+<span>{{d.findings}}</span><span>{{d.contra}}</span><span>{{d.risks}}</span><span>{{d.reqs}}</span>
+<span><sc-if value="{{d.canRetry}}" hint-placeholder-val="{{false}}"><button class="btn" style="min-height: 30px" onClick="{{d.retry}}">Retry</button></sc-if></span>
+</div>
+</sc-for>
+</div></div>
+<div class="lbl" style="padding: 10px 18px; border-top: 1px solid var(--border)">Each domain must pass its evidence check before it can count toward a recommendation. When it does not, the report says so instead of guessing.</div>
+</section>
+<section class="card" style="margin-top: 16px">
+<div class="ch"><h2>Sanctions screening</h2><span class="lbl">{{screening.datasets}}</span></div>
+<div class="cb lbl">{{screening.subjects}} people and companies screened. Informational diligence aid, not a substitute for professional compliance review.</div>
+<sc-for list="{{screening.matches}}" as="m" hint-placeholder-count="1">
+<div class="li" style="display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; padding: 14px 18px">
+<span class="pill"><span class="dot" style="background: var(--amber)"></span>Potential match: requires human review</span>
+<span style="flex: 1 1 320px; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 500">{{m.subject}}</span><span class="lbl">List entry: {{m.listed}} · {{m.band}} · {{m.corr}}</span><span class="lbl">{{m.status}}</span></span>
+<sc-if value="{{m.pending}}" hint-placeholder-val="{{true}}"><button class="btn" style="min-height: 30px" onClick="{{m.dismiss}}">Dismiss as false positive…</button><button class="btn" style="min-height: 30px" onClick="{{m.escalate}}">Escalate</button></sc-if>
+</div>
+</sc-for>
+</section>
+</sc-if>
+
+<!-- DATA ROOM -->
+<sc-if value="{{tab.dataroom}}" hint-placeholder-val="{{false}}">
+<sc-if value="{{gate.open}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; flex-direction: column; gap: 16px">
+<section class="card cb" style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; border-style: dashed">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"></path></svg>
+<span style="flex: 1 1 320px; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600">Drop files here or choose files</span><span class="lbl">PDF, DOCX, XLSX, PPTX, CSV · up to 50 MB each. Every file is virus-scanned, encrypted, and used only inside this assessment.</span></span>
+<button class="btn btn-primary" onClick="{{upload}}">Choose files</button>
+</section>
+<section class="card">
+<div class="ch"><h2>Data room</h2><span class="lbl">{{docSummary}}</span></div>
+<div class="scroll"><div style="min-width: 860px">
+<div class="thd" style="grid-template-columns: 2fr 1.1fr 0.5fr 1.9fr 1fr"><span>Document</span><span>Type</span><span>Version</span><span>Status</span><span>Added</span></div>
+<sc-for list="{{docs}}" as="d" hint-placeholder-count="9">
+<div class="tr" style="grid-template-columns: 2fr 1.1fr 0.5fr 1.9fr 1fr; cursor: default">
+<span style="display: flex; flex-direction: column"><span style="font-weight: 500">{{d.name}}</span><span class="lbl">{{d.meta}}</span></span>
+<span>{{d.cls}}<sc-if value="{{d.byUser}}" hint-placeholder-val="{{false}}"> <span class="lbl">(set by you)</span></sc-if></span>
+<span class="mute">v{{d.v}}</span>
+<span style="display: flex; flex-direction: column; gap: 5px"><span style="display: flex; gap: 8px; align-items: center"><span class="dot" style="background: {{d.dot}}"></span>{{d.status}}</span><span class="steps"><sc-for list="{{d.steps}}" as="s" hint-placeholder-count="5"><span style="background: {{s}}"></span></sc-for></span></span>
+<span class="lbl">{{d.when}}</span>
+</div>
+</sc-for>
+</div></div>
+</section>
+</div>
+</sc-if>
+</sc-if>
+
+<!-- FINANCIALS -->
+<sc-if value="{{tab.financials}}" hint-placeholder-val="{{false}}">
+<sc-if value="{{gate.open}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; flex-direction: column; gap: 16px">
+<sc-if value="{{fin.needsValidation}}" hint-placeholder-val="{{true}}">
+<section class="card">
+<div class="ch"><h2>Waiting for your check: KPI workbook Sep 2026.xlsx · sheet “MRR”</h2><span class="pill"><span class="dot" style="background: var(--amber)"></span>2 checks failed</span></div>
+<div class="cb" style="display: flex; flex-direction: column; gap: 14px">
+<span class="mute" style="font-size: 13px">The July total does not equal the sum of its rows, and three cells were read with low confidence (highlighted). Nothing from this table is used in calculations until a deal-team member validates it. This does not block the report: validating starts a new revision, and the current report stays as it is.</span>
+<div class="scroll"><div class="grid" style="grid-template-columns: 1.4fr repeat(4, 1fr); min-width: 560px">
+<sc-for list="{{fin.grid}}" as="c" hint-placeholder-count="25"><span style="{{c.style}}">{{c.v}}</span></sc-for>
+</div></div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end">
+<label class="lbl" style="display: flex; flex-direction: column; gap: 6px; font-weight: 500">Churned MRR, Jul 2026<input class="input" style="width: 140px" value="{{fin.corrValue}}" onInput="{{fin.setValue}}"></label>
+<label class="lbl" style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 6px; font-weight: 500">Reason (required)<input class="input" placeholder="e.g. Source sheet shows −4,100; sign was read as positive" value="{{fin.corrReason}}" onInput="{{fin.setReason}}"></label>
+<button class="btn" onClick="{{fin.saveCorrection}}">Save correction</button>
+<button class="btn btn-primary" onClick="{{fin.validate}}">Validate table</button>
+</div>
+<sc-if value="{{fin.hasMsg}}" hint-placeholder-val="{{false}}"><span class="lbl" style="color: {{fin.msgColor}}">{{fin.msg}}</span></sc-if>
+</div>
+</section>
+</sc-if>
+<section class="card">
+<div class="ch"><h2>Calculated metrics</h2><span class="lbl">Calculated by fixed formulas (ddcalc@1) from cited source cells; never estimated</span></div>
+<div class="scroll"><div style="min-width: 900px">
+<div class="thd" style="grid-template-columns: 1.3fr 1fr 1.2fr 1.6fr 2.2fr"><span>Metric</span><span>Value</span><span>Period</span><span>Formula and inputs</span><span>Status</span></div>
+<sc-for list="{{fin.metrics}}" as="m" hint-placeholder-count="12">
+<div class="tr" style="grid-template-columns: 1.3fr 1fr 1.2fr 1.6fr 2.2fr; cursor: default">
+<span style="font-weight: 600">{{m.name}}</span>
+<span style="font-weight: 600; color: {{m.valColor}}">{{m.value}}</span>
+<span class="mute">{{m.period}}</span>
+<span style="display: flex; flex-direction: column"><span class="mono">{{m.formula}}</span><span class="lbl"><a href="#">{{m.inputs}}</a></span></span>
+<span style="display: flex; gap: 8px; align-items: flex-start"><span class="dot" style="background: {{m.dot}}; margin-top: 7px"></span><span>{{m.status}}</span></span>
+</div>
+</sc-for>
+</div></div>
+<div class="disc" style="margin: 12px 18px">These figures are calculated from documents the company provided. This is not an audit or an accounting opinion.</div>
+</section>
+</div>
+</sc-if>
+</sc-if>
+
+<!-- RISKS -->
+<sc-if value="{{tab.risks}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+<section class="card" style="flex: 1 1 260px; min-width: 0">
+<div class="ch"><h2>Severity × likelihood</h2></div>
+<div class="cb"><div class="mx">
+<sc-for list="{{riskMatrix}}" as="c" hint-placeholder-count="20"><span style="{{c.style}}">{{c.v}}</span></sc-for>
+</div><p class="lbl" style="margin: 10px 0 0">Counts of open risks you can see.</p></div>
+</section>
+<section class="card" style="flex: 999 1 560px; min-width: 0">
+<div class="ch"><h2>Risk register</h2><span class="lbl">Every risk links to the findings behind it</span></div>
+<sc-for list="{{risks}}" as="r" hint-placeholder-count="5">
+<div class="li" style="display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; padding: 14px 18px">
+<span class="pill" style="min-width: 74px"><span class="dot" style="background: {{r.dot}}"></span>{{r.sev}}</span>
+<span style="flex: 1 1 320px; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 500">{{r.title}}</span><span class="lbl">{{r.meta}}</span><span class="lbl">Ask: {{r.ask}}</span></span>
+<span class="chip">{{r.status}}</span>
+<button class="btn" style="min-height: 30px" onClick="{{r.cycle}}">{{r.next}}</button>
+</div>
+</sc-for>
+</section>
+</div>
+</sc-if>
+
+<!-- CONTRADICTIONS -->
+<sc-if value="{{tab.contra}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 16px">
+<sc-for list="{{contras}}" as="x" hint-placeholder-count="3">
+<section class="card">
+<div class="ch"><h2>{{x.title}}</h2><span class="lbl">{{x.meta}}</span></div>
+<sc-if value="{{x.isRestricted}}" hint-placeholder-val="{{false}}"><div class="cb"><div class="restricted">Restricted to the deal team.</div></div></sc-if>
+<sc-if value="{{x.isOpen}}" hint-placeholder-val="{{true}}">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))">
+<sc-for list="{{x.sides}}" as="s" hint-placeholder-count="2">
+<div class="cb" style="display: flex; flex-direction: column; gap: 6px; border-right: 1px solid var(--border)">
+<span class="lbl">{{s.src}}</span>
+<span style="font-size: 26px; font-weight: 700">{{s.value}}</span>
+<span style="font-size: 13px" class="mute">“{{s.quote}}”</span>
+<span class="lbl"><a href="#">{{s.loc}}</a></span>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 12px 18px; border-top: 1px solid var(--border); background: var(--surface-2); border-radius: 0 0 14px 14px">
+<span class="lbl" style="flex: 1 1 320px">{{x.note}}</span><button class="btn" style="min-height: 30px">Add note</button>
+</div>
+</sc-if>
+</section>
+</sc-for>
+</div>
+</sc-if>
+
+<!-- REQUESTS -->
+<sc-if value="{{tab.requests}}" hint-placeholder-val="{{false}}">
+<section class="card">
+<div class="ch"><h2>Requested documents and information</h2><button class="btn" style="min-height: 30px" onClick="{{copyRequests}}">Copy open requests</button></div>
+<sc-for list="{{requests}}" as="q" hint-placeholder-count="4">
+<div class="li" style="display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; padding: 14px 18px">
+<span style="flex: 1 1 340px; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 500">{{q.item}}</span><span class="lbl">{{q.reason}}</span></span>
+<sc-if value="{{q.blocking}}" hint-placeholder-val="{{false}}"><span class="chip" style="color: var(--red)">Blocks a recommendation</span></sc-if>
+<span class="pill"><span class="dot" style="background: {{q.dot}}"></span>{{q.status}}</span>
+<sc-if value="{{q.canAdvance}}" hint-placeholder-val="{{true}}"><button class="btn" style="min-height: 30px" onClick="{{q.advance}}">{{q.next}}</button></sc-if>
+</div>
+</sc-for>
+<div class="lbl" style="padding: 10px 18px; border-top: 1px solid var(--border)">We draft these; someone on the deal team sends them. The system never contacts the company.</div>
+</section>
+</sc-if>
+
+<!-- SOURCES -->
+<sc-if value="{{tab.evidence}}" hint-placeholder-val="{{false}}">
+<section class="card">
+<div class="ch"><h2>{{evHeader}}</h2><sc-if value="{{evFiltered}}" hint-placeholder-val="{{false}}"><button class="btn" style="min-height: 30px" onClick="{{clearFilter}}">Show all findings</button></sc-if><sc-if value="{{evUnfiltered}}" hint-placeholder-val="{{true}}"><span class="lbl">Every finding links to a saved web page or a document page</span></sc-if></div>
+<sc-if value="{{evEmpty}}" hint-placeholder-val="{{false}}"><div class="li lbl">No findings of this kind you can see.</div></sc-if>
+<sc-for list="{{claims}}" as="c" hint-placeholder-count="8">
+<article class="li" style="display: flex; flex-direction: column; gap: 8px; padding: 16px 18px">
+<div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap"><span class="pill"><span class="dot" style="background: {{c.dot}}"></span>{{c.label}}</span><span class="lbl">{{c.topic}}</span><sc-if value="{{c.isPrivate}}" hint-placeholder-val="{{false}}"><span class="chip">Private · deal team</span></sc-if></div>
+<span style="font-size: 15px; font-weight: 500">{{c.statement}}</span>
+<sc-if value="{{c.hasQuote}}" hint-placeholder-val="{{true}}">
+<span style="font-size: 14px; padding: 10px 14px; border-radius: 8px; background: var(--surface-2)">“{{c.quote}}”</span>
+<span class="lbl"><a href="#">{{c.source}}</a> · {{c.saved}}</span>
+</sc-if>
+<sc-if value="{{c.hasExplain}}" hint-placeholder-val="{{false}}"><span class="lbl">{{c.explain}}</span></sc-if>
+</article>
+</sc-for>
+</section>
+</sc-if>
+
+<!-- HISTORY -->
+<sc-if value="{{tab.history}}" hint-placeholder-val="{{false}}">
+<section class="card">
+<div class="ch"><h2>Revisions</h2><span class="lbl">New evidence or an upgrade creates a new revision; approved reports never change</span></div>
+<sc-for list="{{history}}" as="h" hint-placeholder-count="3">
+<div class="li" style="display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center; padding: 16px 18px">
+<span class="pill" style="{{h.pillStyle}}">{{h.version}}</span>
+<span style="flex: 1 1 320px; display: flex; flex-direction: column; gap: 2px"><span>{{h.what}}</span><span class="lbl">{{h.when}}</span></span>
+<span class="lbl">{{h.status}}</span>
+</div>
+</sc-for>
+</section>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- DECISIONS -->
+<sc-if value="{{is.decisions}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 20px">
+<div class="ph"><div><h1>Decisions</h1><p class="sub">One partner decides. Your decision applies to the report version exactly as you see it; it never changes afterwards.</p></div></div>
+<sc-for list="{{reviews}}" as="r" hint-placeholder-count="3">
+<article class="card">
+<div class="ch">
+<div style="display: flex; gap: 12px; align-items: center"><span class="logo">{{r.initials}}</span><span style="display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 600">{{r.company}}</span><span class="lbl">Waiting {{r.age}}</span></span></div>
+<span class="pill"><span class="dot" style="background: {{r.recDot}}"></span>Agents suggest {{r.rec}}</span>
+</div>
+<div class="cb" style="display: flex; flex-direction: column; gap: 14px">
+<span style="font-size: 15px">{{r.summary}}</span>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px">
+<div><div class="lbl">Level</div><div style="font-weight: 600">{{r.level}}</div></div><div><div class="lbl">Evidence coverage</div><div style="font-weight: 600">{{r.coverage}}</div></div><div><div class="lbl">Claim confidence</div><div style="font-weight: 600">{{r.confidence}}</div></div><div><div class="lbl">Attractiveness</div><div style="font-weight: 600">{{r.score}}</div></div><div><div class="lbl">Open risks</div><div style="font-weight: 600">{{r.risks}}</div></div>
+</div>
+<sc-if value="{{r.hasProblem}}" hint-placeholder-val="{{false}}">
+<div class="callout" style="border-left: 3px solid {{r.problemColor}}; display: flex; flex-direction: column; gap: 8px">
+<strong style="font-weight: 600">{{r.problemTitle}}</strong><span class="mute">{{r.problemText}}</span>
+<sc-if value="{{r.canReload}}" hint-placeholder-val="{{false}}"><div><button class="btn" onClick="{{r.reload}}">Review the new version</button></div></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{r.reqOpen}}" hint-placeholder-val="{{false}}">
+<div class="callout" style="display: flex; flex-direction: column; gap: 8px">
+<strong style="font-weight: 600">What do you need from the company?</strong>
+<label class="lbl" style="display: flex; flex-direction: column; gap: 6px; font-weight: 500">One item per line (required)<textarea class="input" style="min-height: 64px; padding: 10px; resize: vertical">Signed IP assignment from the CTO covering pre-incorporation work
+Which ARR definition the deck uses, with the calculation</textarea></label>
+<div><button class="btn btn-primary" onClick="{{r.sendRequest}}">Send request</button></div>
+<span class="lbl">Sends decision request_information. The assessment moves to “Waiting for information”; each line becomes a draft request on the Requests tab.</span>
+</div>
+</sc-if>
+<sc-if value="{{r.isDone}}" hint-placeholder-val="{{false}}"><span class="pill" style="align-self: flex-start"><span class="dot" style="background: {{r.doneDot}}"></span>{{r.doneLabel}}</span></sc-if>
+</div>
+<sc-if value="{{r.isPending}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; flex-wrap: wrap; gap: 10px; padding: 12px 18px; border-top: 1px solid var(--border); background: var(--surface-2); border-radius: 0 0 12px 12px">
+<button class="btn btn-primary" onClick="{{r.approve}}">Advance</button>
+<button class="btn" onClick="{{r.research}}">Request more information…</button>
+<button class="btn" onClick="{{r.reject}}">Pass</button>
+<div style="flex: 1"></div>
+<button class="btn btn-ghost" onClick="{{r.open}}">Read report →</button>
+</div>
+</sc-if>
+</article>
+</sc-for>
+</div>
+</sc-if>
+
+<!-- WATCHLIST -->
+<sc-if value="{{is.watchlist}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 24px">
+<div class="ph"><div><h1>Watchlist</h1><p class="sub">We keep an eye on these companies and tell you when something important changes.</p></div><button class="btn">Add company</button></div>
+<section class="card">
+<div class="scroll"><div style="min-width: 720px">
+<div class="thd" style="grid-template-columns: 34px 1.2fr 2fr 1.6fr 0.6fr"><span></span><span>Company</span><span>Watching for</span><span>Latest</span><span></span></div>
+<sc-for list="{{watch}}" as="w" hint-placeholder-count="4">
+<div class="tr" style="grid-template-columns: 34px 1.2fr 2fr 1.6fr 0.6fr; cursor: default">
+<span class="logo">{{w.initials}}</span>
+<span style="font-weight: 600">{{w.company}}</span>
+<span style="display: flex; flex-direction: column"><span>{{w.rules}}</span><span class="lbl">{{w.cadence}}</span></span>
+<span>{{w.latest}}</span>
+<span><button class="btn" style="min-height: 30px" onClick="{{w.toggle}}">{{w.toggleLabel}}</button></span>
+</div>
+</sc-for>
+</div></div>
+</section>
+<section class="card">
+<div class="ch"><h2>Recent changes</h2></div>
+<sc-for list="{{events}}" as="e" hint-placeholder-count="5">
+<div class="li" style="display: flex; gap: 14px; padding: 16px 18px">
+<span class="dot" style="background: {{e.dot}}; margin-top: 7px"></span>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600">{{e.company}} <span class="lbl" style="font-weight: 400">· {{e.importance}} · {{e.when}}</span></span><span>{{e.summary}}</span><span class="lbl">{{e.next}}</span></span>
+</div>
+</sc-for>
+</section>
+</div>
+</sc-if>
+
+<!-- THESIS -->
+<sc-if value="{{is.thesis}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 24px; max-width: 900px">
+<div class="ph"><div><h1>Investment thesis</h1><p class="sub">What the agents look for. Changes apply to new research; reviews already running keep their version.</p></div><button class="btn btn-primary">Save changes</button></div>
+<section class="card">
+<div class="ch"><h2>Mandate</h2></div>
+<div class="cb" style="display: flex; flex-direction: column; gap: 18px">
+<label for="th" class="lbl" style="display: flex; flex-direction: column; gap: 6px; font-weight: 500">Thesis
+<textarea id="th" class="input" style="min-height: 84px; padding: 12px; resize: vertical; font-size: 15px; line-height: 1.6">B2B software and infrastructure that decarbonises energy, industry and logistics, sold to regulated or asset-heavy buyers in Europe and North America.</textarea>
+</label>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px">
+<sc-for list="{{mandate}}" as="m" hint-placeholder-count="5">
+<div style="display: flex; flex-direction: column; gap: 6px"><span class="lbl" style="font-weight: 500">{{m.label}}</span><div style="display: flex; flex-wrap: wrap; gap: 6px"><sc-for list="{{m.chips}}" as="c" hint-placeholder-count="3"><span class="pill">{{c}}</span></sc-for></div></div>
+</sc-for>
+</div>
+</div>
+</section>
+<section class="card">
+<div class="ch"><h2>How companies are scored</h2><span class="lbl">Weights total 100%</span></div>
+<sc-for list="{{rubric}}" as="r" hint-placeholder-count="5">
+<div class="li" style="display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; padding: 14px 18px">
+<span style="flex: 1 1 140px; font-weight: 600">{{r.name}}</span>
+<span class="lbl" style="flex: 3 1 300px">{{r.anchor}}</span>
+<span class="bar" style="flex: 1 1 100px"><span style="display: block; height: 100%; width: {{r.pct}}%; background: var(--brand)"></span></span>
+<span style="width: 44px; text-align: right; font-weight: 600">{{r.weight}}</span>
+</div>
+</sc-for>
+</section>
+<p class="lbl" style="margin: 0">Which diligence domains run at each level is set in <a href="#" onClick="{{goSettings}}">Settings</a>. AI models, spending limits and source settings are managed by your admin in the <a href="Console.dc.html">agent console</a>.</p>
+</div>
+</sc-if>
+
+<!-- SETTINGS -->
+<sc-if value="{{is.settings}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 24px; max-width: 980px">
+<div class="ph"><div><h1>Settings</h1><p class="sub">Workspace rules for private documents and diligence domains. Changes apply to new assessments and revisions. Thesis is open source under Apache-2.0 · <a href="#">Third-party notices</a></p></div></div>
+<section class="card">
+<div class="ch"><h2>External AI processing of private documents</h2><span class="pill"><span class="dot" style="background: {{ai.dot}}"></span>{{ai.label}}</span></div>
+<div class="cb" style="display: flex; flex-direction: column; gap: 12px">
+<span style="font-size: 14px; max-width: 760px">Off by default. Uploaded documents stay on this server. AI analysis of private documents runs only on a local model you host, or on OpenAI if a workspace owner or admin allows specific kinds of data below. The server checks this before every request.</span>
+<div class="kv" style="display: grid; grid-template-columns: 170px 1fr; gap: 6px 16px; font-size: 13px">
+<span class="mute">Route for private data</span><span>{{ai.route}}</span>
+<span class="mute">Local model</span><span>{{ai.local}}</span>
+<span class="mute">External processing</span><span>{{ai.external}}</span>
+<span class="mute">Data that may be sent</span><span>{{ai.categories}}</span>
+</div>
+<sc-if value="{{ai.dialog}}" hint-placeholder-val="{{false}}">
+<div class="callout" style="display: flex; flex-direction: column; gap: 10px">
+<strong style="font-weight: 600">Allow OpenAI to process private documents?</strong>
+<span class="mute" style="font-size: 13px">Only the kinds of data you tick will be sent, only for the listed purposes, until the expiry date. Every transmission is logged without its content.</span>
+<div style="display: flex; flex-wrap: wrap; gap: 6px"><sc-for list="{{ai.options}}" as="o" hint-placeholder-count="6"><button class="chip" style="cursor: pointer; {{o.style}}" onClick="{{o.toggle}}">{{o.label}}</button></sc-for></div>
+<label class="lbl" style="display: flex; flex-direction: column; gap: 6px; font-weight: 500; max-width: 360px">Type the workspace name to confirm<input class="input" placeholder="Default workspace" value="{{ai.confirmText}}" onInput="{{ai.setConfirm}}"></label>
+<div style="display: flex; gap: 8px"><button class="btn btn-primary" onClick="{{ai.confirm}}">Allow selected data · expires in 365 days</button><button class="btn" onClick="{{ai.cancel}}">Cancel</button></div>
+<span class="lbl">You confirmed your password 2 minutes ago (step-up required for this change).</span>
+</div>
+</sc-if>
+<div style="display: flex; flex-wrap: wrap; gap: 10px"><sc-if value="{{ai.canEnable}}" hint-placeholder-val="{{true}}"><button class="btn" onClick="{{ai.open}}">Allow external processing…</button></sc-if><sc-if value="{{ai.canRevoke}}" hint-placeholder-val="{{false}}"><button class="btn" onClick="{{ai.revoke}}">Turn off external processing</button></sc-if><button class="btn btn-ghost">View transmission log</button></div>
+</div>
+</section>
+<section class="card">
+<div class="ch"><h2>Diligence domains</h2><span class="lbl">Required domains must pass their evidence check before a recommendation is possible</span></div>
+<div class="scroll"><div style="min-width: 720px">
+<div class="thd" style="grid-template-columns: 2fr 0.8fr 1.2fr 1.6fr"><span>Domain</span><span>On</span><span>Required</span><span>Runs at</span></div>
+<sc-for list="{{domainCfg}}" as="d" hint-placeholder-count="12">
+<div class="tr" style="grid-template-columns: 2fr 0.8fr 1.2fr 1.6fr; cursor: default">
+<span style="font-weight: 500">{{d.name}}</span>
+<span><button class="chip" style="cursor: pointer" onClick="{{d.toggle}}" aria-pressed="{{d.on}}">{{d.onLabel}}</button></span>
+<span class="mute">{{d.req}}</span>
+<span style="display: flex; gap: 4px"><sc-for list="{{d.levels}}" as="l" hint-placeholder-count="3"><span class="chip" style="{{l.style}}">L{{l.n}}</span></sc-for></span>
+</div>
+</sc-for>
+</div></div>
+<div class="lbl" style="padding: 10px 18px; border-top: 1px solid var(--border)">Stage, industry and region overrides (for example, legal becomes required for fintech) are applied on top of these defaults and saved with each assessment.</div>
+</section>
+<section class="card">
+<div class="ch"><h2>Data-room retention</h2><span class="lbl">Maximum 90 days; can only be shortened</span></div>
+<div class="cb" style="display: flex; flex-direction: column; gap: 10px"><span>Delete data-room files, extracted text, OCR images, tables, embeddings and exports <strong>90 days</strong> after an assessment closes. Reopening an assessment does not restart the clock.</span>
+<span class="lbl">Legal holds: none active. Backups expire within 30 days of deletion; full erasure date is shown on each deletion certificate.</span>
+<div style="display: flex; gap: 8px"><button class="btn">Shorten…</button><button class="btn btn-ghost">Place legal hold…</button></div></div>
+</section>
+</div>
+</sc-if>
+
+</div>
+</main>
+
+<sc-if value="{{toast.show}}" hint-placeholder-val="{{false}}">
+<div class="toast" role="status" aria-live="polite">
+<span class="dot" style="background: {{toast.dot}}; margin-top: 6px"></span>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600">{{toast.title}}</span><span style="opacity: .75">{{toast.text}}</span></span>
+<button onClick="{{toast.close}}" aria-label="Dismiss" style="border: 0; background: transparent; color: inherit; opacity: .7; cursor: pointer; font-size: 14px; padding: 0 2px">✕</button>
+</div>
+</sc-if>
+
+<sc-if value="{{bellOpen}}" hint-placeholder-val="{{false}}">
+<div class="pop" role="dialog" aria-label="Notifications">
+<div class="ch"><h2>Notifications</h2><button class="btn btn-ghost" style="min-height: 28px" onClick="{{toggleBell}}">Close</button></div>
+<sc-for list="{{notifications}}" as="n" hint-placeholder-count="3">
+<button class="pitem" style="align-items: flex-start; padding: 12px 16px; border-top: 1px solid var(--border)" onClick="{{n.go}}">
+<span class="dot" style="background: {{n.dot}}; margin-top: 7px"></span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 500">{{n.title}}</span><span class="lbl">{{n.when}}</span></span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{paletteOpen}}" hint-placeholder-val="{{false}}">
+<div class="overlay">
+<div class="palette" role="dialog" aria-label="Command palette">
+<div style="display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--border)">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+<label for="pal" style="flex: 1"><input id="pal" style="width: 100%; border: 0; outline: 0; background: transparent; font-size: 15px" placeholder="Type a company or command"></label>
+<button class="kbd" style="cursor: pointer" onClick="{{closePalette}}">Esc</button>
+</div>
+<div class="sect" style="padding: 12px 16px 4px">Jump to</div>
+<sc-for list="{{commands}}" as="c" hint-placeholder-count="6">
+<button class="pitem" onClick="{{c.go}}"><span class="logo" style="width: 26px; height: 26px; font-size: 10px; border-radius: 7px">{{c.tag}}</span><span style="flex: 1">{{c.label}}</span><span class="lbl">{{c.hint}}</span></button>
+</sc-for>
+<a class="pitem" href="Console.dc.html" style="border-top: 1px solid var(--border)"><span class="logo" style="width: 26px; height: 26px; font-size: 10px; border-radius: 7px">AC</span><span style="flex: 1">Open agent console</span><span class="lbl">Admins</span></a>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"mode":{"editor":"enum","options":["live_ready","setup_required","demo_ready","degraded"],"default":"live_ready","section":"States"},"level":{"editor":"enum","options":["3","2","1"],"default":"3","section":"Diligence"},"viewer":{"editor":"enum","options":["deal_team","outside_deal_team"],"default":"deal_team","section":"Diligence"},"externalAI":{"editor":"enum","options":["local_model","off","external_authorized"],"default":"local_model","section":"Diligence"},"theme":{"editor":"enum","options":["light","dark"],"default":"light","section":"Theme"},"$preview":{"width":1440,"height":1180}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { screen: 'home', tab: 'report', formName: '', policy: 'reuse_active', formLevel: 2, submitted: null, lastFp: null, decisions: {}, kestrelReloaded: false, paused: {}, modeOverride: null, themeOverride: null, paletteOpen: false, bellOpen: false, evFilter: null, fernQ: 6, northPct: 5, toast: null,
+      levelOverride: null, aiOverride: null, aiDialog: false, aiConfirm: '', aiCats: null, matchStatus: null, uploads: [], corrValue: '4,100', corrReason: '', corrected: false, validated: false, finMsg: null, riskStatus: {}, reqStatus: {}, retried: false, domainOff: {}, reqOpen: {} };
+  }
+
+  componentDidMount() {
+    // Stands in for assessment.progress and document.status_changed events from GET /api/v1/events/stream
+    var self = this;
+    this.liveTimer = setInterval(function () {
+      var m = self.state.modeOverride || self.props.mode || 'live_ready';
+      if (m === 'setup_required') { return; }
+      var ups = self.state.uploads.map(function (u) { return u.step < 4 ? Object.assign({}, u, { step: u.step + 1 }) : u; });
+      self.setState({ fernQ: Math.min(13, self.state.fernQ + 1), northPct: Math.min(35, self.state.northPct + 6), uploads: ups });
+    }, 2500);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.liveTimer);
+    clearTimeout(this.toastTimer);
+  }
+
+  showToast(title, text, dot) {
+    var self = this;
+    clearTimeout(this.toastTimer);
+    this.setState({ toast: { title: title, text: text, dot: dot } });
+    this.toastTimer = setTimeout(function () { self.setState({ toast: null }); }, 4500);
+  }
+
+  renderVals() {
+    var self = this, s = this.state;
+    var go = function (screen, tab) { return function () { self.setState({ screen: screen, tab: tab || 'report', paletteOpen: false, bellOpen: false, evFilter: null }); }; };
+    var V = { green: 'var(--green)', amber: 'var(--amber)', red: 'var(--red)', gray: 'var(--gray)', blue: 'var(--blue)', brand: 'var(--brand)' };
+    var theme = s.themeOverride || this.props.theme || 'light';
+    var mode = s.modeOverride || this.props.mode || 'live_ready';
+    var setup = mode === 'setup_required', demo = mode === 'demo_ready', degraded = mode === 'degraded';
+    var level = s.levelOverride || parseInt(this.props.level || '3', 10);
+    var dealTeam = (this.props.viewer || 'deal_team') === 'deal_team';
+    var aiMode = s.aiOverride || this.props.externalAI || 'local_model';   // D1 route for private data
+    var privAI = aiMode !== 'off';
+    var L3 = level === 3, priv = L3 && dealTeam;
+    var LEVEL_NAME = { 1: 'Screening', 2: 'Public diligence', 3: 'Enhanced diligence' };
+
+    var notice = {
+      show: mode !== 'live_ready', dot: setup ? V.red : demo ? V.blue : V.amber,
+      text: setup ? 'Live diligence is paused until your admin connects OpenAI. You can still read every report and make decisions.' : demo ? 'You are in the demo workspace: sample companies stored on this server, one at each diligence level. Your actions here are real; starting new diligence needs OpenAI.' : 'Diligence is running slower than usual. Your admin has been notified; nothing needs doing on your side.',
+      canDemo: setup, startDemo: function () { self.setState({ modeOverride: 'demo_ready' }); }
+    };
+    var status = setup ? { dot: V.red, label: 'Setup needed', line: 'Live diligence paused' } : demo ? { dot: V.blue, label: 'Demo workspace', line: 'Live diligence needs OpenAI' } : degraded ? { dot: V.amber, label: 'Running slower', line: 'Admin notified' } : { dot: V.green, label: 'All systems normal', line: 'Agents ready' };
+
+    var I = {
+      home: 'M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z',
+      companies: 'M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16M15 9h4a1 1 0 0 1 1 1v11M8 8h3M8 12h3M8 16h3M3 21h18',
+      decisions: 'M9 12l2 2 4-4M5 3h14a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z',
+      watchlist: 'M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
+      thesis: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM12 12.5v-1',
+      settings: 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z'
+    };
+    var active = s.screen === 'company' ? 'companies' : s.screen;
+    var mkNav = function (k, label, badge) { return { label: label, icon: I[k], hasBadge: !!badge, badge: badge || '', cls: k === active ? 'on' : '', go: go(k) }; };
+    var navMain = [mkNav('home', 'Home'), mkNav('companies', 'Companies'), mkNav('decisions', 'Decisions', '3'), mkNav('watchlist', 'Watchlist')];
+    var navFirm = [mkNav('thesis', 'Investment thesis'), mkNav('settings', 'Settings')];
+
+    var crumbMap = { home: ['Home'], companies: ['Companies'], company: ['Companies', 'Lattice Grid'], decisions: ['Decisions'], watchlist: ['Watchlist'], thesis: ['Investment thesis'], settings: ['Settings'] };
+    var crumbs = crumbMap[s.screen].map(function (c, i) { return { label: c, notFirst: i > 0 }; });
+
+    var initials = function (n) { return n.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2); };
+    var fq = setup ? 6 : s.fernQ;
+    var fern = setup ? ['Paused: needs setup', V.red, 'Paused with 5 of 12 domains done. Picks up where it stopped once your admin finishes setup.'] : degraded ? ['In progress, slower than usual', V.amber, Math.min(12, fq) + ' of 12 domains checked'] : ['In progress', V.blue, Math.min(12, fq) + ' of 12 domains checked'];
+    var live = setup ? { label: 'Paused', dot: V.gray, cls: '' } : { label: 'Live', dot: V.green, cls: 'pulse' };
+
+    var companies = [
+      ['Lattice Grid', 'latticegrid.io', 'DE', 'Climate software', 'Seed', String(level), 'Ready for your decision', V.amber, L3 ? '9 of 12 domains' : level === 2 ? '8 of 12 domains' : '7 of 8 domains', '3.8'],
+      ['Kestrel Ops', 'kestrelops.com', 'GB', 'Industrial AI', 'Series A', '2', 'Ready for your decision', V.amber, '10 of 12 domains', '4.1'],
+      ['Brightwater Labs', 'brightwater.dev', 'NL', 'Water analytics', 'Seed', '1', 'Ready for your decision', V.amber, '6 of 8 domains', '3.3'],
+      ['Fernbank Bio', 'fernbank.bio', 'GB', 'Bio tooling', 'Series A', '2', fern[0], fern[1], '—', '—'],
+      ['Quillmark', 'quillmark.ai', 'US', 'Vertical AI, legal', 'Seed', '3', 'Waiting for documents', V.blue, '—', '—'],
+      ['Northbeam Freight', 'nbfreight.co', 'MX', 'Logistics software', 'Seed', '1', 'Starting', V.gray, '—', '—'],
+      ['Orbital Ledger', 'orbitalledger.com', 'SG', 'Carbon accounting', 'Seed', '2', 'Stopped at spending limit', V.red, '—', '—'],
+      ['Tidepool Robotics', 'tidepool.dev', 'NL', 'Robotics', 'Pre-seed', '1', 'Watching · decided 3 days ago', V.green, '7 of 8 domains', '3.2'],
+      ['Halcyon Health', 'halcyon.health', 'US', 'Digital health', 'Series A', '2', 'Passed · 6 days ago', V.gray, '11 of 12 domains', '2.4']
+    ].map(function (c) { return { name: c[0], initials: initials(c[0]), domain: c[1], hq: c[2], sector: c[3], stage: c[4], level: c[5], status: c[6], dot: c[7], coverage: c[8], score: c[9], open: go('company') }; });
+
+    var kpis = [
+      { label: 'Ready for decision', value: '3', sub: 'oldest waiting 2 h' },
+      { label: 'In progress', value: '4', sub: setup ? '1 paused for setup' : '1 waiting for documents' },
+      { label: 'Decided in November', value: '11', sub: '4 advanced · 5 watching · 2 passed' },
+      { label: 'Open document requests', value: '4', sub: '2 block a recommendation' }
+    ];
+
+    var decisionList = [
+      { company: 'Lattice Grid', sector: 'Level ' + level + ' · Climate software · Seed', line: 'Strong thesis fit and team; revenue concentrated in one utility and the deck overstates ARR.', verdict: 'Suggest advance with conditions', dot: V.green, go: go('company') },
+      { company: 'Kestrel Ops', sector: 'Level 2 · Industrial AI · Series A', line: 'Just raised a Series A; we opened a new revision with the new information.', verdict: 'Suggest advance', dot: V.green, go: go('decisions') },
+      { company: 'Brightwater Labs', sector: 'Level 1 · Water analytics · Seed', line: 'Good fit but early; one public pilot. Level 2 would check legal and security.', verdict: 'Suggest hold', dot: V.blue, go: go('decisions') }
+    ].map(function (d) { return Object.assign({}, d, { initials: initials(d.company) }); });
+
+    var inProgress = [
+      { company: 'Fernbank Bio', status: fern[0], dot: fern[1], pct: Math.round(Math.min(12, fq) / 12 * 100), detail: fern[2] },
+      { company: 'Quillmark', status: 'Waiting for documents', dot: V.blue, pct: 70, detail: 'Level 3 · 2 requested documents block the financial analysis' },
+      { company: 'Northbeam Freight', status: s.northPct > 5 ? 'Checking domains' : 'Starting', dot: s.northPct > 5 ? V.blue : V.gray, pct: setup ? 5 : s.northPct, detail: s.northPct > 5 ? 'Level 1 · reading public sources for 8 domains' : 'Planning which domains to check' },
+      { company: 'Orbital Ledger', status: 'Stopped at spending limit', dot: V.red, pct: 55, detail: 'Partial findings available. Your admin can raise the limit and continue.' }
+    ];
+
+    var events = [
+      { company: 'Kestrel Ops', summary: 'Announced a €12M Series A with a new board member.', importance: 'Important', when: '41 min ago', next: 'We opened a new revision; it is waiting for your decision.', dot: V.red },
+      { company: 'Lattice Grid', summary: 'Released a public forecasting API with finer-grained forecasts.', importance: 'Worth knowing', when: '5 h ago', next: 'Product domain re-checked; no change to the report.', dot: V.amber },
+      { company: 'Tidepool Robotics', summary: 'Posted 14 robotics and field roles in 10 days.', importance: 'Worth knowing', when: 'Yesterday', next: 'No change to the report.', dot: V.amber },
+      { company: 'Halcyon Health', summary: 'Their press page was taken down.', importance: 'Minor', when: '2 days ago', next: 'We keep our saved copy; this does not mean earlier facts were wrong.', dot: V.gray },
+      { company: 'Halcyon Health', summary: 'Moved from per-seat to per-clinic pricing.', importance: 'Minor', when: '2 days ago', next: 'No change to the report.', dot: V.gray }
+    ];
+
+    // ---------- Company: level, upgrade, gates ----------
+    var upgrade = function () {
+      var next = level + 1;
+      if (next === 3 && !dealTeam) { self.showToast('Only the deal team can start Level 3', 'Ask a partner to add you to the deal team', V.amber); return; }
+      self.setState({ levelOverride: next, tab: 'domains' });
+      self.showToast('Upgraded to Level ' + next, 'Revision ' + (next + 1) + ' started. Evidence already collected is reused.', V.green);
+    };
+    var revision = level + 1;
+    var co = {
+      level: level, levelName: LEVEL_NAME[level], revision: revision, isL3: L3, canUpgrade: level < 3, nextLevel: level + 1, upgrade: upgrade,
+      conditions: L3 ? ['Resolve the ARR difference between the deck and the KPI workbook', 'Obtain a signed IP assignment from the CTO covering pre-incorporation work', 'Reference calls with both confirmed utilities to test concentration risk'] : [], hasConditions: L3,
+      rec: L3 ? 'Agents suggest: advance, with conditions' : level === 2 ? 'Agents suggest: hold until Level 3' : 'Agents suggest: hold until Level 2',
+      recDot: L3 ? V.green : V.blue,
+      headline: L3 ? 'Strong fit with your climate thesis and a proven team. Before a term sheet: resolve the ARR difference between the deck and the KPI workbook, get the CTO’s IP assignment, and test customer concentration (58% from one utility).' : level === 2 ? 'Strong fit and a proven team on public evidence. Revenue, customers and IP ownership cannot be checked without company documents, so financial and legal sections are incomplete.' : 'Fits your thesis at seed, with an experienced founder. This is a screen: legal, security, governance and financials were not checked at this level.',
+      hasLimit: true,
+      limit: L3 ? 'security posture check could not run because web search was unavailable; retry from Domains.' : level === 2 ? 'no company documents at this level; revenue is not public and was not estimated.' : 'screening uses public sources only and checks 8 of 12 domains.'
+    };
+
+    // Four measures, never combined
+    var DOM = [
+      ['company', 'Company and business model', [1, 2, 3]], ['team', 'Founders and team', [1, 2, 3]], ['market', 'Market size and dynamics', [1, 2, 3]], ['competition', 'Competition', [1, 2, 3]], ['product', 'Product and technology', [1, 2, 3]], ['traction', 'Traction, customers and GTM', [1, 2, 3]],
+      ['financials', 'Financials, unit economics, runway', [2, 3]], ['cap', 'Fundraising and capitalization', [1, 2, 3]], ['legal', 'Legal, IP and regulatory', [2, 3]], ['security', 'Security, privacy, resilience', [2, 3]], ['governance', 'Governance and execution', [2, 3]], ['thesis', 'Thesis fit and return potential', [1, 2, 3]]
+    ];
+    // [status, gate, reason, found, required, findings, contra, risks, reqs]  per level 3 / 2 / 1
+    var D3 = {
+      company: ['done', 'sufficient', 'Registry record and incorporation documents agree', 6, 4, 7, 0, 0, 0],
+      team: ['done', 'sufficient', 'Each founder confirmed by an independent source', 8, 6, 7, 0, 0, 0],
+      market: ['done', 'partial', 'Only one independent market estimate', 3, 4, 5, 0, 0, 0],
+      competition: ['done', 'sufficient', 'Five competitors, pricing checked', 6, 5, 6, 0, 1, 0],
+      product: ['done', 'partial', 'Forecast-accuracy claim could not be verified', 5, 6, 7, 0, 0, 0],
+      traction: ['done', 'partial', '2 of 3 customers confirmed by the customer', 5, 6, 8, 1, 1, 0],
+      financials: [s.validated ? 'done' : 'review', s.validated ? 'sufficient' : 'partial', s.validated ? 'Validated table used in revision 5' : '1 table waiting for validation (does not block the report)', s.validated ? 12 : 9, 12, 9, 1, 2, 1],
+      cap: ['done', 'sufficient', 'Cap table reconciles to registry', 5, 4, 5, 1, 0, 0],
+      legal: ['done', 'partial', 'IP assignment missing for CTO', 7, 9, 7, 0, 1, 1],
+      security: s.retried ? ['done', 'partial', 'No penetration test in last 12 months', 6, 7, 5, 0, 1, 1] : ['failed', 'insufficient', 'Web search was unavailable during the run', 2, 7, 2, 0, 0, 1],
+      governance: ['done', 'sufficient', 'Board minutes for 4 quarters', 4, 4, 4, 0, 0, 0],
+      thesis: ['done', 'sufficient', 'Every required criterion answered', 9, 6, 9, 0, 0, 0]
+    };
+    var D2 = { traction: ['done', 'partial', 'Customers named publicly; no revenue data', 3, 4, 4, 0, 0, 0], financials: ['done', 'unavailable_at_level', 'No public filings for this company', 0, 1, 0, 0, 0, 0], legal: ['done', 'partial', 'Public records only; no contracts', 3, 4, 2, 0, 0, 0], security: ['done', 'partial', 'Public posture only', 3, 4, 3, 0, 0, 0], governance: ['done', 'partial', 'Public signals only', 2, 3, 1, 0, 0, 0], cap: ['done', 'partial', 'Public rounds; sources disagree on seed size', 3, 3, 3, 1, 0, 0] };
+    var GATE = { sufficient: ['Sufficient', V.green], partial: ['Partial', V.amber], insufficient: ['Insufficient', V.red], unavailable_at_level: ['Not at this level', V.gray] };
+    var STATUS = { done: ['Complete', V.green], review: ['Needs review', V.amber], failed: ['Failed', V.red], na: ['Not at this level', V.gray] };
+    var domainRows = DOM.map(function (d) {
+      var runs = d[2].indexOf(level) !== -1;
+      var r = !runs ? ['na', 'unavailable_at_level', level === 1 ? 'Runs from Level 2' : 'Runs from Level 3', 0, 1, 0, 0, 0, 0] : L3 ? D3[d[0]] : (level === 2 && D2[d[0]]) ? D2[d[0]] : D3[d[0]].slice();
+      if (runs && !L3 && !D2[d[0]]) { r = r.slice(); r[8] = 0; if (r[0] === 'failed' || r[0] === 'review') { r[0] = 'done'; r[1] = 'partial'; r[2] = 'Public sources only'; } }
+      if (runs && level === 1) { r = r.slice(); r[2] = 'Screening depth · ' + r[2]; }
+      var hidden = !dealTeam && L3 && (d[0] === 'financials');
+      var g = GATE[r[1]], st = STATUS[r[0]];
+      return {
+        key: d[0], name: d[1], scope: runs ? (L3 ? 'Public sources and data room' : 'Public sources') : '—', status: st[0], dot: r[0] === 'na' ? V.gray : (r[0] === 'failed' ? V.red : g[1]),
+        gate: g[0], gateKey: r[1], reason: hidden ? 'Restricted to the deal team' : r[2], pct: runs ? Math.min(100, Math.round(r[3] / r[4] * 100)) : 0, cov: runs ? r[3] + ' found · ' + r[4] + ' needed' : '—', statusDot: st[1],
+        findings: runs ? String(r[5]) : '—', contra: runs ? String(r[6]) : '—', risks: runs ? String(r[7]) : '—', reqs: runs ? String(r[8]) : '—',
+        canRetry: r[0] === 'failed', retry: function () { self.setState({ retried: true }); self.showToast('Retrying security domain', 'Only this domain runs again, in the same revision', V.blue); }
+      };
+    });
+    var nSuff = domainRows.filter(function (d) { return d.gateKey === 'sufficient'; }).length;
+    var nRun = domainRows.filter(function (d) { return d.gateKey !== 'unavailable_at_level'; }).length;
+    var domainSummary = nSuff + ' of ' + nRun + ' domains that ran have sufficient evidence' + (nRun < 12 ? ' · ' + (12 - nRun) + ' not at this level' : '');
+
+    var cells = domainRows.map(function (d) { return { color: d.gateKey === 'sufficient' ? V.green : d.gateKey === 'partial' ? V.amber : d.gateKey === 'insufficient' ? V.red : 'var(--surface-2)', title: d.name + ': ' + d.gate }; });
+    var MD = { cells: [], split: [], aria: '', lo: 0, w: 0, pt: 0, isCells: false, isRange: false, isSplit: false };
+    var measures = [
+      { label: 'Source reliability', value: L3 ? 'Good' : 'Fair', note: L3 ? '62% of material findings have an independent source; 38% rest on company documents only' : '55% independent sources; 45% company website or press releases', isSplit: true, split: [{ n: L3 ? 62 : 55, color: V.green }, { n: L3 ? 38 : 45, color: V.amber }], isCells: false, isRange: false },
+      { label: 'Claim confidence', value: 'Medium', note: L3 ? '31 verified · 18 source-supported · 4 inferences' : '19 verified · 14 source-supported · 3 inferences', isSplit: true, split: [{ n: 31, color: V.green }, { n: 18, color: V.blue }, { n: 4, color: V.gray }], isCells: false, isRange: false },
+      { label: 'Evidence coverage', value: nSuff + ' of 12 domains', note: 'Green sufficient · amber partial · red insufficient · grey not at this level', isCells: true, cells: cells, aria: domainSummary, isSplit: false, isRange: false },
+      { label: 'Attractiveness', value: '3.8 of 5', note: 'Range 3.2 to 4.4 · dashed line is your advance line (3.5). Kept separate from confidence.', isRange: true, lo: 55, w: 30, pt: 70, aria: 'Attractiveness 3.8 of 5, range 3.2 to 4.4', isSplit: false, isCells: false }
+    ].map(function (x) { return Object.assign({}, MD, x); });
+
+    // Finding kinds
+    var KIND = { verified: ['Verified fact', V.green], supported: ['Source-supported', V.blue], calc: ['Calculation', V.brand], inference: ['Inference', 'var(--muted)'], contra: ['Contradictory', V.red], missing: ['Missing', V.gray], risk: ['Unresolved risk', V.amber] };
+    var claimsAll = [
+      { kind: 'verified', topic: 'Founders', statement: 'Founded in 2024 by Mara Lindqvist, formerly head of grid-operations software at a large German utility, and Jonas Ebert.', quote: 'Mara spent eight years building the operations software our grid teams relied on before starting Lattice Grid with Jonas in 2024.', source: 'utility-press.example/archive', saved: 'saved 5 Nov 2026' },
+      { kind: 'verified', topic: 'Company', statement: 'Lattice Grid GmbH is registered in Berlin, incorporated March 2024.', quote: 'Lattice Grid GmbH · Sitz: Berlin · Eintragung: 14.03.2024', source: 'Commercial register extract', saved: 'saved 5 Nov 2026' },
+      { kind: 'contra', topic: 'Funding', statement: 'Seed round reported as €4.2M by the company and €3.5M by a news aggregator.', quote: 'Today we are announcing our €4.2M seed round…', source: 'latticegrid.io/blog/seed', saved: 'saved 5 Nov 2026', explain: 'Both kept; see Contradictions.' },
+      { kind: 'supported', topic: 'Customers', statement: 'Lists three municipal utilities as customers.', quote: 'Case studies: Stadtwerke Nordhafen and Stadtwerke Elbtal use Lattice forecasting in production.', source: 'latticegrid.io/customers', saved: 'saved 6 Nov 2026', explain: 'Two utilities confirm it on their own sites; the third does not.' },
+      { kind: 'calc', topic: 'Financials', statement: 'Runway is 19 months at the average net burn of Jul–Sep 2026.', quote: 'Cash 30 Sep 2026: €2,240,000 · Net burn Jul–Sep avg: €118,000', source: 'Management accounts FY2025.pdf · p. 4 and KPI workbook · sheet Cash', saved: 'ddcalc@1 · runway', priv: true },
+      { kind: 'contra', topic: 'Financials', statement: 'Deck states ARR of €900k; the KPI workbook gives 12 × MRR = €640k for September 2026.', quote: 'ARR €0.9M (Sep 2026)', source: 'Pitch deck Oct 2026.pdf · slide 9', saved: 'uploaded 6 Nov 2026', priv: true },
+      { kind: 'inference', topic: 'Market', statement: 'The regulatory deadline is likely to pull purchasing forward into 2027.', none: true, explain: 'Inference by the evaluation agent from the regulator’s timetable; not a fact.' },
+      { kind: 'missing', topic: 'Unit economics', statement: 'Customer acquisition cost could not be calculated.', none: true, explain: 'Sales and marketing spend was not provided. A document request is open; we did not estimate it.' },
+      { kind: 'missing', topic: 'Product', statement: 'Forecast error below 2% at substation level.', none: true, explain: 'The company states this but no independent evidence was found, so it is not used in scoring.' },
+      { kind: 'risk', topic: 'Legal', statement: 'No IP assignment found for code the CTO wrote before incorporation.', none: true, explain: 'Legal checklist item IP-03. Raised as a risk and a document request. This is not legal advice.', priv: true },
+      { kind: 'verified', topic: 'Market', statement: 'About 900 electricity distribution operators work in Germany.', quote: 'Germany has around 900 distribution system operators, most of them municipal utilities.', source: 'energy-regulator.example/report', saved: 'saved 6 Nov 2026' }
+    ].filter(function (c) { return L3 || !c.priv; }).map(function (c) {
+      var restricted = c.priv && !dealTeam;
+      return Object.assign({}, c, { label: KIND[c.kind][0], dot: KIND[c.kind][1], isPrivate: !!c.priv && !restricted, statement: restricted ? 'Restricted to the deal team.' : c.statement, hasQuote: !c.none && !restricted, quote: c.quote || '', source: c.source || '', saved: c.saved || '', hasExplain: !!c.explain && !restricted, explain: c.explain || '' });
+    });
+    var COUNTS = L3 ? { verified: 31, supported: 18, calc: 9, inference: 4, contra: 3, missing: 6, risk: 5 } : level === 2 ? { verified: 19, supported: 14, calc: 1, inference: 3, contra: 1, missing: 8, risk: 2 } : { verified: 11, supported: 7, calc: 0, inference: 2, contra: 1, missing: 5, risk: 1 };
+    var findTotal = 0; Object.keys(COUNTS).forEach(function (k) { findTotal += COUNTS[k]; });
+    var evBar = Object.keys(KIND).filter(function (k) { return COUNTS[k] > 0; }).map(function (k) {
+      return { n: COUNTS[k], label: KIND[k][0].toLowerCase(), color: KIND[k][1], aria: COUNTS[k] + ' ' + KIND[k][0], pick: function () { self.setState({ tab: 'evidence', evFilter: { value: k, label: KIND[k][0] } }); } };
+    });
+    var ef = s.evFilter;
+    var claims = !ef ? claimsAll : claimsAll.filter(function (c) { return c.kind === ef.value; });
+    var evHeader = !ef ? 'Findings and sources' : 'Findings: ' + ef.label;
+
+    // Report: 21 sections
+    var ST = { s: ['Supported', V.green], i: ['Incomplete', V.amber], n: ['Not applicable', V.gray], u: ['Unavailable at this level', 'var(--border-strong)'] };
+    var DISC = { legal: 'Issues and questions for your counsel. This is not legal advice.', fin: 'Calculated from company documents. Not an audit or accounting opinion.', sec: 'Observations from documents and public signals. Not a security certification.' };
+    var R = [
+      // n, title, [L3 status, body], [L2 status, body], [L1 status, body], cite, private, disclaimer
+      [1, 'Executive investment summary', ['s', co.headline], ['s', co.headline], ['s', co.headline], '12 findings'],
+      [2, 'Company overview', ['s', 'Lattice Grid GmbH, registered in Berlin in March 2024, sells load-forecasting software to electricity distribution operators.'], 0, 0, 'Commercial register · company site'],
+      [3, 'Investment-thesis alignment', ['s', 'Meets all six required criteria: climate B2B software, Europe, seed stage, regulated buyers. No exclusion applies.'], 0, 0, '9 findings'],
+      [4, 'Business model', ['s', 'Annual licences priced per substation. Pricing in the deck matches the public pricing page.'], ['s', 'Annual licences priced per substation, according to the public pricing page.'], ['i', 'Pricing page found; delivery and contract model not checked at screening depth.'], '3 findings'],
+      [5, 'Founder and team assessment', ['s', 'The CEO’s eight-year role at a German utility is confirmed by the employer’s press archive; the CTO’s earlier forecasting product is confirmed. Org chart shows 11 employees.'], ['s', 'Both founders’ prior roles confirmed by independent sources.'], 0, '7 findings'],
+      [6, 'Market opportunity', ['i', 'Company model: €310M serviceable market. One independent estimate: €240M, from regulator data. Shown as a range; not blended.'], ['i', 'One independent estimate (€240M, regulator data). The company’s own figure is not public.'], 0, '4 findings'],
+      [7, 'Competitive landscape', ['s', 'Five competitors; two well-funded incumbents offer overlapping products. Both are named in the deck.'], ['s', 'Five competitors identified from public sources.'], ['i', 'Three candidate competitors identified at screening depth.'], '5 findings'],
+      [8, 'Product and technology', ['i', 'Live at two utilities with public API documentation. The “below 2% forecast error” claim could not be verified.'], 0, ['i', 'Product page reviewed; documentation not checked at screening depth.'], '6 findings'],
+      [9, 'Traction and commercial performance', ['i', 'Customer list shows three paying customers; two confirm the relationship publicly. The largest customer provides 58% of revenue.'], ['i', 'Two utilities named publicly as customers. Revenue is not public and was not estimated.'], ['i', 'Two customers named on the company site.'], '8 findings', true],
+      [10, 'Financial analysis', ['i', 'ARR €640k (KPI workbook, Sep 2026); gross margin 71.2%; net burn €118k per month; runway 19 months. CAC and payback not computable: sales and marketing spend not provided.'], ['u', 'No public filings for this company. Needs company documents (Level 3).'], ['u', 'Checked from Level 2.'], '9 calculations', true, 'fin'],
+      [11, 'Fundraising and capitalization', ['s', 'Cap table reconciles to the registry share count. Founders hold 68.4% fully diluted.'], ['i', 'Seed round reported as €4.2M and €3.5M by different sources.'], ['i', 'Public rounds only: €4.2M and €3.5M reported.'], '5 findings', true],
+      [12, 'Legal and regulatory risks', ['i', 'No IP assignment found for code the CTO wrote before incorporation. No litigation or sanctions matches in public records.'], ['i', 'No litigation or sanctions matches in public records. Contracts and IP not checked without documents.'], ['u', 'Checked from Level 2.'], '6 findings', true, 'legal'],
+      [13, 'Security and operational risks', [s.retried ? 'i' : 'i', s.retried ? 'Policies reviewed; no penetration test in the last 12 months. Public posture: TLS and security headers in order.' : 'Policies reviewed; no penetration test in the last 12 months. The public posture check did not run (search unavailable).'], ['i', 'Public posture only: TLS and security headers in order; trust page claims SOC 2 without a report.'], ['u', 'Checked from Level 2.'], '5 findings', true, 'sec'],
+      [14, 'Material red flags', ['s', 'Customer concentration (58%); missing CTO IP assignment; deck ARR higher than the workbook.'], ['s', 'None found in public sources; several areas not checkable without documents.'], ['s', 'None found at screening depth.'], '3 risks', true],
+      [15, 'Contradictory or disputed findings', ['s', 'Three open: seed amount, ARR, customer count.'], ['s', 'One open: seed amount.'], ['s', 'One open: seed amount.'], '3 contradictions'],
+      [16, 'Evidence coverage and confidence', ['s', domainSummary + '. 38% of material findings rest only on company documents.'], ['s', domainSummary + '.'], ['s', domainSummary + '.'], 'All domains'],
+      [17, 'Missing information and requested documents', ['s', 'Four requests, two of which block a recommendation.'], ['s', 'Missing items listed; document requests are created at Level 3.'], ['s', 'Missing items listed; document requests are created at Level 3.'], '4 requests'],
+      [18, 'Investment scenarios and key assumptions', ['s', 'Gross multiple on a €2M ticket: bear 0.6×, base 3.1×, bull 8.4×. Every assumption is labelled as cited, entered by you, or inferred.'], ['i', 'Scenarios use public data and your assumptions only; proposed round terms are not known.'], ['u', 'Available from Level 2.'], '3 scenarios', true],
+      [19, 'Recommended next diligence actions', ['s', 'Reference calls with both confirmed utilities; obtain the CTO IP assignment; reconcile the ARR definition; request a penetration test summary.'], ['s', 'Upgrade to Level 3 and request financials, cap table and key contracts.'], ['s', 'Upgrade to Level 2 to check legal, security, competition and product.'], ''],
+      [20, 'Investment committee considerations', ['s', 'Concentration and the IP assignment are suggested conditions for a term sheet. The decision is yours.'], 0, 0, ''],
+      [21, 'Evidence appendix and audit trail', ['s', '142 saved web sources and 9 documents. Every finding links to its saved copy or document page.'], ['s', '118 saved web sources.'], ['s', '46 saved web sources.'], 'Audit trail']
+    ];
+    var counts = { s: 0, i: 0, n: 0, u: 0 };
+    var report = R.map(function (r) {
+      var v = level === 3 ? r[2] : level === 2 ? (r[3] || r[2]) : (r[4] || r[3] || r[2]);
+      counts[v[0]]++;
+      var restricted = !!(L3 && r[6] && !dealTeam);
+      return { n: r[0], title: r[1], status: ST[v[0]][0], dot: ST[v[0]][1], body: v[1], cite: r[5], hasCite: !!r[5] && v[0] !== 'u', isRestricted: restricted, isOpen: !restricted, hasDisc: !!r[7] && v[0] !== 'u', disc: r[7] ? DISC[r[7]] : '' };
+    });
+    var statusLegend = [['s', 'Supported'], ['i', 'Incomplete'], ['n', 'Not applicable'], ['u', 'Unavailable at this level']].map(function (x) { return { dot: ST[x[0]][1], label: x[1], n: counts[x[0]] }; });
+    var exports = ['Web', 'PDF', 'DOCX', 'JSON'].map(function (f) { return { label: f, go: function () { self.showToast(f + ' export ready', L3 ? 'Watermarked with your name and the time; deal team only' + (dealTeam ? '' : ' — private sections left out') : 'Public evidence only', V.green); } }; });
+
+    // Data room
+    var STEPS = ['Uploaded', 'Virus scan', 'Reading', 'Classified', 'Ready'];
+    var stepColors = function (n, color) { var a = []; for (var i = 0; i < 5; i++) { a.push(i <= n ? color : 'var(--surface-2)'); } return a; };
+    var baseDocs = [
+      ['Pitch deck Oct 2026.pdf', '24 pages · pypdf', 'Pitch deck', 2, 4, 'Ready', V.green, '6 Nov · Ana Ruiz'],
+      ['KPI workbook Sep 2026.xlsx', '6 sheets · openpyxl', 'Financials', 1, s.validated ? 4 : 3, s.validated ? 'Ready · validated by you' : 'Needs validation · 2 checks failed', s.validated ? V.green : V.amber, '6 Nov · Priya Nair'],
+      ['Management accounts FY2025.pdf', '18 pages · 4 read by OCR (local) · pdfplumber tables', 'Financials', 1, 4, 'Ready', V.green, '6 Nov · Priya Nair'],
+      ['Board minutes Q3 2026 (scan).pdf', '12 pages · all read by OCR (local) · 2 low confidence', 'Board material', 1, 4, 'Ready · 2 pages low confidence', V.amber, '7 Nov · Marco Lee'],
+      ['Cap table Oct 2026.xlsx', '2 sheets', 'Cap table', 1, 4, 'Ready', V.green, '6 Nov · Priya Nair'],
+      ['Customer revenue 2026.csv', '1,212 rows', 'Customer revenue', 1, 4, 'Ready', V.green, '6 Nov · Priya Nair'],
+      ['MSA Stadtwerke Nordhafen.docx', '31 pages', 'Contract', 1, 4, 'Ready', V.green, '6 Nov · Marco Lee', true],
+      ['Security policy set.pdf', '42 pages', 'Policy', 1, 4, 'Ready', V.green, '7 Nov · Marco Lee'],
+      ['invoice-tool.xlsm', 'Rejected before reading', '—', 1, 0, 'Not accepted: macro-enabled files are blocked', V.red, '7 Nov · Marco Lee'],
+      ['signed_contracts.zip', 'Quarantined', '—', 1, 1, 'Blocked by the virus scan', V.red, '7 Nov · Marco Lee']
+    ];
+    var UPS = ['Uploaded', 'Scanning for viruses', 'Reading', 'Classified: board material', 'Ready'];
+    var docs = s.uploads.map(function (u) { return [u.name, u.step < 2 ? '—' : '16 pages', u.step >= 3 ? 'Board material' : '—', 1, u.step, UPS[u.step], u.step === 4 ? V.green : V.blue, 'Just now · you']; }).concat(baseDocs).map(function (d) {
+      return { name: d[0], meta: d[1], cls: d[2], v: d[3], steps: stepColors(d[4], d[6]), status: d[5], dot: d[6], when: d[7], byUser: !!d[8] };
+    });
+    var docSummary = docs.filter(function (d) { return d.status.indexOf('Ready') === 0; }).length + ' ready · ' + docs.filter(function (d) { return d.dot === V.red; }).length + ' blocked · encrypted at rest · deleted 90 days after this assessment closes';
+    var upload = function () { var n = self.state.uploads.length + 1; self.setState({ uploads: [{ name: 'Board deck Q3 2026' + (n > 1 ? ' (' + n + ')' : '') + '.pdf', step: 0 }].concat(self.state.uploads) }); };
+
+    // Financials
+    var corr = s.corrected;
+    var G = [['', 'Jun 2026', 'Jul 2026', 'Aug 2026', 'Sep 2026'], ['New MRR', '3,900', '4,400', '3,100', '2,100'], ['Expansion MRR', '1,200', '1,050', '1,400', '600'], ['Churned MRR', '−1,800', corr ? '−4,100' : '4,100', '−900', '−2,100'], ['Total MRR', '47,800', '49,150', '52,750', '53,350']];
+    var grid = [];
+    G.forEach(function (row, ri) { row.forEach(function (v, ci) {
+      var st = 'background: var(--surface)';
+      if (ri === 0 || ci === 0) { st = 'background: var(--surface-2); font-weight: 500; text-align: ' + (ci === 0 ? 'left' : 'right'); }
+      if (ri === 0 && ci === 0) { st += '; border-top: 0'; }
+      if (ri === 0) { st += '; border-top: 0'; }
+      if (ci === 0) { st += '; border-left: 0'; }
+      if (!corr && ((ri === 3 && ci === 2) || (ri === 4 && ci === 2))) { st += '; background: color-mix(in srgb, var(--amber) 18%, var(--surface)); box-shadow: inset 0 0 0 1px var(--amber)'; }
+      if (!corr && ri === 2 && ci === 4) { st += '; background: color-mix(in srgb, var(--amber) 10%, var(--surface))'; }
+      if (corr && ri === 3 && ci === 2) { st += '; background: color-mix(in srgb, var(--green) 14%, var(--surface))'; }
+      grid.push({ v: v, style: st });
+    }); });
+    var vOK = s.validated;
+    var M = [
+      ['Revenue growth', '181.5%', 'Sep 2025 → Sep 2026', '(R₁ − R₀) / R₀', '2 cells · KPI workbook', 'Computed', V.green],
+      ['Gross margin', '71.2%', 'FY2025', '(Rev − COGS) / Rev', '2 lines · management accounts p. 3', 'Computed', V.green],
+      ['Net burn', '€118k / month', 'Avg Jul–Sep 2026', 'Δ cash ÷ months', '4 cells · sheet Cash', 'Computed', V.green],
+      ['Runway', '19 months', 'From 30 Sep 2026', 'Cash ÷ net burn', 'Cash p. 4 · net burn', 'Computed', V.green],
+      ['ARR (workbook)', '€640,200', 'Sep 2026', '12 × MRR', 'Total MRR · Sep', 'Flagged: the deck says €900k (40.6% higher). See Contradictions.', V.red],
+      ['Net revenue retention', vOK ? '112%' : 'Not computable', 'Oct 2025 → Sep 2026', '(Start + exp − contr − churn) / Start', 'MRR sheet', vOK ? 'Computed from the validated table' : 'Waiting for the MRR table to be validated', vOK ? V.green : V.amber],
+      ['Gross revenue retention', vOK ? '94%' : 'Not computable', 'Oct 2025 → Sep 2026', '(Start − contr − churn) / Start', 'MRR sheet', vOK ? 'Computed from the validated table' : 'Waiting for the MRR table to be validated', vOK ? V.green : V.amber],
+      ['Customer acquisition cost', 'Not computable', '—', 'S&M spend ÷ new customers', 'Missing: sales and marketing spend', 'Missing input. Document request sent 6 Nov.', V.gray],
+      ['Lifetime value', 'Not computable', '—', 'ARPA × GM ÷ churn rate', 'Missing: customer-level churn history', 'Missing input. Not estimated.', V.gray],
+      ['CAC payback', 'Not computable', '—', 'CAC ÷ (ARPA × GM)', 'Needs CAC', 'Missing input.', V.gray],
+      ['Top customer share', '58%', '2026 year to date', 'Max(customer rev) ÷ total', 'Customer revenue 2026.csv', 'Computed · above your 30% threshold, raised as a risk', V.amber],
+      ['Q3 revenue vs budget', '−14%', 'Q3 2026', '(Actual − Budget) / Budget', 'Budget 2026 · KPI workbook', 'Computed', V.green]
+    ];
+    var fin = {
+      needsValidation: !vOK, grid: grid, corrValue: s.corrValue, corrReason: s.corrReason,
+      setValue: function (e) { self.setState({ corrValue: e.target.value }); }, setReason: function (e) { self.setState({ corrReason: e.target.value }); },
+      saveCorrection: function () { if (!self.state.corrReason.trim()) { self.setState({ finMsg: ['A reason is required for every correction.', V.red] }); return; } self.setState({ corrected: true, finMsg: ['Correction saved as version 2 of this table. The original reading is kept. July now adds up.', V.green] }); },
+      validate: function () { if (!self.state.corrected) { self.setState({ finMsg: ['The July total still does not add up. Correct the cell (with a reason) before validating.', V.red] }); return; } self.setState({ validated: true, finMsg: null }); self.showToast('Table validated · revision 5 started', 'Retention metrics calculated; the revision 4 report stays as it is', V.green); },
+      hasMsg: !!s.finMsg, msg: s.finMsg ? s.finMsg[0] : '', msgColor: s.finMsg ? s.finMsg[1] : '',
+      metrics: M.map(function (m) { return { name: m[0], value: m[1], valColor: m[1] === 'Not computable' ? 'var(--muted)' : 'var(--text)', period: m[2], formula: m[3], inputs: m[4], status: m[5], dot: m[6] }; })
+    };
+
+    // Risks
+    var RS = [
+      ['r1', 'Customer concentration: largest customer is 58% of revenue', 'High', V.red, 'Likely', 'Traction · Financials · 3 findings', 'Is the Nordhafen contract multi-year, and what is its renewal date?', true, 2, 0],
+      ['r2', 'No IP assignment found for code the CTO wrote before incorporation', 'Critical', V.red, 'Possible', 'Legal · checklist IP-03 · 2 findings', 'Can the company provide a signed assignment covering 2023–2024 work?', true, 3, 1],
+      ['r3', 'Deck ARR (€900k) is 40.6% higher than the KPI workbook (€640k)', 'High', V.red, 'Likely', 'Financials · 1 contradiction', 'Which ARR definition does the deck use (bookings, contracted, or run-rate)?', true, 2, 0],
+      ['r4', 'No penetration test in the last 12 months', 'Medium', V.amber, 'Possible', 'Security · checklist SEC-07', 'Is a test planned before the next customer renewal?', false, 1, 1],
+      ['r5', 'Two well-funded incumbents with overlapping products', 'Medium', V.amber, 'Possible', 'Competition · 5 findings', 'What is the win rate against incumbents in the last 4 quarters?', false, 1, 1]
+    ];
+    var NEXT = { Open: 'Accepted', Accepted: 'Mitigated', Mitigated: 'Closed', Closed: 'Open' };
+    var risks = RS.filter(function (r) { return L3 || r[0] === 'r5'; }).map(function (r) {
+      var st = s.riskStatus[r[0]] || (r[0] === 'r5' ? 'Accepted' : 'Open');
+      var restricted = r[7] && !dealTeam;
+      return { sev: r[2], dot: r[3], title: restricted ? 'Restricted to the deal team' : r[1], meta: (restricted ? '' : r[4] + ' · ') + r[5], ask: restricted ? '—' : r[6], status: st, next: 'Mark ' + NEXT[st].toLowerCase(), cycle: function () { var m = Object.assign({}, self.state.riskStatus); m[r[0]] = NEXT[st]; self.setState({ riskStatus: m }); } };
+    });
+    var LIK = ['Likely', 'Possible', 'Unlikely'], SEV = ['Critical', 'High', 'Medium', 'Low'];
+    var riskMatrix = [{ v: '', style: '' }].concat(LIK.map(function (l) { return { v: l, style: 'color: var(--muted)' }; }));
+    SEV.forEach(function (sv) {
+      riskMatrix.push({ v: sv, style: 'color: var(--muted); justify-content: flex-start' });
+      LIK.forEach(function (lk) {
+        var n = RS.filter(function (r) { return (L3 || r[0] === 'r5') && r[2] === sv && r[4] === lk && (s.riskStatus[r[0]] || 'Open') !== 'Closed'; }).length;
+        var hot = (sv === 'Critical' || sv === 'High') && lk !== 'Unlikely';
+        riskMatrix.push({ v: n ? String(n) : '', style: 'font-weight: 600; background: ' + (n ? (hot ? 'color-mix(in srgb, var(--red) 22%, var(--surface))' : 'color-mix(in srgb, var(--amber) 22%, var(--surface))') : 'var(--surface-2)') });
+      });
+    });
+
+    // Contradictions
+    var contras = [
+      { title: 'Seed round size', meta: 'Public · 2 sources · open', priv: false, sides: [{ src: 'Company announcement · company-authored · 5 Nov 2026', value: '€4.2M', quote: 'Today we are announcing our €4.2M seed round…', loc: 'latticegrid.io/blog/seed' }, { src: 'News aggregator · lower reliability · 5 Nov 2026', value: '€3.5M', quote: '…has closed €3.5M in seed funding, according to people familiar.', loc: 'startupwire.example' }], note: 'The cap table and SAFE documents support €4.2M including a €0.7M SAFE. Both sources stay on record.' },
+      { title: 'Annual recurring revenue', meta: 'Private · tolerance 2% · open', priv: true, sides: [{ src: 'Pitch deck Oct 2026.pdf · company', value: '€900k', quote: 'ARR €0.9M (Sep 2026)', loc: 'Slide 9' }, { src: 'KPI workbook Sep 2026.xlsx · company', value: '€640k', quote: 'Total MRR Sep 2026: 53,350', loc: 'Sheet MRR · cell E5 (× 12)' }], note: 'Difference 40.6%. Request sent asking which ARR definition the deck uses. No value is preferred until explained.' },
+      { title: 'Number of paying customers', meta: 'Private · open', priv: true, sides: [{ src: 'Pitch deck Oct 2026.pdf', value: '5 utilities', quote: 'Trusted by 5 utilities', loc: 'Slide 7' }, { src: 'Customer revenue 2026.csv', value: '3 paying', quote: '3 distinct customer IDs with revenue in 2026', loc: 'Rows 2–1,212' }], note: 'Two may be unpaid pilots. Raised in the request list.' }
+    ].filter(function (x) { return L3 || !x.priv; }).map(function (x) { var r = x.priv && !dealTeam; return Object.assign({}, x, { isRestricted: r, isOpen: !r }); });
+
+    // Requests
+    var RQ = [
+      ['q1', 'Sales and marketing spend by month, last 12 months', 'Needed for CAC and payback (financials)', false, 'Sent'],
+      ['q2', 'Signed IP assignment from the CTO covering pre-incorporation work', 'Legal checklist IP-03 · risk r2', true, 'Draft'],
+      ['q3', 'Which ARR definition the deck uses, with the calculation', 'Contradiction: deck vs KPI workbook', true, 'Sent'],
+      ['q4', 'Latest penetration test summary', 'Security checklist SEC-07', false, 'Draft']
+    ];
+    var RNEXT = { Draft: 'Sent', Sent: 'Received', Received: 'Closed' };
+    var RDOT = { Draft: V.gray, Sent: V.blue, Received: V.green, Closed: V.green };
+    var requests = !L3 ? [] : RQ.map(function (q) {
+      var st = s.reqStatus[q[0]] || q[4];
+      return { item: q[1], reason: q[2], blocking: q[3], status: st, dot: RDOT[st], canAdvance: !!RNEXT[st], next: RNEXT[st] ? 'Mark ' + RNEXT[st].toLowerCase() : '', advance: function () { var m = Object.assign({}, self.state.reqStatus); m[q[0]] = RNEXT[st]; self.setState({ reqStatus: m }); } };
+    });
+
+    var TABS = [['report', 'Report'], ['domains', 'Domains'], ['financials', 'Financials'], ['dataroom', 'Data room'], ['risks', 'Risks', risks.length], ['contra', 'Contradictions', contras.length], ['requests', 'Requests', requests.filter(function (q) { return q.status === 'Draft' || q.status === 'Sent'; }).length], ['evidence', 'Sources'], ['history', 'History']];
+    var tabs = TABS.map(function (t) { return { label: t[1], cls: s.tab === t[0] ? 'on' : '', hasCount: !!t[2], count: t[2] || '', select: function () { self.setState({ tab: t[0], evFilter: null }); } }; });
+
+    var privTab = s.tab === 'dataroom' || s.tab === 'financials';
+    var gate = { show: false, open: true, title: '', text: '', canUpgrade: false };
+    if (privTab && !L3) { gate = { show: true, open: false, title: s.tab === 'dataroom' ? 'The data room is part of Level 3' : 'No financial data at this level', text: s.tab === 'dataroom' ? 'Upgrade to enhanced diligence to upload company documents. Needs the deal team and private-processing acceptance.' : 'This company files no public financial statements. Upgrade to Level 3 to analyse documents the company provides; nothing is estimated in the meantime.', canUpgrade: level === 2 }; }
+    else if (privTab && !dealTeam) { gate = { show: true, open: false, title: 'Restricted to the deal team', text: 'Ask a partner on the deal team (Ana Ruiz, Marco Lee, Priya Nair) to add you.', canUpgrade: false }; }
+    else if (s.tab === 'requests' && !L3) { gate = { show: true, open: false, title: 'Document requests start at Level 3', text: 'Missing information is listed in report section 17.', canUpgrade: level === 2 }; }
+
+    var history = [
+      L3 ? { version: 'Revision 4', what: 'Current. Upgraded to Level 3; 9 documents added to the data room.', when: '7 Nov 2026, 09:36', status: 'Ready for your decision', pillStyle: 'background:var(--brand-soft);color:var(--brand-text)' } : null,
+      level >= 2 ? { version: 'Revision 3', what: (level === 2 ? 'Current. ' : '') + 'Upgraded to Level 2; all public domains checked.', when: '6 Nov 2026', status: level === 2 ? 'Ready for your decision' : 'Kept for reference', pillStyle: level === 2 ? 'background:var(--brand-soft);color:var(--brand-text)' : '' } : null,
+      { version: 'Revision 2', what: (level === 1 ? 'Current. ' : '') + 'Level 1 screening refreshed after a second round on competitors.', when: '5 Nov 2026', status: level === 1 ? 'Ready for your decision' : 'Kept for reference', pillStyle: level === 1 ? 'background:var(--brand-soft);color:var(--brand-text)' : '' },
+      { version: 'Revision 1', what: 'First Level 1 screening, started by Ana.', when: '5 Nov 2026', status: 'Kept for reference', pillStyle: '' }
+    ].filter(Boolean);
+
+    // Decisions
+    var kr = s.kestrelReloaded;
+    var rv = [
+      { id: 'lg', company: 'Lattice Grid', rec: 'advance with conditions', recDot: V.green, age: '12 min', summary: 'Load forecasting for grid operators. Strong fit and team; concentration, ARR and IP assignment to resolve.', level: 'Level ' + level, score: '3.8 of 5', coverage: nSuff + ' of 12 domains', confidence: 'Medium', risks: L3 ? '4 open' : '1 open', outcome: 'ok' },
+      { id: 'ko', company: 'Kestrel Ops', rec: 'advance', recDot: V.green, age: '38 min', summary: kr ? 'Predictive maintenance for process plants. Updated with the new €12M Series A.' : 'Predictive maintenance for process plants.', level: 'Level 2', score: kr ? '4.1 of 5' : '3.9 of 5', coverage: kr ? '10 of 12 domains' : '9 of 12 domains', confidence: kr ? 'High' : 'Medium', risks: '1 open', outcome: kr ? 'ok' : 'stale' },
+      { id: 'bw', company: 'Brightwater Labs', rec: 'hold', recDot: V.blue, age: '2 h', summary: 'Leak detection for water utilities. Good fit, one public pilot.', level: 'Level 1', score: '3.3 of 5', coverage: '6 of 8 domains', confidence: 'Low', risks: '0 open', outcome: 'taken' }
+    ];
+    var DONE = { approve: ['Advanced to partner meeting', V.green], research: ['Information requested · 2 items added to Requests', V.blue], reject: ['Passed', V.gray] };
+    var reviews = rv.map(function (r) {
+      var d = s.decisions[r.id];
+      var act = function (k) { return function () { var dd = Object.assign({}, self.state.decisions); dd[r.id] = r.outcome === 'ok' ? k : r.outcome; self.setState({ decisions: dd }); if (r.outcome === 'ok') { self.showToast(DONE[k][0], r.company + ' · your decision is recorded against this report version', DONE[k][1]); } }; };
+      var prob = d === 'stale' ? { title: 'This report changed while you were reading it.', text: 'We found news of a new funding round and opened a new revision. Your decision was not recorded, so you can decide on the latest version.', color: V.amber, reload: true } : d === 'taken' ? { title: 'Marco Lee decided this a moment ago.', text: 'He chose to advance it. Your firm’s rule is that the first decision counts, so yours was not recorded.', color: V.gray, reload: false } : null;
+      var done = d && !prob ? DONE[d] : null;
+      return Object.assign({}, r, {
+        initials: initials(r.company), isPending: !d, hasProblem: !!prob, problemTitle: prob ? prob.title : '', problemText: prob ? prob.text : '', problemColor: prob ? prob.color : '', canReload: !!(prob && prob.reload),
+        isDone: !!done, doneLabel: done ? done[0] : '', doneDot: done ? done[1] : '',
+        approve: act('approve'), research: function () { var m = Object.assign({}, self.state.reqOpen); m[r.id] = !m[r.id]; self.setState({ reqOpen: m }); }, sendRequest: act('research'), reqOpen: !d && !!s.reqOpen[r.id], reject: act('reject'), open: go('company'),
+        reload: function () { var dd = Object.assign({}, self.state.decisions); delete dd[r.id]; self.setState({ decisions: dd, kestrelReloaded: true }); }
+      });
+    });
+
+    var watch = [['w1', 'Kestrel Ops', 'Funding, leadership, pricing', 'daily', 'Raised a Series A · new revision'], ['w2', 'Lattice Grid', 'Funding, launches, hiring, sanctions lists', 'daily', 'Launched a public API'], ['w3', 'Tidepool Robotics', 'Funding, hiring', 'daily', 'Hiring fast'], ['w4', 'Halcyon Health', 'Pricing, negative news', 'weekly', 'Press page removed']].map(function (w) {
+      var p = !!s.paused[w[0]];
+      return { company: w[1], initials: initials(w[1]), rules: w[2], cadence: p ? 'Paused' : 'Checked ' + w[3], latest: w[4], toggleLabel: p ? 'Resume' : 'Pause', toggle: function () { var pp = Object.assign({}, self.state.paused); pp[w[0]] = !pp[w[0]]; self.setState({ paused: pp }); self.showToast(p ? 'Watching again' : 'Watching paused', w[1] + (p ? ' · checks resume ' + w[3] : ' · no checks until you resume'), p ? V.green : V.gray); } };
+    });
+
+    var mandate = [{ label: 'Stages', chips: ['Pre-seed', 'Seed', 'Series A'] }, { label: 'Regions', chips: ['EU', 'UK', 'US', 'Canada'] }, { label: 'Sectors', chips: ['Climate software', 'Industrial AI', 'Logistics'] }, { label: 'Never', chips: ['Token projects', 'Consumer social'] }, { label: 'Who decides', chips: ['One partner', 'Level 3 needs the deal team'] }];
+    var rubric = [['Team', 'Highest: repeat founders with deep domain experience', 25], ['Market', 'Highest: large demand backed by regulation, sized from public data', 20], ['Product', 'Highest: live with customers and clearly different', 20], ['Traction', 'Highest: several confirmed paying customers', 20], ['Fit with your thesis', 'Highest: meets every criterion above', 15]].map(function (r) { return { name: r[0], anchor: r[1], weight: r[2] + '%', pct: r[2] * 4 }; });
+
+    // Settings
+    var CATS = [['document_text_excerpts', 'Document passages'], ['document_tables', 'Extracted tables'], ['private_findings', 'Private findings'], ['embedding_inputs', 'Text for search embeddings'], ['document_metadata', 'File names and titles'], ['document_images', 'Page images']];
+    var sel = s.aiCats || { document_text_excerpts: true, document_tables: true };
+    var ai = {
+      dot: aiMode === 'external_authorized' ? V.amber : V.green,
+      label: aiMode === 'external_authorized' ? 'External allowed (limited)' : aiMode === 'local_model' ? 'Off · local model' : 'Off',
+      route: aiMode === 'external_authorized' ? 'OpenAI for the data below; local model for everything else' : aiMode === 'local_model' ? 'Local model only' : 'None: AI steps on private documents are skipped',
+      local: aiMode === 'off' ? 'Not configured (optional profile local-llm)' : 'llm:8000 · verified 7 Nov 2026 09:12 (structured-output probe passed)',
+      external: aiMode === 'external_authorized' ? 'Allowed by Ana Ruiz (owner) on 7 Nov 2026 · expires 7 Nov 2027 · terms reviewed: OpenAI API data controls (link)' : 'Off',
+      categories: aiMode === 'external_authorized' ? CATS.filter(function (c) { return sel[c[0]]; }).map(function (c) { return c[1]; }).join(', ') + ' · purposes: extraction, verification' : 'Nothing',
+      canEnable: aiMode !== 'external_authorized', canRevoke: aiMode === 'external_authorized', dialog: !!s.aiDialog, confirmText: s.aiConfirm || '',
+      options: CATS.map(function (c) { return { label: (sel[c[0]] ? '✓ ' : '') + c[1], style: sel[c[0]] ? 'background: var(--brand-soft); color: var(--brand-text); border-color: transparent' : '', toggle: function () { var m = Object.assign({}, sel); m[c[0]] = !m[c[0]]; self.setState({ aiCats: m }); } }; }),
+      setConfirm: function (e) { self.setState({ aiConfirm: e.target.value }); },
+      open: function () { self.setState({ aiDialog: true }); }, cancel: function () { self.setState({ aiDialog: false }); },
+      confirm: function () { if ((self.state.aiConfirm || '').trim() !== 'Default workspace') { self.showToast('Type the workspace name to confirm', 'Nothing was changed', V.amber); return; } self.setState({ aiOverride: 'external_authorized', aiDialog: false }); self.showToast('External processing allowed for the selected data', 'Policy version 4 · audited', V.amber); },
+      revoke: function () { self.setState({ aiOverride: 'local_model' }); self.showToast('External processing turned off', 'Takes effect for new requests within 30 seconds', V.green); }
+    };
+    var screening = { datasets: 'OFAC SDN + consolidated non-SDN · published 6 Nov 2026 · retrieved 7 Nov 06:02 UTC · current', subjects: 6,
+      matches: [{ subject: 'Ilse Varnstrom-Hale (board observer)', listed: 'VARNSTROM, Ilse (synthetic demo entry)', band: 'Weak · 87', corr: 'Country differs · no date of birth on list', status: s.matchStatus || 'Pending review' }].map(function (m) { return Object.assign({}, m, { pending: m.status === 'Pending review',
+        dismiss: function () { self.setState({ matchStatus: 'Dismissed as false positive · reason: different person (country and role differ) · Ana Ruiz' }); },
+        escalate: function () { self.setState({ matchStatus: 'Escalated to compliance' }); } }); }) };
+    var REQ = { thesis: 'Always', company: 'Yes', team: 'Yes', financials: 'Yes at Level 3', legal: 'Yes at Level 3 · fintech, health from L2', traction: 'Yes' };
+    var domainCfg = DOM.map(function (d) {
+      var off = !!s.domainOff[d[0]] && d[0] !== 'thesis';
+      return { name: d[1], on: off ? 'false' : 'true', onLabel: off ? 'Off' : 'On', req: off ? '—' : (REQ[d[0]] || 'No'), toggle: function () { if (d[0] === 'thesis') { self.showToast('Thesis fit always runs', 'It is needed for every recommendation', V.gray); return; } var m = Object.assign({}, self.state.domainOff); m[d[0]] = !m[d[0]]; self.setState({ domainOff: m }); self.showToast('Saved as configuration v6', 'PUT /config/domains · running assessments keep their version', V.green); },
+        levels: [1, 2, 3].map(function (n) { var on = d[2].indexOf(n) !== -1 && !off; return { n: n, style: on ? 'background: var(--brand-soft); color: var(--brand-text); border-color: transparent' : 'color: var(--muted)' }; }) };
+    });
+
+    // Start form
+    var POL = [['reuse_active', 'Use the assessment in progress', 'No duplicate work'], ['new_assessment', 'Start a fresh assessment', 'Keeps the old one as it is'], ['reassess_latest', 'Update the latest assessment', 'Creates a new revision']];
+    var LV = [[1, 'Screening', 'Public sources · 8 of 12 domains · fastest'], [2, 'Public diligence', 'All 12 domains from public sources'], [3, 'Enhanced diligence', 'Adds your data room and financial analysis']];
+    var l3Reason = !dealTeam ? 'Partners and the deal team only' : '';
+    var low = (s.formName || '').trim().toLowerCase(), nm = (s.formName || '').trim(), res = s.submitted;
+    var form = {
+      name: s.formName, setName: function (e) { self.setState({ formName: e.target.value }); }, level: s.formLevel,
+      levels: LV.map(function (l) { var dis = l[0] === 3 && !!l3Reason; return { n: l[0], label: l[1], hint: l[2], disabled: dis ? 'true' : 'false', hasReason: dis, reason: l3Reason, cls: (s.formLevel === l[0] ? 'on' : '') + (dis ? ' off' : ''), pick: function () { if (dis) { return; } self.setState({ formLevel: l[0] }); } }; }),
+      policies: POL.map(function (p) { return { label: p[1], hint: p[2], cls: s.policy === p[0] ? 'on' : '', pick: function () { self.setState({ policy: p[0] }); } }; }),
+      submit: function () {
+        var pol = self.state.policy, lv = self.state.formLevel, fp = low + '|' + pol + '|' + lv, r;
+        if (setup) { r = { color: V.red, title: 'Live diligence needs setup first.', body: 'Your admin needs to connect OpenAI. Meanwhile you can explore the demo workspace.' }; }
+        else if (low.indexOf('kestrel') !== -1) { r = { color: V.amber, title: 'Which company do you mean?', body: 'We found two companies with that name. Pick one so we assess the right company.', candidates: true }; }
+        else if (low.indexOf('lattice') !== -1 && pol === 'reuse_active') { r = { color: V.brand, title: 'Lattice Grid already has an assessment ready for your decision.', body: 'We did not start new work. To go deeper, use Upgrade on the company page.' }; }
+        else if (lv === 3) { r = { color: V.green, title: 'Level 3 diligence started' + (nm ? ' on ' + nm : '') + '.', body: 'Public research starts now. Open the company’s Data room to upload documents; financial analysis waits for them.' }; }
+        else { r = { color: V.green, title: 'Level ' + lv + ' diligence started' + (nm ? ' on ' + nm : '') + (demo ? ' — not started' : '') + '.', body: demo ? 'Not started: the demo workspace can browse and act on sample companies, but new diligence needs OpenAI (422 PROVIDER_NOT_CONFIGURED).' : 'It will appear on Home when it is ready for you. You can upgrade later without losing work.' }; }
+        if (self.state.lastFp === fp && !setup) { r = Object.assign({}, r, { body: r.body + ' (You already sent this; we did not start it twice.)' }); }
+        self.setState({ submitted: r, lastFp: fp });
+      },
+      show: !!res, color: res ? res.color : '', title: res ? res.title : '', body: res ? res.body : '', hasCandidates: !!(res && res.candidates),
+      candidates: [{ name: 'Kestrel Ops', domain: 'kestrelops.com · Industrial AI, UK' }, { name: 'Kestrel Analytics', domain: 'kestrel.ai · Data tools, US' }]
+    };
+
+    var notifications = [
+      { title: 'Kestrel Ops raised a Series A — new revision', when: '41 min ago', dot: V.red, go: go('decisions') },
+      { title: 'Lattice Grid: KPI workbook needs validation', when: '20 min ago', dot: V.amber, go: function () { self.setState({ screen: 'company', tab: 'financials', bellOpen: false }); } },
+      { title: 'Lattice Grid is ready for your decision', when: '12 min ago', dot: V.amber, go: go('company') },
+      { title: 'A file was blocked by the virus scan', when: '1 h ago', dot: V.red, go: function () { self.setState({ screen: 'company', tab: 'dataroom', bellOpen: false }); } }
+    ];
+    var commands = [
+      { tag: 'LG', label: 'Lattice Grid', hint: 'Company', go: go('company') },
+      { tag: 'KO', label: 'Kestrel Ops', hint: 'Decision', go: go('decisions') },
+      { tag: '+', label: 'Start diligence', hint: 'Action', go: go('companies') },
+      { tag: '✓', label: 'Decisions', hint: 'Page', go: go('decisions') },
+      { tag: '⚙', label: 'Settings', hint: 'Page', go: go('settings') },
+      { tag: '◐', label: theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme', hint: 'Appearance', go: function () { self.setState({ themeOverride: theme === 'dark' ? 'light' : 'dark', paletteOpen: false }); } }
+    ];
+
+    return {
+      themeClass: theme === 'dark' ? 't-dark' : 't-light',
+      themeIcon: theme === 'dark' ? 'M12 4V2M12 22v-2M4 12H2M22 12h-2M5.6 5.6 4.2 4.2M19.8 19.8l-1.4-1.4M5.6 18.4l-1.4 1.4M19.8 4.2l-1.4 1.4M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10z' : 'M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z',
+      toggleTheme: function () { self.setState({ themeOverride: theme === 'dark' ? 'light' : 'dark' }); },
+      openPalette: function () { self.setState({ paletteOpen: true, bellOpen: false }); }, closePalette: function () { self.setState({ paletteOpen: false }); },
+      toggleBell: function () { self.setState({ bellOpen: !self.state.bellOpen }); },
+      paletteOpen: s.paletteOpen, bellOpen: s.bellOpen, commands: commands, notifications: notifications, live: live,
+      toast: { show: !!s.toast, title: s.toast ? s.toast.title : '', text: s.toast ? s.toast.text : '', dot: s.toast ? s.toast.dot : '', close: function () { self.setState({ toast: null }); } },
+      navMain: navMain, navFirm: navFirm, crumbs: crumbs, notice: notice, status: status,
+      is: { home: s.screen === 'home', companies: s.screen === 'companies', company: s.screen === 'company', decisions: s.screen === 'decisions', watchlist: s.screen === 'watchlist', thesis: s.screen === 'thesis', settings: s.screen === 'settings' },
+      tab: { report: s.tab === 'report', domains: s.tab === 'domains', dataroom: s.tab === 'dataroom', financials: s.tab === 'financials', risks: s.tab === 'risks', contra: s.tab === 'contra', requests: s.tab === 'requests' && L3, evidence: s.tab === 'evidence', history: s.tab === 'history' },
+      co: co, measures: measures, gate: gate, findTotal: findTotal, evBar: evBar, evHeader: evHeader, evFiltered: !!ef, evUnfiltered: !ef, evEmpty: claims.length === 0, claims: claims,
+      clearFilter: function () { self.setState({ evFilter: null }); },
+      report: report, statusLegend: statusLegend, exports: exports, domains: domainRows, domainSummary: domainSummary,
+      docs: docs, docSummary: docSummary, upload: upload, fin: fin, risks: risks, riskMatrix: riskMatrix, contras: contras, requests: requests,
+      copyRequests: function () { self.showToast('Open requests copied', 'Paste them into your email to the company', V.green); },
+      kpis: kpis, decisionList: decisionList, inProgress: inProgress, signals: events.slice(0, 3), events: events, companies: companies,
+      tabs: tabs, history: history, reviews: reviews, watch: watch, mandate: mandate, rubric: rubric, form: form, ai: ai, screening: screening, domainCfg: domainCfg, privAI: privAI, aiOff: !privAI && L3,
+      goCompanies: go('companies'), goDecisions: go('decisions'), goWatchlist: go('watchlist'), goSettings: go('settings')
+    };
+  }
+}
+</script>
+</body>
+</html>

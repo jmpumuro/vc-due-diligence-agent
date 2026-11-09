@@ -1,0 +1,19 @@
+{
+  "harness_version": "research-eval@1.0.0",
+  "dataset_id": "d6-false-claims",
+  "dataset_version": "d6-false-claims@1.0.0",
+  "mode": "fixture",
+  "notes": "Baseline established 2026-11-08. Fixture-mode structural metrics only. Live HTTPS retrieval remains BLOCKED (REM-P2-01). Do not treat undefined live metrics as passes.",
+  "thresholds_rationale": "contradiction_recall and syndicated_not_counted_independent must remain 1.0 in fixture mode as correctness invariants, not arbitrary score targets. Live runs compare deltas against this file without inventing pass bars.",
+  "metrics": [
+    {"name": "identity_resolution_ok", "value": 1.0, "numerator": 1, "denominator": 1},
+    {"name": "contradiction_recall", "value": 1.0, "numerator": 5, "denominator": 5},
+    {"name": "unsupported_claim_recall", "value": 1.0, "numerator": 2, "denominator": 2},
+    {"name": "citation_presence", "value": 1.0, "numerator": 5, "denominator": 5},
+    {"name": "url_dedupe_correct", "value": 1.0, "numerator": 1.0, "denominator": 1.0},
+    {"name": "syndicated_not_counted_independent", "value": 1.0, "numerator": 1.0, "denominator": 1.0},
+    {"name": "contradiction_preserved_low_rank", "value": 1.0, "numerator": 1.0, "denominator": 1.0},
+    {"name": "conflicting_claims_recorded", "value": 1.0, "numerator": 1.0, "denominator": 1.0},
+    {"name": "numeric_grounding_contract", "value": 1.0, "numerator": 1.0, "denominator": 1.0}
+  ]
+}

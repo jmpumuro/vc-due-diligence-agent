@@ -1,0 +1,272 @@
+# Stage 2 runnable shell. Object store: SeaweedFS (ADR-017, pending owner confirm).
+# SearXNG / Temporal / Postgres have no host ports (internal only) except api:8000 and web:3000.
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: thesis
+      POSTGRES_PASSWORD: thesis
+      POSTGRES_DB: thesis
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U thesis -d thesis"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks: [thesis]
+
+  seaweedfs:
+    image: chrislusf/seaweedfs:3.80
+    command: "server -dir=/data -s3 -s3.port=8333 -ip.bind=0.0.0.0 -master.volumeSizeLimitMB=100"
+    volumes:
+      - weeddata:/data
+    # B1: publish S3 API for host smokes (ADR-017). Decision: always map in dev compose.
+    ports:
+      - "8333:8333"
+    networks: [thesis]
+
+  seaweed-init:
+    image: amazon/aws-cli:2.17.50
+    depends_on:
+      - seaweedfs
+    environment:
+      AWS_ACCESS_KEY_ID: any
+      AWS_SECRET_ACCESS_KEY: any
+      AWS_DEFAULT_REGION: us-east-1
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        sleep 3
+        aws --endpoint-url http://seaweedfs:8333 s3 mb s3://artifacts || true
+        aws --endpoint-url http://seaweedfs:8333 s3 mb s3://dataroom || true
+        aws --endpoint-url http://seaweedfs:8333 s3 mb s3://quarantine || true
+        echo seaweed-init done
+    networks: [thesis]
+
+  searxng:
+    image: searxng/searxng:latest
+    volumes:
+      - ./searxng/settings.yml:/etc/searxng/settings.yml:ro
+    environment:
+      SEARXNG_BASE_URL: http://searxng:8080/
+    # Health: process up; API canary runs inside /system/status (not host-published).
+    networks: [thesis]
+
+  temporal:
+    image: temporalio/auto-setup:1.25.2
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB: postgres12
+      DB_PORT: 5432
+      POSTGRES_USER: thesis
+      POSTGRES_PWD: thesis
+      POSTGRES_SEEDS: postgres
+      DBNAME: temporal
+      VISIBILITY_DBNAME: temporal_visibility
+    networks: [thesis]
+
+  migrate:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    command: ["alembic", "upgrade", "head"]
+    env_file: [.env]
+    environment:
+      DATABASE_URL: postgresql+asyncpg://thesis:thesis@postgres:5432/thesis
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [thesis]
+    restart: "on-failure"
+
+  seed-demo:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    command: ["python", "-m", "thesis_api.cli", "seed-demo"]
+    env_file: [.env]
+    environment:
+      DATABASE_URL: postgresql+asyncpg://thesis:thesis@postgres:5432/thesis
+      DEMO_WORKSPACE: "true"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    networks: [thesis]
+    restart: "on-failure"
+
+  # DD-12 malware gate — clamd TCP :3310 (no host publish).
+  clamav:
+    image: clamav/clamav:1.4
+    environment:
+      CLAMD_CONF_StreamMaxLength: 25M
+    volumes:
+      - clamav_db:/var/lib/clamav
+    healthcheck:
+      # First boot downloads signatures (can take several minutes).
+      test: ["CMD-SHELL", "echo zPING | nc -w 2 127.0.0.1 3310 | grep -q PONG"]
+      interval: 30s
+      timeout: 5s
+      retries: 30
+      start_period: 180s
+    networks: [thesis]
+    restart: unless-stopped
+
+  # D4 OCR path — Tesseract + /ocr; Temporal q.docs worker polls separately.
+  worker-docs:
+    build:
+      context: .
+      dockerfile: apps/worker-docs/Dockerfile
+    environment:
+      OCR_LANGUAGES: eng
+    ports:
+      - "8091:8091"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8091/health/live || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    networks: [thesis]
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    env_file: [.env]
+    environment:
+      DATABASE_URL: postgresql+asyncpg://thesis:thesis@postgres:5432/thesis
+      SEARXNG_URL: http://searxng:8080
+      TEMPORAL_HOST: temporal:7233
+      S3_ENDPOINT: http://seaweedfs:8333
+      S3_ACCESS_KEY: any
+      S3_SECRET_KEY: any
+      DEMO_WORKSPACE: "true"
+      # Flipped after scripts/smoke_d4_product.py passed in this environment.
+      OCR_PRODUCT_VERIFIED: "true"
+      CLAMAV_HOST: clamav
+      CLAMAV_PORT: "3310"
+      WORKER_DOCS_URL: http://worker-docs:8091
+    ports:
+      # Host 8000 is often taken locally; container still listens on 8000.
+      - "8001:8000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      seed-demo:
+        condition: service_completed_successfully
+      searxng:
+        condition: service_started
+      temporal:
+        condition: service_started
+      seaweed-init:
+        condition: service_completed_successfully
+      clamav:
+        condition: service_started
+      worker-docs:
+        condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8000/health/live || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    networks: [thesis]
+
+  worker:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    command: ["python", "-m", "thesis_api.worker"]
+    env_file: [.env]
+    environment:
+      DATABASE_URL: postgresql+asyncpg://thesis:thesis@postgres:5432/thesis
+      TEMPORAL_HOST: temporal:7233
+      S3_ENDPOINT: http://seaweedfs:8333
+      S3_ACCESS_KEY: any
+      S3_SECRET_KEY: any
+      WORKER_DOCS_URL: http://worker-docs:8091
+      CLAMAV_HOST: clamav
+      CLAMAV_PORT: "3310"
+      OCR_PRODUCT_VERIFIED: "true"
+    depends_on:
+      api:
+        condition: service_healthy
+      temporal:
+        condition: service_started
+    networks: [thesis]
+    restart: unless-stopped
+
+  # Temporal q.docs poller — DocumentIngestionWorkflow (parse via HTTP worker-docs).
+  worker-docs-temporal:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    command: ["python", "-m", "thesis_api.worker_docs_queue"]
+    env_file: [.env]
+    environment:
+      DATABASE_URL: postgresql+asyncpg://thesis:thesis@postgres:5432/thesis
+      TEMPORAL_HOST: temporal:7233
+      S3_ENDPOINT: http://seaweedfs:8333
+      S3_ACCESS_KEY: any
+      S3_SECRET_KEY: any
+      WORKER_DOCS_URL: http://worker-docs:8091
+    depends_on:
+      api:
+        condition: service_healthy
+      temporal:
+        condition: service_started
+      worker-docs:
+        condition: service_started
+      seaweed-init:
+        condition: service_completed_successfully
+    networks: [thesis]
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    environment:
+      INTERNAL_API_URL: http://api:8000
+      PUBLIC_API_URL: http://localhost:8001
+      NEXT_PUBLIC_API_URL: http://localhost:8001
+    ports:
+      - "3000:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    networks: [thesis]
+
+  # REM-P1-05 — opt-in local model route stub.
+  # PolicyEnforcedProvider.local_route_available stays false until an
+  # OpenAI-compatible /v1/models probe succeeds — never silently fall back to OpenAI.
+  local-llm:
+    profiles: ["local-llm"]
+    image: hashicorp/http-echo:1.0
+    command: ["-text=local-llm-stub", "-listen=:8080"]
+    ports:
+      - "8088:8080"
+    networks: [thesis]
+    restart: "no"
+
+  # D6 decision: ci-local fixture server (byte-identical to fixtures/d6-site/false-claims).
+  # Public Pages deploy remains optional; harness uses http://d6-fixture/ inside compose.
+  d6-fixture:
+    image: nginx:1.27-alpine
+    volumes:
+      - ./fixtures/d6-site/false-claims:/usr/share/nginx/html:ro
+    ports:
+      - "8090:80"
+    networks: [thesis]
+    restart: unless-stopped
+
+networks:
+  thesis:
+
+volumes:
+  pgdata:
+  weeddata:
+  clamav_db:

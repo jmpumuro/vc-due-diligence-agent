@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Thesis — Agent console</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Geist,Inter,system-ui,sans-serif;font-size:13px;line-height:1.5;font-feature-settings:'tnum' 1,'cv11' 1;background:#0C0D10}
+.t-light{--bg:#F6F6F7;--surface:#FFFFFF;--surface-2:#F3F3F5;--sidebar:#FBFBFC;--border:#E6E6EA;--border-strong:#D4D4DA;--text:#18181B;--muted:#62626B;--brand:#5146E5;--brand-hover:#4338CA;--brand-soft:#EEEDFD;--brand-text:#4338CA;--green:#16794A;--amber:#A16207;--red:#C2302A;--blue:#2563EB;--gray:#8E8E96;--chart:#18181B;--overlay:rgba(24,24,27,.32);--shadow:0 1px 2px rgba(24,24,27,.04),0 8px 24px rgba(24,24,27,.08)}
+.t-dark{--bg:#0C0D10;--surface:#131418;--surface-2:#1B1C21;--sidebar:#0F1013;--border:#25272D;--border-strong:#34373E;--text:#EDEDEF;--muted:#A1A1AA;--brand:#7C74FF;--brand-hover:#948DFF;--brand-soft:#232046;--brand-text:#B4AEFF;--green:#3FB871;--amber:#D9A23A;--red:#EF5A50;--blue:#5B8CFF;--gray:#71717A;--chart:#EDEDEF;--overlay:rgba(0,0,0,.55);--shadow:0 8px 32px rgba(0,0,0,.5)}
+a{color:inherit}
+button,input{font-family:inherit;font-size:inherit;color:inherit}
+h1{margin:0;font-size:20px;font-weight:600;letter-spacing:-0.01em}
+h2{margin:0;font-size:13px;font-weight:600}
+.app{background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-wrap:wrap;align-items:stretch;position:relative}
+.side{flex:1 1 236px;max-width:100%;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;gap:18px;padding:14px 12px;box-sizing:border-box}
+.navi{display:flex;align-items:center;gap:10px;width:100%;min-height:34px;padding:0 10px;border:0;border-radius:7px;background:transparent;color:var(--muted);cursor:pointer;text-align:left;font-weight:500;box-sizing:border-box}
+.navi:hover{background:var(--surface-2);color:var(--text)}
+.navi.on{background:var(--brand-soft);color:var(--brand-text);font-weight:600}
+.navi{transition:background .15s ease-out,color .15s ease-out}
+.sect{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 10px;margin:4px 0 2px}
+.switch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px;padding:3px;background:var(--surface-2);border-radius:8px}
+.sw{display:flex;align-items:center;justify-content:center;min-height:30px;border-radius:6px;font-size:12px;font-weight:600;color:var(--muted);text-decoration:none}
+.sw.on{background:var(--surface);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.sw:hover{color:var(--text)}
+.top{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 28px;border-bottom:1px solid var(--border);background:var(--surface);min-height:56px;box-sizing:border-box}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);flex:1 1 220px;min-width:0}
+.crumbs b{color:var(--text);font-weight:500}
+.search{display:flex;align-items:center;gap:8px;min-height:34px;padding:0 10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--muted);cursor:pointer;min-width:220px}
+.kbd{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;padding:1px 5px;border:1px solid var(--border);border-radius:4px;color:var(--muted);background:var(--surface)}
+.iconbtn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+.iconbtn:hover{background:var(--surface-2);color:var(--text)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:32px;padding:0 12px;border-radius:7px;border:1px solid var(--border-strong);background:var(--surface);cursor:pointer;font-weight:500;color:var(--text);text-decoration:none}
+.btn:hover{background:var(--surface-2)}
+.btn:disabled{color:var(--muted);opacity:.55;cursor:not-allowed}
+.btn-primary{background:var(--brand);border-color:var(--brand);color:#FFFFFF}
+.btn-primary:hover{background:var(--brand-hover)}
+.btn-ghost{border-color:transparent;background:transparent}
+.page{padding:24px 28px 56px;display:flex;flex-direction:column;gap:20px;max-width:1280px;width:100%;box-sizing:border-box}
+.ph{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:flex-end}
+.sub{margin:4px 0 0;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.btn,.btn-primary{border-radius:10px;transition:background .15s ease-out,border-color .15s ease-out}
+.btn:focus-visible,.tab:focus-visible,.navi:focus-visible,.tr:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(63,184,113,.55)}70%{box-shadow:0 0 0 7px rgba(63,184,113,0)}100%{box-shadow:0 0 0 0 rgba(63,184,113,0)}}
+.pulse{animation:pulse 1.8s infinite}
+.toast{position:fixed;right:24px;bottom:24px;z-index:40;display:flex;gap:12px;align-items:flex-start;width:min(400px,calc(100% - 32px));padding:12px 14px;border-radius:12px;background:var(--text);color:var(--bg);box-shadow:var(--shadow);font-size:13px;box-sizing:border-box}
+.ev-new{background:var(--brand-soft)}
+@media (prefers-reduced-motion: reduce){.pulse{animation:none}.navi,.btn{transition:none}}
+.ch{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border)}
+.cb{padding:14px 16px}
+.thd{display:grid;gap:12px;padding:8px 16px;font-size:12px;font-weight:500;color:var(--muted);background:var(--surface-2);border-bottom:1px solid var(--border)}
+.tr{display:grid;width:100%;gap:12px;align-items:center;padding:10px 16px;border:0;border-top:1px solid var(--border);background:transparent;text-align:left;cursor:pointer;box-sizing:border-box}
+.tr:first-of-type{border-top:0}
+.tr:hover{background:var(--surface-2)}
+.li{padding:11px 16px;border-top:1px solid var(--border)}
+.li:first-of-type{border-top:0}
+.mute{color:var(--muted)}
+.lbl{font-size:12px;color:var(--muted)}
+.mono{font-family:'Geist Mono',ui-monospace,monospace;font-size:12px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:99px;flex:none}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:2px 9px 2px 7px;border-radius:99px;background:var(--surface-2);font-size:12px;font-weight:500;white-space:nowrap}
+.badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:99px;font-size:11px;font-weight:600;box-sizing:border-box}
+.bar{height:6px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.tabs{display:inline-flex;gap:2px;padding:3px;border-radius:10px;background:var(--surface-2);overflow-x:auto;align-self:flex-start;max-width:100%;box-sizing:border-box}
+.tab{min-height:30px;padding:0 12px;border:0;border-radius:8px;background:transparent;cursor:pointer;color:var(--muted);font-weight:500;white-space:nowrap}
+.tab:hover{color:var(--text)}
+.tab.on{color:var(--text);background:var(--surface);box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 18px}
+.scroll{overflow-x:auto}
+.stat{padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+.overlay{position:absolute;inset:0;background:var(--overlay);display:flex;justify-content:center;align-items:flex-start;padding-top:96px;z-index:20}
+.palette{width:min(560px,92%);background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.pitem{display:flex;align-items:center;gap:12px;width:100%;min-height:42px;padding:0 16px;border:0;background:transparent;cursor:pointer;text-align:left;color:var(--text);text-decoration:none;box-sizing:border-box}
+.pitem:hover{background:var(--surface-2)}
+</style>
+</helmet>
+
+<div class="app {{themeClass}}">
+
+<aside class="side">
+<div style="display: flex; align-items: center; gap: 10px; padding: 4px 6px">
+<svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="8" fill="var(--brand)"></rect><path d="M8 9.5h12M14 9.5v10" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round"></path></svg>
+<div style="flex: 1; min-width: 0"><div style="font-weight: 600; font-size: 14px">Default workspace</div><div class="lbl">frm_dev · config v5</div></div>
+</div>
+<div class="switch" role="navigation" aria-label="Product">
+<a class="sw" href="Main.dc.html">Diligence</a>
+<a class="sw on" href="Console.dc.html">Agent console</a>
+</div>
+<nav aria-label="Console" style="display: flex; flex-direction: column; gap: 2px">
+<div class="sect">Operate</div>
+<sc-for list="{{navOperate}}" as="n" hint-placeholder-count="3">
+<button class="navi {{n.cls}}" onClick="{{n.go}}">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"></path></svg>
+<span style="flex: 1">{{n.label}}</span>
+<sc-if value="{{n.hasBadge}}" hint-placeholder-val="{{false}}"><span class="badge" style="{{n.badgeStyle}}">{{n.badge}}</span></sc-if>
+</button>
+</sc-for>
+<div class="sect" style="margin-top: 14px">Govern</div>
+<sc-for list="{{navGovern}}" as="n" hint-placeholder-count="4">
+<button class="navi {{n.cls}}" onClick="{{n.go}}">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"></path></svg>
+<span style="flex: 1">{{n.label}}</span>
+</button>
+</sc-for>
+</nav>
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 10px">
+<div class="card" style="padding: 12px; display: flex; flex-direction: column; gap: 4px">
+<span style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600"><span class="dot" style="background: {{mode.dot}}"></span><span class="mono">{{mode.key}}</span></span>
+<span class="lbl">{{mode.line}}</span>
+</div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 4px 6px">
+<span style="width: 30px; height: 30px; border-radius: 99px; background: var(--brand-soft); color: var(--brand-text); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12px">AR</span>
+<span style="display: flex; flex-direction: column; line-height: 1.3"><span style="font-weight: 500">Ana Ruiz</span><span class="lbl">Admin</span></span>
+</div>
+</div>
+</aside>
+
+<main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<div class="top">
+<div class="crumbs"><span>Console</span><span>/</span><sc-for list="{{crumbs}}" as="c" hint-placeholder-count="2"><span style="display: inline-flex; gap: 8px"><sc-if value="{{c.notFirst}}" hint-placeholder-val="{{false}}"><span>/</span></sc-if><b>{{c.label}}</b></span></sc-for></div>
+<button class="search" onClick="{{openPalette}}" aria-label="Search and commands">
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+<span style="flex: 1; text-align: left">Run ID, operation, command…</span><span class="kbd">⌘K</span>
+</button>
+<a class="btn btn-ghost" href="#" style="color: var(--muted)">Temporal UI ↗</a>
+<button class="iconbtn" onClick="{{toggleTheme}}" aria-label="Switch light or dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="{{themeIcon}}"></path></svg></button>
+</div>
+
+<sc-if value="{{mode.banner}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 10px 28px; border-bottom: 1px solid var(--border); background: var(--surface-2)">
+<span class="dot" style="background: {{mode.dot}}"></span><span class="mono" style="font-weight: 500">{{mode.bannerCode}}</span><span class="mute" style="flex: 1 1 300px">{{mode.bannerText}}</span>
+</div>
+</sc-if>
+
+<div class="page">
+
+<!-- RUNS -->
+<sc-if value="{{is.runs}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; flex-direction: column; gap: 20px">
+<div class="ph"><div><h1>Runs</h1><p class="sub">Every assessment workflow, newest first. Click a run for stages, ledger and findings.</p></div><span class="lbl mono">GET /system/status · 4 s ago</span></div>
+<div class="card" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr))">
+<sc-for list="{{runKpis}}" as="k" hint-placeholder-count="5"><div class="stat" style="border-right: 1px solid var(--border)"><span class="lbl">{{k.label}}</span><span class="mono" style="font-size: 20px; font-weight: 500">{{k.value}}</span></div></sc-for>
+</div>
+
+<section class="card">
+<div class="ch"><h2>Needs action</h2><span class="lbl">Admin actions are audited</span></div>
+<sc-for list="{{actions}}" as="a" hint-placeholder-count="3">
+<div class="li" style="display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center">
+<span class="pill" style="min-width: 190px"><span class="dot" style="background: {{a.dot}}"></span><span class="mono">{{a.state}}</span></span>
+<span style="flex: 1 1 300px; display: flex; flex-direction: column"><span><span style="font-weight: 600">{{a.company}}</span> <span class="mono mute">{{a.id}}</span></span><span class="mute">{{a.detail}}</span></span>
+<sc-if value="{{a.hasButton}}" hint-placeholder-val="{{true}}"><button class="btn {{a.btnCls}}" disabled="{{a.disabled}}" onClick="{{a.act}}">{{a.button}}</button></sc-if>
+<sc-if value="{{a.hasResult}}" hint-placeholder-val="{{false}}"><span class="mono" style="color: var(--green)">{{a.result}}</span></sc-if>
+</div>
+</sc-for>
+</section>
+
+<section class="card">
+<div class="ch">
+<div style="display: flex; gap: 10px; align-items: center"><h2>Live events</h2><span class="pill"><span class="dot {{feedState.cls}}" style="background: {{feedState.dot}}"></span>{{feedState.label}}</span></div>
+<div style="display: flex; gap: 8px; align-items: center"><span class="lbl mono">GET /api/v1/events/stream?audience=console</span><button class="btn" style="min-height: 28px" onClick="{{feedState.toggle}}">{{feedState.button}}</button></div>
+</div>
+<div class="scroll"><div style="min-width: 760px">
+<div class="thd" style="grid-template-columns: 0.7fr 1.6fr 1fr 2.4fr"><span>Received</span><span>Type</span><span>Subject</span><span>Data</span></div>
+<sc-for list="{{feed}}" as="e" hint-placeholder-count="6">
+<div class="tr {{e.cls}}" style="grid-template-columns: 0.7fr 1.6fr 1fr 2.4fr; cursor: default; padding-top: 8px; padding-bottom: 8px">
+<span class="mono mute">{{e.ago}}</span>
+<span class="mono" style="font-weight: 500">{{e.type}}</span>
+<span class="mono mute">{{e.subject}}</span>
+<span class="mono mute" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{e.data}}</span>
+</div>
+</sc-for>
+</div></div>
+</section>
+
+<section class="card">
+<div class="ch"><h2>All runs</h2><div style="display: flex; gap: 6px"><span class="pill" style="background: var(--brand-soft); color: var(--brand-text)">All 9</span><span class="pill">Active 5</span><span class="pill">Attention 2</span></div></div>
+<div class="scroll"><div style="min-width: 980px">
+<div class="thd" style="grid-template-columns: 1fr 1.1fr 0.4fr 1.5fr 1.5fr 0.4fr 0.6fr 0.8fr 0.6fr"><span>Assessment</span><span>Company</span><span>Level</span><span>State</span><span>Current step · queue</span><span>Rev</span><span>Cost</span><span>Certainty</span><span>Started</span></div>
+<sc-for list="{{runs}}" as="r" hint-placeholder-count="9">
+<button class="tr" style="grid-template-columns: 1fr 1.1fr 0.4fr 1.5fr 1.5fr 0.4fr 0.6fr 0.8fr 0.6fr" onClick="{{r.open}}">
+<span class="mono">{{r.id}}</span><span style="font-weight: 500">{{r.company}}</span><span class="mono">L{{r.level}}</span>
+<span><span class="pill"><span class="dot" style="background: {{r.dot}}"></span><span class="mono">{{r.state}}</span></span></span>
+<span class="mono mute">{{r.step}}</span><span class="mono">{{r.rev}}</span><span class="mono">{{r.cost}}</span>
+<span class="mono" style="color: {{r.certColor}}">{{r.cert}}</span><span class="mute">{{r.started}}</span>
+</button>
+</sc-for>
+</div></div>
+</section>
+</div>
+</sc-if>
+
+<!-- RUN DETAIL -->
+<sc-if value="{{is.run}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 20px">
+<div class="ph">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1>Lattice Grid <span class="mono mute" style="font-size: 13px; font-weight: 400">asm_7Q2KD9 · rev 4 · level 3</span></h1>
+<span style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap"><span class="pill"><span class="dot" style="background: var(--amber)"></span><span class="mono">AWAITING_REVIEW</span></span><span class="mute">waiting on Update submit_review · 12 min</span></span>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+<a class="btn btn-ghost" href="Main.dc.html">Open in Diligence app ↗</a>
+<button class="btn" onClick="{{runAct.trace}}">Export trace</button>
+<button class="btn" onClick="{{runAct.fixtures}}">Replay from ledger</button>
+<button class="btn" style="color: var(--red)" onClick="{{runAct.cancel}}">Cancel run</button>
+</div>
+</div>
+<sc-if value="{{runAct.show}}" hint-placeholder-val="{{false}}"><div class="card mono" style="padding: 10px 14px; border-left: 3px solid var(--brand)">{{runAct.msg}}</div></sc-if>
+
+<div class="card cb kv mono">
+<span class="mute">workflow</span><span>dd:frm_dev:asm_7Q2KD9:r4 · DueDiligenceWorkflow · build wb_2026_11_06 · patches review_target_v2, dd_domains_v1</span>
+<span class="mute">identity</span><span>company cmp_01J9ZL · mandate mdt_01 · trigger manual · created_by usr_ana</span>
+<span class="mute">pinned</span><span>config cs_5b02 (12 domain modules) · evidence set ess_104 (frozen) · evaluation evl_6KQ1 · report rv_4 · policy single-reviewer@1</span>
+<span class="mute">private data</span><span>data room dr_31 · 9 files · deal team of 3 · acknowledgement ppa_02 · content not visible in the console</span>
+<span class="mute">review target</span><span>rt_b7d310 (sha256 of ReviewTarget; memo_version_id = rv_4)</span>
+</div>
+
+<div class="tabs" role="tablist"><sc-for list="{{tabs}}" as="t" hint-placeholder-count="4"><button class="tab {{t.cls}}" role="tab" onClick="{{t.select}}">{{t.label}}</button></sc-for></div>
+
+<sc-if value="{{tab.timeline}}" hint-placeholder-val="{{true}}">
+<section class="card">
+<div class="ch"><h2>Where the time went</h2><span class="lbl">Domains ran in parallel as child workflows; legal was the critical path</span></div>
+<div class="cb" style="display: flex; flex-direction: column; gap: 2px">
+<div style="display: grid; grid-template-columns: 150px 1fr 96px; gap: 12px; align-items: center; padding-bottom: 6px">
+<span></span>
+<div style="display: flex; justify-content: space-between" class="lbl mono"><sc-for list="{{ganttTicks}}" as="t" hint-placeholder-count="8"><span>{{t}}</span></sc-for></div>
+<span></span>
+</div>
+<sc-for list="{{gantt}}" as="g" hint-placeholder-count="15">
+<div style="display: grid; grid-template-columns: 150px 1fr 96px; gap: 12px; align-items: center; padding: 3px 0">
+<span style="font-size: 12px; {{g.labelStyle}}">{{g.label}}</span>
+<div style="position: relative; height: 18px; border-radius: 4px; background: var(--surface-2)">
+<sc-for list="{{g.segs}}" as="s" hint-placeholder-count="1"><span style="position: absolute; top: 3px; height: 12px; left: {{s.left}}%; width: {{s.width}}%; border-radius: 3px; background: {{s.color}}"></span></sc-for>
+</div>
+<span class="mono" style="text-align: right; font-size: 11px; color: {{g.durColor}}">{{g.dur}}</span>
+</div>
+</sc-for>
+<div style="display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 10px" class="lbl">
+<span style="display: inline-flex; gap: 6px; align-items: center"><span style="width: 14px; height: 8px; border-radius: 2px; background: var(--brand)"></span>completed</span>
+<span style="display: inline-flex; gap: 6px; align-items: center"><span style="width: 14px; height: 8px; border-radius: 2px; background: var(--red)"></span>failed attempt</span>
+<span style="display: inline-flex; gap: 6px; align-items: center"><span style="width: 14px; height: 8px; border-radius: 2px; background: var(--amber)"></span>waiting on a person</span>
+</div>
+<div class="lbl" style="margin-top: 6px">The security domain failed twice on SEARCH_UNAVAILABLE (SearXNG engines suspended) and was left partial; the investor can retry just that domain. One KPI table is waiting for validation; that does not block the run (validating it starts revision 5).</div>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{tab.domains}}" hint-placeholder-val="{{false}}">
+<section class="card">
+<div class="ch"><h2>Domain child workflows</h2><span class="lbl mono">DomainResearchWorkflow × 12 · DocumentIngestionWorkflow × 1</span></div>
+<div class="scroll"><div style="min-width: 1000px">
+<div class="thd" style="grid-template-columns: 1.9fr 1.2fr 1.2fr 0.4fr 0.7fr 1fr 0.6fr 1.4fr"><span>Workflow</span><span>Domain</span><span>Queues</span><span>Tries</span><span>Time</span><span>Gate</span><span>Cost</span><span>Note</span></div>
+<sc-for list="{{domainRuns}}" as="d" hint-placeholder-count="13">
+<div class="tr" style="grid-template-columns: 1.9fr 1.2fr 1.2fr 0.4fr 0.7fr 1fr 0.6fr 1.4fr; cursor: default">
+<span class="mono mute">{{d.wf}}</span><span style="font-weight: 500">{{d.name}}</span><span class="mono mute">{{d.queues}}</span><span class="mono">{{d.tries}}</span><span class="mono">{{d.time}}</span>
+<span><span class="pill"><span class="dot" style="background: {{d.dot}}"></span><span class="mono">{{d.gate}}</span></span></span><span class="mono">{{d.cost}}</span><span class="mute">{{d.note}}</span>
+</div>
+</sc-for>
+</div></div>
+</section>
+</sc-if>
+
+<sc-if value="{{tab.stages}}" hint-placeholder-val="{{false}}">
+<section class="card"><div class="scroll"><div style="min-width: 820px">
+<div class="thd" style="grid-template-columns: 1.5fr 1.1fr 0.5fr 0.7fr 2.2fr"><span>Stage</span><span>Queue</span><span>Tries</span><span>Time</span><span>Detail</span></div>
+<sc-for list="{{stages}}" as="s" hint-placeholder-count="10">
+<div class="tr" style="grid-template-columns: 1.5fr 1.1fr 0.5fr 0.7fr 2.2fr; cursor: default">
+<span style="display: inline-flex; gap: 8px; align-items: center"><span class="dot" style="background: {{s.dot}}"></span><span class="mono">{{s.key}}</span></span>
+<span class="mono mute">{{s.queue}}</span><span class="mono">{{s.tries}}</span><span class="mono">{{s.time}}</span><span class="mute">{{s.detail}}</span>
+</div>
+</sc-for>
+</div></div></section>
+</sc-if>
+
+<sc-if value="{{tab.ledger}}" hint-placeholder-val="{{false}}">
+<section class="card">
+<div class="ch"><h2>Operation ledger</h2><span class="lbl mono">first 14 of 186 operations · $3.92 actual · $0.019 possible duplicate</span></div>
+<div class="scroll"><div style="min-width: 1000px">
+<div class="thd" style="grid-template-columns: 0.7fr 1.1fr 0.9fr 1fr 0.4fr 1fr 0.9fr 0.6fr 0.8fr"><span>Operation</span><span>Role</span><span>Queue</span><span>Status</span><span>Tries</span><span>Provider request</span><span>Tokens</span><span>Cost</span><span>Certainty</span></div>
+<sc-for list="{{ledger}}" as="x" hint-placeholder-count="12">
+<div class="tr" style="grid-template-columns: 0.7fr 1.1fr 0.9fr 1fr 0.4fr 1fr 0.9fr 0.6fr 0.8fr; cursor: default">
+<span class="mono">{{x.op}}</span>
+<span style="display: flex; flex-direction: column"><span>{{x.role}}</span><sc-if value="{{x.hasNote}}" hint-placeholder-val="{{false}}"><span class="lbl">{{x.note}}</span></sc-if></span>
+<span class="mono mute">{{x.queue}}</span>
+<span><span class="pill"><span class="dot" style="background: {{x.dot}}"></span><span class="mono">{{x.status}}</span></span></span>
+<span class="mono">{{x.tries}}</span><span class="mono mute">{{x.req}}</span><span class="mono">{{x.tokens}}</span><span class="mono">{{x.cost}}</span>
+<span class="mono" style="color: {{x.certColor}}">{{x.cert}}</span>
+</div>
+</sc-for>
+</div></div>
+</section>
+</sc-if>
+
+<sc-if value="{{tab.budget}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+<section class="card" style="flex: 1 1 400px; min-width: 0">
+<div class="ch"><h2>Reservation hierarchy</h2><span class="lbl">settled · held · free</span></div>
+<sc-for list="{{budget}}" as="b" hint-placeholder-count="4">
+<div class="li" style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between"><span style="font-weight: 500">{{b.level}}</span><span class="mono">{{b.limit}}</span></div>
+<div style="display: flex; height: 6px; border-radius: 99px; overflow: hidden; background: var(--surface-2)"><span style="width: {{b.s}}%; background: var(--brand)"></span><span style="width: {{b.h}}%; background: var(--amber)"></span></div>
+<span class="mono mute">{{b.text}}</span>
+</div>
+</sc-for>
+</section>
+<section class="card" style="flex: 1 1 400px; min-width: 0">
+<div class="ch"><h2>Reservations for this run</h2></div>
+<div class="thd" style="grid-template-columns: 1fr 0.8fr 1fr 1.2fr"><span>Reservation</span><span>Operation</span><span>Amount</span><span>Status</span></div>
+<sc-for list="{{reservations}}" as="r" hint-placeholder-count="4">
+<div class="tr mono" style="grid-template-columns: 1fr 0.8fr 1fr 1.2fr; cursor: default"><span>{{r.id}}</span><span class="mute">{{r.op}}</span><span>{{r.amount}}</span><span style="color: {{r.color}}">{{r.status}}</span></div>
+</sc-for>
+</section>
+</div>
+</sc-if>
+
+<sc-if value="{{tab.findings}}" hint-placeholder-val="{{false}}">
+<section class="card">
+<div class="ch"><h2>Findings</h2><span class="lbl">Provenance, document security and source policy events. Private passages are never shown here.</span></div>
+<sc-for list="{{findings}}" as="f" hint-placeholder-count="5">
+<div class="li" style="display: flex; flex-direction: column; gap: 6px; padding: 14px 16px">
+<span style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap"><span class="pill"><span class="dot" style="background: {{f.dot}}"></span><span class="mono">{{f.code}}</span></span><span class="mono mute">{{f.where}}</span></span>
+<span>{{f.text}}</span><span class="mono mute">{{f.meta}}</span>
+</div>
+</sc-for>
+</section>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- HEALTH -->
+<sc-if value="{{is.health}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 20px">
+<div class="ph"><div><h1>Health</h1><p class="sub">Workers count as ready only when DescribeTaskQueue reports pollers.</p></div><span class="lbl mono">GET /health/ready</span></div>
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+<section class="card" style="flex: 1 1 340px; min-width: 0">
+<div class="ch"><h2>Dependencies</h2></div>
+<sc-for list="{{deps}}" as="d" hint-placeholder-count="5">
+<div class="li" style="display: flex; justify-content: space-between; gap: 12px"><span style="display: inline-flex; gap: 8px; align-items: center"><span class="dot" style="background: {{d.dot}}"></span><span class="mono">{{d.name}}</span></span><span class="mute">{{d.detail}}</span></div>
+</sc-for>
+</section>
+<section class="card" style="flex: 2 1 520px; min-width: 0">
+<div class="ch"><h2>Task queues</h2><span class="lbl">least-privilege workers</span></div>
+<div class="scroll"><div style="min-width: 520px">
+<div class="thd" style="grid-template-columns: 1.1fr 0.6fr 0.6fr 0.7fr 1.6fr"><span>Queue</span><span>Pollers</span><span>Backlog</span><span>Build</span><span>Permissions</span></div>
+<sc-for list="{{queues}}" as="q" hint-placeholder-count="7">
+<div class="tr" style="grid-template-columns: 1.1fr 0.6fr 0.6fr 0.7fr 1.6fr; cursor: default">
+<span style="display: inline-flex; gap: 8px; align-items: center"><span class="dot" style="background: {{q.dot}}"></span><span class="mono">{{q.name}}</span></span>
+<span class="mono">{{q.pollers}}</span><span class="mono">{{q.backlog}}</span><span class="mono mute">wb_1103</span><span class="mute">{{q.perm}}</span>
+</div>
+</sc-for>
+</div></div>
+</section>
+</div>
+</div>
+</sc-if>
+
+<!-- COSTS -->
+<sc-if value="{{is.costs}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 20px">
+<div class="ph"><div><h1>Costs and budgets</h1><p class="sub">November to date. Unknown spend is never counted as zero.</p></div><span class="lbl mono">GET /usage?from=2026-11-01</span></div>
+<div class="card" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr))">
+<sc-for list="{{costKpis}}" as="k" hint-placeholder-count="5"><div class="stat" style="border-right: 1px solid var(--border)"><span class="lbl">{{k.label}}</span><span class="mono" style="font-size: 18px; font-weight: 500">{{k.value}}</span></div></sc-for>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+<section class="card" style="flex: 1 1 400px; min-width: 0">
+<div class="ch"><h2>Daily spend, USD</h2><span class="lbl">dashed line: $50 tenant cap</span></div>
+<div class="cb">
+<div style="display: flex; align-items: flex-end; gap: 14px; height: 170px; border-bottom: 1px solid var(--border-strong); position: relative">
+<div style="position: absolute; left: 0; right: 0; bottom: 90.9%; border-top: 1px dashed var(--muted)"></div>
+<sc-for list="{{daily}}" as="d" hint-placeholder-count="7"><div style="flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 6px"><span class="mono" style="font-size: 11px">{{d.label}}</span><span style="width: 100%; max-width: 30px; height: {{d.pct}}%; background: {{d.color}}; border-radius: 4px 4px 0 0"></span></div></sc-for>
+</div>
+<div style="display: flex; gap: 14px; margin-top: 6px"><sc-for list="{{daily}}" as="d" hint-placeholder-count="7"><span class="lbl" style="flex: 1; text-align: center">{{d.day}}</span></sc-for></div>
+</div>
+</section>
+<section class="card" style="flex: 1 1 360px; min-width: 0">
+<div class="ch"><h2>By role</h2><span class="lbl">month to date</span></div>
+<div class="cb">
+<sc-for list="{{roleCost}}" as="r" hint-placeholder-count="8"><div style="display: grid; grid-template-columns: 96px 1fr 64px; gap: 12px; align-items: center; padding: 5px 0"><span>{{r.role}}</span><span class="bar"><span style="display: block; height: 100%; width: {{r.pct}}%; background: var(--brand)"></span></span><span class="mono" style="text-align: right">{{r.cost}}</span></div></sc-for>
+</div>
+</section>
+<section class="card" style="flex: 1 1 360px; min-width: 0">
+<div class="ch"><h2>By diligence level</h2><span class="lbl">median per assessment · reserved limit</span></div>
+<div class="cb">
+<sc-for list="{{levelCost}}" as="r" hint-placeholder-count="3"><div style="display: grid; grid-template-columns: 96px 1fr 120px; gap: 12px; align-items: center; padding: 5px 0"><span>{{r.level}}</span><span class="bar"><span style="display: block; height: 100%; width: {{r.pct}}%; background: var(--brand)"></span></span><span class="mono" style="text-align: right">{{r.cost}}</span></div></sc-for>
+</div>
+</section>
+<section class="card" style="flex: 1 1 360px; min-width: 0">
+<div class="ch"><h2>By domain</h2><span class="lbl">Level 2 and 3 runs, month to date</span></div>
+<div class="cb">
+<sc-for list="{{domainCost}}" as="r" hint-placeholder-count="12"><div style="display: grid; grid-template-columns: 120px 1fr 64px; gap: 12px; align-items: center; padding: 4px 0"><span>{{r.name}}</span><span class="bar"><span style="display: block; height: 100%; width: {{r.pct}}%; background: var(--brand)"></span></span><span class="mono" style="text-align: right">{{r.cost}}</span></div></sc-for>
+</div>
+</section>
+</div>
+</div>
+</sc-if>
+
+<!-- RECONCILIATION -->
+<sc-if value="{{is.recon}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 20px">
+<div class="ph"><div><h1>Reconciliation and outbox</h1><p class="sub">Temporal owns progress, PostgreSQL owns records, object storage owns artifacts.</p></div><button class="btn btn-primary" onClick="{{recon.run}}">Run reconciliation</button></div>
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+<section class="card" style="flex: 1 1 440px; min-width: 0">
+<div class="ch"><h2>Checks</h2><span class="mono lbl">{{recon.lastRun}}</span></div>
+<sc-for list="{{recon.findings}}" as="f" hint-placeholder-count="6"><div class="li" style="display: flex; justify-content: space-between; gap: 12px"><span>{{f.kind}}</span><span class="mono">{{f.result}}</span></div></sc-for>
+</section>
+<section class="card" style="flex: 1 1 360px; min-width: 0">
+<div class="ch"><h2>Outbox</h2></div>
+<div class="cb kv"><span class="mute">Delivered today</span><span class="mono">46</span><span class="mute">Pending</span><span class="mono">2</span><span class="mute">Retrying</span><span class="mono">1 · crm_fixture, attempt 3</span><span class="mute">Duplicates suppressed</span><span class="mono">1 · matched crm id 88213</span><span class="mute">Dead-lettered</span><span class="mono">0</span></div>
+</section>
+</div>
+</div>
+</sc-if>
+
+<!-- QUALITY -->
+<sc-if value="{{is.quality}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 20px">
+<div class="ph"><div><h1>Quality evaluation</h1><p class="sub">Nightly run on corpus v0.3 · sample figures · thresholds provisional until a baseline is agreed.</p></div></div>
+<section class="card"><div class="scroll"><div style="min-width: 760px">
+<div class="thd" style="grid-template-columns: 2fr 0.7fr 1.1fr 0.9fr 0.8fr"><span>Metric</span><span>Value</span><span>95% interval</span><span>Provisional</span><span>vs last</span></div>
+<sc-for list="{{quality}}" as="m" hint-placeholder-count="8">
+<div class="tr" style="grid-template-columns: 2fr 0.7fr 1.1fr 0.9fr 0.8fr; cursor: default"><span>{{m.name}}</span><span class="mono" style="font-weight: 500">{{m.value}}</span><span class="mono mute">{{m.ci}}</span><span style="display: inline-flex; gap: 8px; align-items: center"><span class="dot" style="background: {{m.dot}}"></span><span class="mono">{{m.target}}</span></span><span class="mono mute">{{m.trend}}</span></div>
+</sc-for>
+</div></div></section>
+<span class="lbl">Corpus: 120 companies, 1,840 labelled claims, two reviewers with adjudication; 30-company blind holdout excluded from tuning.</span>
+</div>
+</sc-if>
+
+<!-- MODELS -->
+<sc-if value="{{is.versions}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 20px">
+<div class="ph"><div><h1>Models and versions</h1><p class="sub">Model IDs are checked against the OpenAI account at startup. Each assessment pins its own versions.</p></div></div>
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+<section class="card" style="flex: 2 1 520px; min-width: 0">
+<div class="ch"><h2>Agents</h2></div>
+<div class="thd" style="grid-template-columns: 1fr 1fr 1.1fr 0.7fr 0.9fr"><span>Role</span><span>Model</span><span>Prompt</span><span>Budget</span><span>Status</span></div>
+<sc-for list="{{models}}" as="m" hint-placeholder-count="8">
+<div class="tr" style="grid-template-columns: 1fr 1fr 1.1fr 0.7fr 0.9fr; cursor: default"><span style="font-weight: 500">{{m.role}}</span><span class="mono">{{m.model}}</span><span class="mono mute">{{m.prompt}}</span><span class="mono">{{m.budget}}</span><span style="display: inline-flex; gap: 8px; align-items: center"><span class="dot" style="background: {{m.dot}}"></span><span class="mono">{{m.state}}</span></span></div>
+</sc-for>
+</section>
+<section class="card" style="flex: 1 1 320px; min-width: 0">
+<div class="ch"><h2>Workflow versions</h2></div>
+<div class="cb kv mono"><span class="mute">current build</span><span>wb_2026_11_06</span><span class="mute">still running</span><span>wb_2026_10_28 · 4 awaiting review</span><span class="mute">patches</span><span>review_target_v2, ledger_v1, dd_domains_v1</span><span class="mute">replay corpus</span><span>238 histories incl. L1, L2, L3, upgrade, cancel · passed 06:10</span><span class="mute">config</span><span>v5 active · 4 pinned</span></div>
+</section>
+</div>
+</div>
+</sc-if>
+
+</div>
+</main>
+
+<sc-if value="{{toast.show}}" hint-placeholder-val="{{false}}">
+<div class="toast" role="status" aria-live="polite">
+<span class="dot" style="background: {{toast.dot}}; margin-top: 6px"></span>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600">{{toast.title}}</span><span class="mono" style="opacity: .75; font-size: 11px">{{toast.text}}</span></span>
+<button onClick="{{toast.close}}" aria-label="Dismiss" style="border: 0; background: transparent; color: inherit; opacity: .7; cursor: pointer; font-size: 14px; padding: 0 2px">✕</button>
+</div>
+</sc-if>
+
+<sc-if value="{{paletteOpen}}" hint-placeholder-val="{{false}}">
+<div class="overlay">
+<div class="palette" role="dialog" aria-label="Command palette">
+<div style="display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--border)">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+<label for="pal" style="flex: 1"><input id="pal" style="width: 100%; border: 0; outline: 0; background: transparent; font-size: 14px" placeholder="asm_, op_, or a command"></label>
+<button class="kbd" style="cursor: pointer" onClick="{{closePalette}}">Esc</button>
+</div>
+<div class="sect" style="padding: 12px 16px 4px">Commands</div>
+<sc-for list="{{commands}}" as="c" hint-placeholder-count="6">
+<button class="pitem" onClick="{{c.go}}"><span class="mono mute" style="width: 92px">{{c.tag}}</span><span style="flex: 1">{{c.label}}</span></button>
+</sc-for>
+<a class="pitem" href="Main.dc.html" style="border-top: 1px solid var(--border)"><span class="mono mute" style="width: 92px">app</span><span style="flex: 1">Open Diligence app</span></a>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"mode":{"editor":"enum","options":["live_ready","setup_required","demo_ready","degraded"],"default":"live_ready","section":"States"},"theme":{"editor":"enum","options":["dark","light"],"default":"dark","section":"Theme"},"$preview":{"width":1440,"height":1180}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { screen: 'runs', tab: 'timeline', done: {}, reconRuns: 0, runMsg: '', themeOverride: null, paletteOpen: false, tick: 0, feed: [], feedPaused: false, toast: null };
+  }
+
+  componentDidMount() {
+    // Stands in for GET /api/v1/events/stream?audience=console; type names follow the backend catalog exactly.
+    var self = this;
+    var catalog = [
+      ['run.stage_completed', 'asm_4HD6WE', '{ stage: "CRITIQUING", queue: "q.evaluation", attempt: 1, outcome: "revise", duration_ms: 24800 }'],
+      ['operation.updated', 'op_f210', '{ status: "SUCCEEDED", attempt_count: 1, cost_usd: 0.044, cost_certainty: "actual" }'],
+      ['budget.reservation_changed', 'rsv_a031', '{ level: "assessment", status: "held", amount_usd: 0.12 }'],
+      ['run.stage_started', 'asm_1ZA7KC', '{ stage: "RESEARCHING", queue: "q.fetch", attempt: 1 }'],
+      ['finding.recorded', 'asm_1ZA7KC', '{ code: "SOURCE_BLOCKED", where: "fetch", summary: "robots.txt disallows /press" }'],
+      ['assessment.progress', 'asm_9PL3QZ', '{ domains_complete: 7, domains_total: 12 }'],
+      ['domain.status_changed', 'asm_9PL3QZ', '{ revision: 1, domain_id: "competition", status: "complete", gate_result: "sufficient" }'],
+      ['document.status_changed', 'doc_77K1', '{ version: 1, status: "scanning" }'],
+      ['contradiction.detected', 'asm_4HD6WE', '{ contradiction_id: "ctr_1A90", domain_ids: ["financials", "traction"] }'],
+      ['financials.validation_required', 'ftb_0C12', '{ version: 1, issue_count: 2 }'],
+      ['outbox.delivery_changed', 'obx_7731', '{ target: "crm_fixture", status: "delivered", attempt: 1 }'],
+      ['queue.health_changed', 'q.research', '{ pollers: 4, backlog: 0 }']
+    ];
+    var seed = [
+      ['review.requested', 'asm_7Q2KD9', '{ target_digest: "rt_b7d310", policy: "single-reviewer@1" }'],
+      ['report.version_created', 'asm_7Q2KD9', '{ report_version_id: "rv_4", level: 3, revision: 4 }'],
+      ['run.stage_completed', 'asm_7Q2KD9', '{ stage: "MEMO_READY", queue: "q.evaluation", attempt: 1, duration_ms: 47100 }']
+    ];
+    this.setState({ feed: seed.map(function (e, i) { return { type: e[0], subject: e[1], data: e[2], t: -(i + 1) * 4 }; }) });
+    var n = 0;
+    this.feedTimer = setInterval(function () {
+      var st = self.state, tick = st.tick + 1;
+      if (st.feedPaused) { self.setState({ tick: tick }); return; }
+      var e = catalog[n % catalog.length]; n += 1;
+      var mode = self.props.mode || 'live_ready';
+      if (mode === 'setup_required' && e[1] === 'asm_9PL3QZ') { e = ['system.status_changed', 'system', '{ mode: "setup_required", provider_state: "credentials_missing" }']; }
+      self.setState({ tick: tick, feed: [{ type: e[0], subject: e[1], data: e[2], t: tick * 3 }].concat(st.feed).slice(0, 7) });
+    }, 3000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.feedTimer);
+    clearTimeout(this.toastTimer);
+  }
+
+  showToast(title, text, dot) {
+    var self = this;
+    clearTimeout(this.toastTimer);
+    this.setState({ toast: { title: title, text: text, dot: dot } });
+    this.toastTimer = setTimeout(function () { self.setState({ toast: null }); }, 4500);
+  }
+
+  renderVals() {
+    var self = this, s = this.state;
+    var go = function (screen, tab) { return function () { self.setState({ screen: screen, tab: tab || 'timeline', paletteOpen: false }); }; };
+    var V = { green: 'var(--green)', amber: 'var(--amber)', red: 'var(--red)', blue: 'var(--blue)', gray: 'var(--gray)', faint: 'var(--border-strong)' };
+    var theme = s.themeOverride || this.props.theme || 'dark';
+    var mk = this.props.mode || 'live_ready';
+    var setup = mk === 'setup_required', demo = mk === 'demo_ready', degraded = mk === 'degraded';
+    var mode = {
+      key: mk, dot: setup ? V.red : demo ? V.blue : degraded ? V.amber : V.green,
+      line: setup ? 'provider credentials missing' : demo ? 'demo workspace frm_demo seeded · live work needs OpenAI' : degraded ? 'q.research has 0 pollers' : '10/10 queues polling',
+      banner: mk !== 'live_ready',
+      bannerCode: setup ? 'CREDENTIALS_MISSING' : demo ? 'DEMO_MODE=true' : 'QUEUE_NO_POLLERS q.research · SEARCH_DEGRADED',
+      bannerText: setup ? 'Live submissions return 422 PROVIDER_NOT_CONFIGURED. 1 run parked in BLOCKED_CONFIGURATION. Set OPENAI_API_KEY and restart workers.' : demo ? 'No provider key yet. The demo workspace (frm_demo) is served from PostgreSQL by the real API; model steps return PROVIDER_NOT_CONFIGURED.' : '6 research tasks backlogged; worker-research is restarting. Other queues healthy.'
+    };
+
+    var I = {
+      runs: 'M4 6h16M4 12h16M4 18h10',
+      health: 'M3 12h4l3-8 4 16 3-8h4',
+      costs: 'M12 3v18M16.5 7.5c0-1.7-2-3-4.5-3s-4.5 1.3-4.5 3 2 2.6 4.5 3 4.5 1.3 4.5 3-2 3-4.5 3-4.5-1.3-4.5-3',
+      recon: 'M4 4v6h6M20 20v-6h-6M5.6 15A8 8 0 0 0 19 17.4M18.4 9A8 8 0 0 0 5 6.6',
+      quality: 'M4 20V10M10 20V4M16 20v-7M22 20H2',
+      versions: 'M6 3v12M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM18 9a9 9 0 0 1-9 9'
+    };
+    var active = s.screen === 'run' ? 'runs' : s.screen;
+    var mkNav = function (k, label, badge, badgeStyle) { return { label: label, icon: I[k], hasBadge: !!badge, badge: badge || '', badgeStyle: badgeStyle || '', cls: k === active ? 'on' : '', go: go(k) }; };
+    var attn = setup ? '3' : '2';
+    var navOperate = [mkNav('runs', 'Runs', attn, 'background:var(--brand-soft);color:var(--brand-text)'), mkNav('health', 'Health', setup || degraded ? '!' : '', 'background:var(--red);color:#FFFFFF'), mkNav('costs', 'Costs and budgets')];
+    var navGovern = [mkNav('recon', 'Reconciliation'), mkNav('quality', 'Quality'), mkNav('versions', 'Models and versions')];
+    var crumbMap = { runs: ['Runs'], run: ['Runs', 'asm_7Q2KD9'], health: ['Health'], costs: ['Costs and budgets'], recon: ['Reconciliation'], quality: ['Quality'], versions: ['Models and versions'] };
+    var crumbs = crumbMap[s.screen].map(function (c, i) { return { label: c, notFirst: i > 0 }; });
+
+    var EV = { fern: ['Resume sent', 'awaiting run.state_changed → RESEARCHING'], orb: ['Budget raised', 'awaiting budget.override_applied, assessment.revision_created'], dup: ['Acknowledged', 'awaiting operation.updated'] };
+    var mark = function (k, msg) { return function () { var d = Object.assign({}, self.state.done); d[k] = msg; self.setState({ done: d }); self.showToast(EV[k][0], msg + ' · ' + EV[k][1], V.green); }; };
+    var now = s.tick * 3;
+    var feed = s.feed.map(function (e) {
+      var ago = now - e.t;
+      return { type: e.type, subject: e.subject, data: e.data, ago: ago < 2 ? 'just now' : ago < 60 ? ago + ' s ago' : Math.floor(ago / 60) + ' m ago', cls: ago < 2 ? 'ev-new' : '' };
+    });
+    var feedState = s.feedPaused
+      ? { label: 'Paused', dot: V.gray, cls: '', button: 'Resume', toggle: function () { self.setState({ feedPaused: false }); } }
+      : { label: 'Live', dot: V.green, cls: 'pulse', button: 'Pause', toggle: function () { self.setState({ feedPaused: true }); } };
+    var actions = [
+      { key: 'fern', id: 'asm_9PL3QZ', company: 'Fernbank Bio', state: setup ? 'BLOCKED_CONFIGURATION' : 'RESEARCHING · domains_running', dot: setup ? V.red : V.blue, detail: setup ? 'Level 2 · stopped in the market domain on CREDENTIALS_MISSING. 5 domains complete and kept. Resume unlocks when the provider is healthy.' : 'Provider healthy. Resume sends resume_after_config; finished domains are not re-run.', button: 'Resume', btnCls: 'btn-primary', disabled: setup, act: mark('fern', 'POST /assessments/asm_9PL3QZ/resume · 202') },
+      { key: 'orb', id: 'asm_8BV2MN', company: 'Orbital Ledger', state: 'BUDGET_EXHAUSTED', dot: V.red, detail: 'Level 2 · reservation failed in follow-up research at the $4.00 limit. 9 domains complete; legal and security partial.', button: 'Raise to $6 and continue', btnCls: '', disabled: false, act: mark('orb', 'budget override audited · revision 2 started') },
+      { key: 'dup', id: 'op_b5a2', company: 'Lattice Grid', state: 'LEDGER_RECONCILED', dot: V.amber, detail: 'Research t4 timed out after send; re-issued under the same operation. Possible duplicate spend $0.019 recorded.', button: 'Acknowledge', btnCls: '', disabled: false, act: mark('dup', 'acknowledged · audit ae_51c0') }
+    ].map(function (a) { var r = s.done[a.key]; return Object.assign({}, a, { hasButton: !r, hasResult: !!r, result: r || '' }); });
+
+    var runRaw = [
+      ['asm_7Q2KD9', 'Lattice Grid', 'AWAITING_REVIEW', V.amber, 'submit_review', '4', '$3.92', 'actual+dup', '12 min', 3],
+      ['asm_2MX8PL', 'Kestrel Ops', 'AWAITING_REVIEW', V.amber, 'submit_review', '3', '$2.71', 'actual', '38 min', 2],
+      ['asm_5TR1VB', 'Brightwater Labs', 'AWAITING_REVIEW', V.amber, 'submit_review', '1', '$0.94', 'actual', '2 h', 1],
+      ['asm_9PL3QZ', 'Fernbank Bio', setup ? 'BLOCKED_CONFIGURATION' : 'RESEARCHING · domains_running', setup ? V.red : V.blue, degraded ? 'market domain · q.research (queued)' : '7 of 12 domains · q.research', '1', '$1.48', 'actual', '3 h', 2],
+      ['asm_4HD6WE', 'Quillmark', 'INFORMATION_REQUESTED', V.blue, 'waiting for 2 documents', '1', '$2.05', 'estimated', '1 h', 3],
+      ['asm_1ZA7KC', 'Northbeam Freight', 'PLANNING', V.blue, 'planner · q.research', '1', '$0.02', 'actual', '1 min', 1],
+      ['asm_8BV2MN', 'Orbital Ledger', 'BUDGET_EXHAUSTED', V.red, 'follow-up research', '1', '$4.00', 'actual', '5 h', 2],
+      ['asm_6KW4JD', 'Tidepool Robotics', 'COMPLETED', V.green, 'delivered · q.delivery', '2', '$0.88', 'actual', '3 d', 1],
+      ['asm_3NE9RT', 'Halcyon Health', 'COMPLETED', V.green, 'delivered · q.delivery', '1', '$2.49', 'actual', '6 d', 2]
+    ];
+    var runs = runRaw.map(function (r) { return { id: r[0], company: r[1], state: r[2], dot: r[3], step: r[4], rev: r[5], level: r[9], cost: r[6], cert: demo ? 'recorded (sample)' : r[7], certColor: r[7] === 'actual' || demo ? 'var(--muted)' : V.amber, started: r[8] + ' ago', open: go('run') }; });
+    var runKpis = [{ label: 'Active runs', value: '5' }, { label: 'Awaiting review', value: '3' }, { label: 'Blocked or stopped', value: setup ? '2' : '1' }, { label: 'Ledger UNKNOWN', value: '0' }, { label: 'Spend today', value: '$18.42' }];
+
+    var msgs = { trace: 'trace_asm_7Q2KD9.zip prepared · history, ledger, artifact manifest (prompts and private passages redacted)', fixtures: 'started ledger replay dd:frm_dev:asm_FX91:r1 on q.replay · real search and storage · console only', cancel: 'Confirm by typing asm_7Q2KD9. Cancelling releases held reservations and closes the ledger.' };
+    var runAct = { show: !!s.runMsg, msg: s.runMsg, trace: function () { self.setState({ runMsg: msgs.trace }); }, fixtures: function () { self.setState({ runMsg: msgs.fixtures }); }, cancel: function () { self.setState({ runMsg: msgs.cancel }); } };
+    var tabs = [['timeline', 'Timeline'], ['domains', 'Domains'], ['stages', 'Stages'], ['ledger', 'Operation ledger'], ['budget', 'Budget'], ['findings', 'Findings']].map(function (t) { return { label: t[1], cls: s.tab === t[0] ? 'on' : '', select: function () { self.setState({ tab: t[0] }); } }; });
+
+    var SPAN = 420;
+    var fmt = function (sec) { var m = Math.floor(sec / 60), r = sec % 60; return m ? m + ' m ' + (r < 10 ? '0' : '') + r + ' s' : r + ' s'; };
+    var seg = function (a, b, color) { return { left: (a / SPAN * 100).toFixed(2), width: Math.max(0.6, (b - a) / SPAN * 100).toFixed(2), color: color }; };
+    var task = 'padding-left: 14px; color: var(--muted)';
+    var gantt = [
+      ['Planning · 12 domain plans', [[0, 12]], '', 0],
+      ['Document ingestion · 9 files', [[0, 96]], '', 0],
+      ['Company', [[12, 88]], task, 0], ['Team', [[12, 110]], task, 0], ['Market', [[12, 124]], task, 0], ['Competition', [[12, 140]], task, 0], ['Product', [[12, 131]], task, 0],
+      ['Security', [[12, 60, 'fail'], [66, 118, 'fail']], task, 3],
+      ['Traction', [[96, 190]], task, 0], ['Capitalization', [[96, 160]], task, 0], ['Legal', [[96, 205]], task, 0], ['Governance', [[96, 150]], task, 0],
+      ['Financials', [[96, 190]], task, 0],
+      ['Thesis fit', [[262, 300]], task, 0],
+      ['Contradictions + follow-up', [[262, 320]], '', 0],
+      ['Evaluation + critic', [[320, 372]], '', 0],
+      ['Report (21 sections)', [[372, 419]], '', 0], ['Awaiting review', [[419, 420, 'wait']], '', 4]
+    ].map(function (g) {
+      var first = g[1][0][0], last = g[1][g[1].length - 1][1];
+      var dur = g[3] === 4 ? '12 min →' : g[3] === 3 ? 'failed · 2 tries' : fmt(last - first) + (g[3] === 2 ? ' · 1 m 20 s wait' : '');
+      return {
+        label: g[0], labelStyle: g[2],
+        segs: g[1].map(function (p) { return seg(p[0], p[1], p[2] === 'fail' ? 'var(--red)' : p[2] === 'wait' ? 'var(--amber)' : 'var(--brand)'); }),
+        dur: dur, durColor: g[3] === 3 ? 'var(--red)' : (g[3] === 2 || g[3] === 4) ? 'var(--amber)' : 'var(--muted)'
+      };
+    });
+    var DR = [
+      ['company', 'Company and business model', 'q.fetch q.research', '1', '1 m 16 s', 'sufficient', '$0.21'],
+      ['team', 'Founders and team', 'q.fetch q.research', '1', '1 m 38 s', 'sufficient', '$0.26'],
+      ['market', 'Market size', 'q.fetch q.research', '1', '1 m 52 s', 'partial', '$0.24', 'one independent estimate'],
+      ['competition', 'Competition', 'q.fetch q.research', '1', '2 m 08 s', 'sufficient', '$0.31'],
+      ['product', 'Product and technology', 'q.fetch q.browser', '1', '1 m 59 s', 'partial', '$0.22', 'GitHub ETag cache hits 14'],
+      ['traction', 'Traction and GTM', 'q.research q.docs', '1', '1 m 34 s', 'partial', '$0.29'],
+      ['financials', 'Financials', 'q.docs', '1', '1 m 34 s', 'partial', '$0.18', 'validation_pending ftb (non-blocking) · 12 ddcalc results'],
+      ['cap', 'Capitalization', 'q.docs q.fetch', '1', '1 m 04 s', 'sufficient', '$0.15', 'Form D not applicable (DE)'],
+      ['legal', 'Legal, IP, regulatory', 'q.verification q.docs', '1', '1 m 49 s', 'partial', '$0.33', 'sanctions lists 6 h old'],
+      ['security', 'Security and resilience', 'q.fetch', '2', '1 m 46 s', 'insufficient', '$0.08', 'SEARCH_UNAVAILABLE ×2; retry available'],
+      ['governance', 'Governance', 'q.docs', '1', '54 s', 'sufficient', '$0.12'],
+      ['thesis', 'Thesis fit', 'q.evaluation', '1', '38 s', 'sufficient', '$0.09']
+    ];
+    var GD = { sufficient: V.green, partial: V.amber, insufficient: V.red };
+    var domainRuns = [{ wf: 'dd:frm_dev:asm_7Q2KD9:r4:docs', name: 'Document ingestion', queues: 'q.docs', tries: '1', time: '1 m 36 s', gate: '7 ready · 2 rejected', dot: V.amber, cost: '$0.41', note: '1 MALWARE_DETECTED · 1 macro format' }].concat(DR.map(function (d) {
+      return { wf: 'dd:frm_dev:asm_7Q2KD9:r4:' + d[0], name: d[1], queues: d[2], tries: d[3], time: d[4], gate: d[5], dot: GD[d[5]], cost: d[6], note: d[7] || '' };
+    }));
+    var ganttTicks = ['0', '1 m', '2 m', '3 m', '4 m', '5 m', '6 m', '7 m'];
+
+    var stages = [
+      ['CREATED', '—', '1', '0.1 s', 'upgrade from rev 3 · level 3 · idempotency key ik_9c2e… · reuses frozen public evidence ess_97', V.green],
+      ['PLANNING · planning', 'q.research', '1', '12 s', '12 DomainPlans · $6.00 reserved across domains', V.green],
+      ['RESEARCHING · ingesting_documents', 'q.docs', '1', '1 m 36 s', '9 files · ClamAV · 7 parsed · MALWARE_DETECTED 1 · UNSUPPORTED_FORMAT 1', V.amber],
+      ['RESEARCHING · domains_running', 'q.fetch, q.research, q.docs', '1–2', '3 m 13 s', '12 child workflows · 11 complete · security insufficient (search_unavailable)', V.amber],
+      ['RESEARCHING · follow_up_research', 'q.fetch, q.research', '1', '36 s', '1 round on traction and legal', V.green],
+      ['VALIDATING · domain_gates', 'q.verification', '1', '6 s', '6 sufficient · 5 partial · 1 insufficient · financials: validation_pending (non-blocking)', V.amber],
+      ['VALIDATING · cross_domain_check', 'q.verification', '1', '16 s', '3 contradictions', V.green],
+      ['VALIDATING · evidence_freeze', 'q.verification', '1', '1 s', 'ess_104 pinned · 186 spans · 12 calculations · 7 document versions', V.green],
+      ['EVALUATING · evaluating', 'q.evaluation', '1', '22 s', 'four measures kept separate · attractiveness 3.8 [3.2, 4.4] · advance with 3 conditions', V.green],
+      ['CRITIQUING · critiquing', 'q.evaluation', '1', '30 s', 'round 1 accept with 2 notes', V.green],
+      ['MEMO_READY · report_writing', 'q.evaluation', '1', '47 s', 'rv_4 · 21 sections · uncited-number check passed · disclaimers present', V.green],
+      ['AWAITING_REVIEW', '—', '—', '12 min', 'target rt_b7d310 · expires 14 Nov', V.amber],
+      ['DELIVERING', 'q.delivery', '—', '—', 'outbox: crm_fixture, notify', V.faint]
+    ].map(function (x) { return { key: x[0], queue: x[1], tries: x[2], time: x[3], detail: x[4], dot: x[5] }; });
+
+    var ledger = [
+      ['op_a1f0', 'Planner', 'q.research', 'SUCCEEDED', 1, 'req_8xA…2k', '6.2k / 1.1k', '$0.021', 'actual'],
+      ['op_b27c', 'Research t1', 'q.research', 'SUCCEEDED', 1, 'req_9fQ…7m', '38.4k / 3.9k', '$0.110', 'actual'],
+      ['op_b3d1', 'Research t2', 'q.research', 'SUCCEEDED', 1, 'req_1Lw…0p', '41.0k / 4.1k', '$0.118', 'actual'],
+      ['op_b48e', 'Research t3', 'q.research', 'SUCCEEDED', 1, 'req_3Vd…9s', '29.9k / 2.7k', '$0.086', 'actual'],
+      ['op_b5a2', 'Research t4', 'q.research', 'RECONCILED', 2, 'none · req_5Tr…1c', '44.3k / 4.9k', '$0.143', 'possible dup', 'IN_FLIGHT past lease → UNKNOWN → re-issued'],
+      ['op_b6c9', 'Research t5', 'q.research', 'SUCCEEDED', 1, 'req_7Hn…4e', '33.1k / 3.2k', '$0.096', 'actual', '1 source quarantined'],
+      ['op_b7e4', 'Research t6', 'q.research', 'SUCCEEDED', 1, 'req_2Kc…8u', '22.6k / 2.0k', '$0.066', 'estimated', 'usage missing in response'],
+      ['op_c102', 'Verification', 'q.verification', 'SUCCEEDED', 1, 'req_4Wp…6a', '52.9k / 6.4k', '$0.157', 'actual'],
+      ['op_d210', 'Evaluation r1', 'q.evaluation', 'SUCCEEDED', 1, 'req_6Pe…3z', '24.9k / 2.3k', '$0.068', 'actual'],
+      ['op_d311', 'Critic r1', 'q.evaluation', 'SUCCEEDED', 1, 'req_0Ny…5r', '21.1k / 4.0k', '$0.041', 'actual'],
+      ['op_d412', 'Evaluation r2', 'q.evaluation', 'SUCCEEDED', 1, 'req_8Bt…1h', '27.3k / 2.4k', '$0.074', 'actual'],
+      ['op_e501', 'Report', 'q.evaluation', 'SUCCEEDED', 1, 'req_5Mq…7d', '61.2k / 9.4k', '$0.181', 'actual'],
+      ['op_f702', 'Extract · document (private)', 'q.research', 'SUCCEEDED', 1, 'req_7Ra…2q', '58.0k / 5.1k', '$0.164', 'actual', 'passages redacted for operators'],
+      ['op_f811', 'Search · security domain', 'q.fetch', 'FAILED', 2, 'searxng · 0 results', '—', '$0.000', 'actual', 'SEARCH_UNAVAILABLE']
+    ].map(function (r) { return { op: r[0], role: r[1], queue: r[2], status: r[3], dot: r[3] === 'SUCCEEDED' ? V.green : r[3] === 'FAILED' ? V.red : V.amber, tries: r[4], req: r[5], tokens: r[6], cost: r[7], cert: demo ? 'recorded (sample)' : r[8], certColor: r[8] === 'actual' || demo ? 'var(--muted)' : V.amber, hasNote: !!r[9], note: r[9] || '' }; });
+
+    var budget = [
+      { level: 'Provider · OpenAI rate', limit: '500 RPM', s: 18, h: 2, text: 'token bucket, separate from money' },
+      { level: 'Tenant · today', limit: '$50.00', s: 36, h: 1, text: '$18.42 settled · $0.53 held · 3 open reservations' },
+      { level: 'Assessment asm_7Q2KD9 · level 3', limit: '$6.00', s: 65, h: 3, text: '$3.92 settled · $0.18 held · $1.90 free · 12 domain sub-budgets' },
+      { level: 'Domain · financials', limit: '$0.40', s: 45, h: 0, text: '$0.18 settled · ddcalc runs locally at no provider cost' }
+    ];
+    var reservations = [
+      { id: 'rsv_91a2', op: 'op_e601', amount: '$0.18', status: 'held · lease 74 s', color: V.amber },
+      { id: 'rsv_7c10', op: 'op_e501', amount: '$0.11 → $0.087', status: 'settled', color: 'var(--muted)' },
+      { id: 'rsv_6b44', op: 'op_b5a2', amount: '$0.16 → $0.143', status: 'settled · reconciled', color: 'var(--muted)' },
+      { id: 'rsv_5f02', op: 'op_b7e4', amount: '$0.09 → $0.066', status: 'settled · estimated', color: 'var(--muted)' }
+    ];
+    var findings = [
+      { code: 'MALWARE_DETECTED', where: 'document ingestion · signed_contracts.zip', dot: V.red, text: 'ClamAV signature match. Object quarantined; never parsed or sent to a model.', meta: 'clamd · signatures 3 h old · uploader notified' },
+      { code: 'UNSUPPORTED_FORMAT', where: 'document ingestion · invoice-tool.xlsm', dot: V.gray, text: 'Macro-enabled format rejected before parsing.', meta: 'policy docs_allowlist@1' },
+      { code: 'INJECTION_SUSPECTED', where: 'document · Pitch deck Oct 2026.pdf · slide 23', dot: V.amber, text: 'Hidden text addressed to an AI reviewer. Passage excluded from evaluation pending deal-team review.', meta: 'passage hidden from operators · tool calls requested after reading: 0' },
+      { code: 'VALIDATION_REQUIRED', where: 'financials · ftb_0C12 v1', dot: V.amber, text: 'KPI table failed foot and sign checks (Jul 2026). Retention metrics not computable in this revision; the run continued (non-blocking). Validation will start revision 5.', meta: 'reminder in 24 h · escalation in 72 h · validation_timeout after 7 days' },
+      { code: 'SEARCH_UNAVAILABLE', where: 'security domain · 2 attempts', dot: V.red, text: 'SearXNG returned no results; 2 upstream engines suspended (captcha). Domain marked insufficient instead of guessing.', meta: 'readiness ok · canary degraded · no bypass attempted' },
+      { code: 'CONTRADICTION', where: 'financials ↔ traction', dot: V.amber, text: 'Two private-document figures differ beyond the 2% tolerance. Both preserved; neither preferred.', meta: 'ctr_1A90 · values visible to the deal team only' }
+    ];
+
+    var deps = [
+      { name: 'postgres', detail: 'ok · RLS policies loaded', dot: V.green }, { name: 'migrations', detail: 'head 0042 · seed lock clean', dot: V.green },
+      { name: 'minio', detail: 'buckets ok', dot: V.green }, { name: 'temporal', detail: 'namespace default ok', dot: V.green },
+      { name: 'openai', detail: setup ? 'CREDENTIALS_MISSING' : demo ? 'not bound (demo)' : 'ok · 2/2 configured models listed', dot: setup ? V.red : demo ? V.blue : V.green },
+      { name: 'searxng', detail: demo ? 'json ok · canary ok · used when live work starts' : degraded ? 'json ok · canary degraded · 2 engines suspended (captcha)' : 'json ok · canary ok 14 min ago · 4/4 engines', dot: demo ? V.blue : degraded ? V.amber : V.green },
+      { name: 'egress-proxy', detail: 'ok · private ranges denied', dot: V.green },
+      { name: 'worker-browser', detail: 'ok · startup render of the bundled health page passed', dot: V.green },
+      { name: 'clamav', detail: 'ok · signatures 3 h old · EICAR test passed', dot: V.green },
+      { name: 'worker-docs', detail: 'ok · demo documents parsed · tesseract 5.3.4 (eng) · no internet route', dot: V.green },
+      { name: 'pgvector', detail: demo ? 'extension installed · demo workspace vectors seeded' : setup ? 'extension installed · embeddings off (no key) · full-text fallback' : 'extension installed · embeddings on', dot: setup ? V.amber : demo ? V.blue : V.green },
+      { name: 'ofac-datasets', detail: 'SDN + consolidated · published 2026-11-06 · retrieved 06:02 UTC · XSD valid', dot: V.green },
+      { name: 'external-ai-policy', detail: 'external off · local model llm:8000 verified 09:12', dot: V.green },
+      { name: 'retention-scheduler', detail: 'last run 03:15 UTC · 2 data rooms deleted and verified · 0 failed', dot: V.green }
+    ];
+    var queues = [['q.discovery', 2, 0, 'web via SafeFetcher'], ['q.fetch', 4, 0, 'egress proxy · object write'], ['q.research', 4, 0, 'LLM · read snapshots'], ['q.verification', 2, 0, 'LLM · read-only evidence'], ['q.evaluation', 2, 0, 'LLM · write evaluation and memo'], ['q.monitoring', 2, 0, 'LLM · read snapshots'], ['q.delivery', 1, 2, 'integration endpoints only'], ['q.browser', 1, 0, 'Chromium via egress proxy only'], ['q.docs', 2, 0, 'no internet · data-room keys · parsers + ddcalc'], ['q.replay', 0, 0, 'ops profile only · replays ledger']].map(function (q) {
+      var dead = degraded && q[0] === 'q.research'; return { name: q[0], pollers: dead ? 0 : q[1], backlog: dead ? 6 : q[2], perm: q[3], dot: dead ? V.amber : V.green };
+    });
+
+    var costKpis = [{ label: 'Provider-reported', value: '$281.40' }, { label: 'Estimated', value: '$5.12' }, { label: 'Possible duplicate', value: '$0.48' }, { label: 'Held now', value: '$0.53' }, { label: 'Reclaimed leases', value: '$0.41' }];
+    var daily = [['Sun', 31.2], ['Mon', 47.6], ['Tue', 44.1], ['Wed', 52.0], ['Thu', 39.8], ['Fri', 41.3], ['Sat', 18.4]].map(function (d) { return { day: d[0], label: '$' + Math.round(d[1]), pct: Math.round(d[1] / 55 * 100), color: d[1] >= 50 ? V.red : 'var(--brand)' }; });
+    var roleCost = [['Research', 112.4], ['Verification', 48.1], ['Evaluation', 31.2], ['Critic', 29.8], ['Report', 22.3], ['Discovery', 18.9], ['Planner', 14.6], ['Monitoring', 9.7]].map(function (r) { return { role: r[0], cost: '$' + r[1].toFixed(2), pct: Math.round(r[1] / 112.4 * 100) }; });
+
+    var levelCost = [['Level 1', 0.92, '$0.92 · limit $1.50'], ['Level 2', 2.64, '$2.64 · limit $4.00'], ['Level 3', 3.88, '$3.88 · limit $6.00']].map(function (l) { return { level: l[0], cost: l[2], pct: Math.round(l[1] / 3.88 * 100) }; });
+    var domainCost = [['Legal', 21.3], ['Competition', 19.8], ['Team', 17.2], ['Traction', 16.9], ['Market', 15.4], ['Product', 14.6], ['Company', 12.1], ['Security', 9.8], ['Financials', 9.4], ['Capitalization', 8.2], ['Governance', 6.1], ['Thesis fit', 4.7]].map(function (d) { return { name: d[0], cost: '$' + d[1].toFixed(2), pct: Math.round(d[1] / 21.3 * 100) }; });
+    var rf = s.reconRuns > 0
+      ? [['Workflow done, DB not finalized', '0'], ['DB active, no live workflow', '0'], ['Artifact missing or hash mismatch', '0'], ['Expired reservations', '0'], ['Ledger UNKNOWN', '0'], ['Outbox stuck past window', '0']]
+      : [['Workflow done, DB not finalized', '1 · finalized asm_3NE9RT'], ['DB active, no live workflow', '0'], ['Artifact missing or hash mismatch', '0'], ['Expired reservations', '2 · reclaimed $0.41'], ['Ledger UNKNOWN', '1 · reconciled op_b5a2'], ['Outbox stuck past window', '0']];
+    var recon = { lastRun: s.reconRuns > 0 ? 'rc_' + (204 + s.reconRuns) + ' · just now · 0 repairs (idempotent)' : 'rc_204 · 6 min ago · 4 repairs', findings: rf.map(function (f) { return { kind: f[0], result: f[1] }; }), run: function () { self.setState({ reconRuns: self.state.reconRuns + 1 }); self.showToast('Reconciliation finished', 'POST /ops/reconciliation/run · reconciliation.completed · 0 repairs', V.green); } };
+
+    var quality = [
+      ['Citation validity (offsets and hashes)', '0.996', '0.992–0.998', '—', '+0.001', V.green], ['Citation support precision', '0.91', '0.88–0.93', '≥ 0.90', '−0.01', V.green],
+      ['Contradiction recall', '0.76', '0.68–0.83', '≥ 0.80', '+0.03', V.amber], ['Contradiction precision', '0.88', '0.81–0.93', '—', '0.00', V.green],
+      ['Entity resolution accuracy', '0.97', '0.94–0.99', '—', '+0.02', V.green], ['Must-question coverage', '0.81', '0.78–0.84', '—', '+0.04', V.green],
+      ['Thesis-fit agreement with experts', '0.72', '0.63–0.80', '—', '−0.02', V.gray], ['Uncited figures in reports', '0', '—', '0', '0', V.green], ['ddcalc golden cases matching', '148 / 148', '—', 'all', '0', V.green], ['Gate verdicts matching labels', '0.89', '0.84–0.93', '—', 'new', V.gray]
+    ].map(function (m) { return { name: m[0], value: m[1], ci: m[2], target: m[3], trend: m[4], dot: m[5] }; });
+
+    var models = [['Discovery', 'gpt-6-luna', 'discovery@1.0.4', '$0.40'], ['Planner', 'gpt-6-luna', 'planner@1.2.0', '$0.15'], ['Research', 'gpt-6-luna', 'research@1.4.0', '$0.35'], ['Verification', 'gpt-6-luna', 'verification@1.3.1', '$0.30'], ['Evaluation', 'gpt-6-luna', 'evaluation@1.1.0', '$0.25'], ['Critic', 'gpt-5.6-terra', 'critic@1.0.2', '$0.25'], ['Memo (report)', 'gpt-6-luna', 'report@2.0.0', '$0.45'], ['Monitoring', 'gpt-6-luna', 'monitoring@1.0.1', '$0.10']].map(function (m) {
+      return { role: m[0], model: m[1], prompt: m[2], budget: m[3], state: setup ? 'unchecked' : demo ? 'key not set' : 'available', dot: setup ? V.red : demo ? V.blue : V.green };
+    });
+
+    var commands = [
+      { tag: 'asm_7Q2KD9', label: 'Lattice Grid run', go: go('run') }, { tag: 'asm_9PL3QZ', label: 'Fernbank Bio · level 2 run', go: go('runs') }, { tag: 'domains', label: 'Lattice Grid domain workflows', go: go('run', 'domains') },
+      { tag: 'health', label: 'Queue and dependency health', go: go('health') }, { tag: 'recon', label: 'Run reconciliation now', go: function () { self.setState({ screen: 'recon', reconRuns: self.state.reconRuns + 1, paletteOpen: false }); } },
+      { tag: 'costs', label: 'Costs and budgets', go: go('costs') }, { tag: 'theme', label: theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme', go: function () { self.setState({ themeOverride: theme === 'dark' ? 'light' : 'dark', paletteOpen: false }); } }
+    ];
+
+    return {
+      themeClass: theme === 'dark' ? 't-dark' : 't-light',
+      themeIcon: theme === 'dark' ? 'M12 4V2M12 22v-2M4 12H2M22 12h-2M5.6 5.6 4.2 4.2M19.8 19.8l-1.4-1.4M5.6 18.4l-1.4 1.4M19.8 4.2l-1.4 1.4M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10z' : 'M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z',
+      toggleTheme: function () { self.setState({ themeOverride: theme === 'dark' ? 'light' : 'dark' }); },
+      openPalette: function () { self.setState({ paletteOpen: true }); }, closePalette: function () { self.setState({ paletteOpen: false }); },
+      paletteOpen: s.paletteOpen, commands: commands,
+      navOperate: navOperate, navGovern: navGovern, crumbs: crumbs, mode: mode,
+      is: { runs: s.screen === 'runs', run: s.screen === 'run', health: s.screen === 'health', costs: s.screen === 'costs', recon: s.screen === 'recon', quality: s.screen === 'quality', versions: s.screen === 'versions' },
+      gantt: gantt, ganttTicks: ganttTicks, feed: feed, feedState: feedState,
+      toast: { show: !!s.toast, title: s.toast ? s.toast.title : '', text: s.toast ? s.toast.text : '', dot: s.toast ? s.toast.dot : '', close: function () { self.setState({ toast: null }); } },
+      tab: { timeline: s.tab === 'timeline', domains: s.tab === 'domains', stages: s.tab === 'stages', ledger: s.tab === 'ledger', budget: s.tab === 'budget', findings: s.tab === 'findings' },
+      runKpis: runKpis, actions: actions, runs: runs, runAct: runAct, tabs: tabs, stages: stages, ledger: ledger, budget: budget, reservations: reservations, findings: findings,
+      domainRuns: domainRuns, levelCost: levelCost, domainCost: domainCost, deps: deps, queues: queues, costKpis: costKpis, daily: daily, roleCost: roleCost, recon: recon, quality: quality, models: models
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "ground_truth": {
+    "A": [
+      "Plinthwick Synthetic Analytics is a fictional company used for testing.",
+      "Management accounts for the year ended 31 December 2025.",
+      "Revenue 412,000 EUR. Cost of goods sold 118,650 EUR.",
+      "Cash at 30 September 2026 was 2,240,000 EUR."
+    ],
+    "B": [
+      "Board minutes, synthetic test document.",
+      "The board approved the 2027 budget on 14 October 2026.",
+      "Customer count at quarter end was 37 paying customers.",
+      "No penetration test was performed in the last twelve months."
+    ]
+  },
+  "files": {
+    "native.pdf": "414bedd0e8a21952fa2cbbe0d78e8bdb14a12ef1ee104fb06d5de3636568655d",
+    "scanned.pdf": "cf1e2e52907a43d5fa5e0a79715f3f3acffd279f4c46987ea5acc13393ff8939",
+    "mixed.pdf": "5117970d46fc4d0e0f50a811eb471ef4b6b748c4c6d4e0bb316d2112f5d3d9db",
+    "image_dominated.pdf": "352b06d32e038d7b9e95e67a52e2439f466df703d1f78ab76d1a25d9da602e14",
+    "image_dominated_captioned.pdf": "53ac0ad86bdd4c64856b37aa7945f7897060ecba8d0e7ff57ef075df0fb1a2c2",
+    "garbled_text_layer.pdf": "6fb79400fc0241eda5ba939d31b381d98b8dc3a98d8a12d8c28e2684b11a4630",
+    "garbled_only.pdf": "c57f3bf8c666e6277f3c7e4cc6e3fdd2f271db707c215bbf5926a8bc038deca5",
+    "noisy_scan.pdf": "8b03009e08f98a0e50755774520117abb7657af207813b0d256acbc7a49e06b5",
+    "malformed.pdf": "7902affa7573e670474eebc54815b37a0b60a66fe54be4302d3ac822e5ae9652",
+    "encrypted.pdf": "37a79738b7a6de45136d60981ffe7b9755d072333af2302f8b5989862842f4ab"
+  }
+}
