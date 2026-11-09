@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from datetime import timedelta
 from typing import Any
 
@@ -8,6 +9,9 @@ from temporalio.common import RetryPolicy
 
 with workflow.unsafe.imports_passed_through():
     from thesis_api.temporal_app import activities, docs_activities, outbox_activities, screening_activities
+
+# Parallel domain research — preserves evidence quality; caps SearXNG/fetch load.
+_DOMAIN_CONCURRENCY = 4
 
 
 @workflow.defn(name="HealthWorkflow")
@@ -70,18 +74,26 @@ class CompanyScreeningWorkflow:
 
         await set_state("RESEARCHING")
         domain_gates: dict[str, str] = {}
-        for domain_id in domains:
+        for i in range(0, len(domains), _DOMAIN_CONCURRENCY):
             if self._cancelled:
                 await set_state("CANCELLED")
                 return {"ok": False, "cancelled": True}
-            result = await workflow.execute_activity(
-                screening_activities.screening_research_domain,
-                args=[firm_id, user_id, assessment_id, domain_id, company_name, level],
-                start_to_close_timeout=research_timeout,
-                retry_policy=retry,
-            )
-            gate = (result.get("gate") or {}).get("gate_result") or "insufficient"
-            domain_gates[domain_id] = gate
+            batch = domains[i : i + _DOMAIN_CONCURRENCY]
+
+            async def _research(domain_id: str) -> tuple[str, str]:
+                result = await workflow.execute_activity(
+                    screening_activities.screening_research_domain,
+                    args=[firm_id, user_id, assessment_id, domain_id, company_name, level],
+                    start_to_close_timeout=research_timeout,
+                    retry_policy=retry,
+                )
+                gate = (result.get("gate") or {}).get("gate_result") or "insufficient"
+                return domain_id, gate
+
+            # Domains are independent claims — run a bounded parallel batch.
+            outcomes = await asyncio.gather(*[_research(d) for d in batch])
+            for domain_id, gate in outcomes:
+                domain_gates[domain_id] = gate
 
         await set_state("VALIDATING")
         await set_state("EVALUATING")

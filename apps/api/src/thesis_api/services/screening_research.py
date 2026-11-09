@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import re
 from datetime import datetime, timezone
@@ -19,8 +20,8 @@ from thesis_api.services.contradictions_store import insert_contradiction
 from thesis_api.services.corroboration import SourceDocument, rank_and_corroborate
 from thesis_api.services.evidence_store import insert_span, persist_fetch_evidence
 from thesis_api.services.fetch.safe_fetcher import SafeFetchError, safe_fetch
-from thesis_api.services.search.normalize import registrable_domain
-from thesis_api.services.search.searxng import SearxngAdapter
+from thesis_api.services.search.normalize import canonicalize_url, registrable_domain
+from thesis_api.services.search.searxng import shared_searxng_adapter
 from thesis_api.services.source_quality import (
     REFERENCE_ONLY_DOMAINS,
     has_preferred_independent_source,
@@ -38,6 +39,12 @@ from thesis_contracts.grounding import ground_numeric_statement, trust_for_groun
 from thesis_contracts.research import Claim, ContradictionRecord
 
 logger = logging.getLogger("thesis_screening_research")
+
+# Firm-scoped fetch cache so parallel domains reuse company-site / news pages.
+_FETCH_CACHE: dict[str, dict[str, Any]] = {}
+_FETCH_CACHE_LOCK = asyncio.Lock()
+_SEARCH_QUERY_CONCURRENCY = 4
+_FETCH_WAVE_SIZE = 4
 
 # Last-resort public page only when search + heuristics fail. Never invent a D6 domain.
 _FALLBACK_PUBLIC_URL = "https://example.com/"
@@ -260,28 +267,33 @@ async def searx_candidate_urls(
     domain_id: str,
     max_results: int = 12,
     deep: bool = False,
+    angles_only: bool = False,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
-    """Run several SearXNG queries and merge hits (broader than a single string)."""
-    adapter = SearxngAdapter(settings.searxng_url, timeout_s=25.0, min_ok_results=1)
+    """Run several SearXNG queries in parallel and merge hits."""
+    adapter = shared_searxng_adapter(settings.searxng_url, timeout_s=25.0)
     topic = _DOMAIN_QUERY.get(domain_id, "company")
-    queries: list[tuple[str, str]] = [
-        (f"{company_name} {topic}", "general"),
-        (f'"{company_name}" {topic}', "general"),
-        (
-            f"{company_name} (site:techcrunch.com OR site:reuters.com OR site:bloomberg.com "
-            f"OR site:forbes.com OR site:cnbc.com)",
-            "general",
-        ),
-        (f"{company_name} news {topic.split()[0]}", "news"),
-        (f'"{company_name}" {topic.split()[0]}', "news"),
-    ]
-    if deep:
+    queries: list[tuple[str, str]] = []
+    if not angles_only:
+        queries.extend(
+            [
+                (f"{company_name} {topic}", "general"),
+                (f'"{company_name}" {topic}', "general"),
+                (
+                    f"{company_name} (site:techcrunch.com OR site:reuters.com OR site:bloomberg.com "
+                    f"OR site:forbes.com OR site:cnbc.com)",
+                    "general",
+                ),
+                (f"{company_name} news {topic.split()[0]}", "news"),
+                (f'"{company_name}" {topic.split()[0]}', "news"),
+                (f"{company_name} site:wikipedia.org OR site:crunchbase.com", "general"),
+            ]
+        )
+    if deep or angles_only:
         for angle in _DOMAIN_DEEP_QUERY.get(domain_id, [topic])[:3]:
             queries.append((f'"{company_name}" {angle}', "general"))
             queries.append((f"{company_name} {angle}", "news"))
-    queries.append(
-        (f"{company_name} site:wikipedia.org OR site:crunchbase.com", "general")
-    )
+    if not queries:
+        queries.append((f"{company_name} {topic}", "general"))
 
     merged: list[dict[str, Any]] = []
     seen: set[str] = set()
@@ -291,14 +303,21 @@ async def searx_candidate_urls(
         "engines_failed": [],
         "queries": [],
         "deep": deep,
+        "angles_only": angles_only,
     }
-    for q, category in queries:
-        payload = await adapter.search(
-            firm_id=firm_id,
-            query=q,
-            category=category,
-            max_results=max_results,
-        )
+    sem = asyncio.Semaphore(_SEARCH_QUERY_CONCURRENCY)
+
+    async def _one(q: str, category: str) -> dict[str, Any]:
+        async with sem:
+            return await adapter.search(
+                firm_id=firm_id,
+                query=q,
+                category=category,
+                max_results=max_results,
+            )
+
+    payloads = await asyncio.gather(*[_one(q, cat) for q, cat in queries])
+    for (q, category), payload in zip(queries, payloads, strict=True):
         meta["queries"].append(f"{category}:{q}")
         meta["state"] = payload.get("state") or meta["state"]
         if payload.get("state") == "ok":
@@ -325,6 +344,7 @@ async def discover_research_urls(
     deep: bool = False,
     exclude_urls: set[str] | None = None,
     website: str | None = None,
+    angles_only: bool = False,
 ) -> dict[str, Any]:
     """SearXNG + sparse heuristics, diversified across registrable domains."""
     results, search_meta = await searx_candidate_urls(
@@ -332,6 +352,7 @@ async def discover_research_urls(
         company_name=company_name,
         domain_id=domain_id,
         deep=deep,
+        angles_only=angles_only,
     )
     site = (website or "").strip()
     site_urls: list[str] = []
@@ -366,33 +387,19 @@ async def discover_research_urls(
     }
 
 
-async def fetch_public_evidence(
-    session: AsyncSession,
-    tenant: TenantContext,
-    *,
-    url: str = _FALLBACK_PUBLIC_URL,
-) -> dict[str, Any]:
-    """SafeFetch a public URL and persist snapshot/span. Falls back to offline stub."""
+def _fetch_cache_key(firm_id: str, url: str) -> str:
+    return f"{firm_id}|{canonicalize_url(url) or url.rstrip('/').lower()}"
+
+
+async def _http_fetch_raw(url: str) -> dict[str, Any] | None:
+    """Network-only fetch (no DB). Safe to run concurrently."""
     try:
         result = await safe_fetch(url, max_bytes=900_000)
         text = _html_to_text(result.body)
-        # SPA shells often leave little readable text — keep a short marker.
         passage = text[:500] if len(text) >= 80 else f"Retrieved public page {result.final_url}"
-        snap, span = await persist_fetch_evidence(
-            session,
-            tenant,
-            canonical_url=result.final_url,
-            body=result.body[:300_000],
-            content_type=result.content_type or "text/html",
-            http_status=result.status_code,
-            passage=passage,
-        )
         return {
-            "ok": True,
             "fetched": True,
             "url": result.final_url,
-            "snapshot_id": snap.snapshot_id,
-            "span_id": span.span_id,
             "passage": passage,
             "text": text[:6000],
             "status_code": result.status_code,
@@ -404,6 +411,62 @@ async def fetch_public_evidence(
         logger.info("safe_fetch blocked/failed %s: %s", url, exc)
     except Exception as exc:  # noqa: BLE001
         logger.warning("safe_fetch error %s: %s", url, exc)
+    return None
+
+
+async def _persist_raw_evidence(
+    session: AsyncSession,
+    tenant: TenantContext,
+    *,
+    raw: dict[str, Any],
+    requested_url: str,
+) -> dict[str, Any]:
+    snap, span = await persist_fetch_evidence(
+        session,
+        tenant,
+        canonical_url=str(raw["url"]),
+        body=raw["body"] if isinstance(raw.get("body"), (bytes, bytearray)) else str(raw.get("passage") or "").encode(),
+        content_type=str(raw.get("content_type") or "text/html"),
+        http_status=raw.get("status_code"),
+        passage=str(raw.get("passage") or ""),
+    )
+    out = {
+        "ok": True,
+        "fetched": True,
+        "url": raw["url"],
+        "snapshot_id": snap.snapshot_id,
+        "span_id": span.span_id,
+        "passage": raw.get("passage"),
+        "text": raw.get("text"),
+        "status_code": raw.get("status_code"),
+        "body": raw.get("body"),
+        "content_type": raw.get("content_type") or "text/html",
+        "text_len": raw.get("text_len") or 0,
+    }
+    cache_key = _fetch_cache_key(tenant.firm_id, requested_url)
+    final_key = _fetch_cache_key(tenant.firm_id, str(raw["url"]))
+    async with _FETCH_CACHE_LOCK:
+        _FETCH_CACHE[cache_key] = out
+        _FETCH_CACHE[final_key] = out
+    return out
+
+
+async def fetch_public_evidence(
+    session: AsyncSession,
+    tenant: TenantContext,
+    *,
+    url: str = _FALLBACK_PUBLIC_URL,
+) -> dict[str, Any]:
+    """SafeFetch a public URL and persist snapshot/span. Falls back to offline stub."""
+    cache_key = _fetch_cache_key(tenant.firm_id, url)
+    async with _FETCH_CACHE_LOCK:
+        hit = _FETCH_CACHE.get(cache_key)
+        if hit is not None:
+            return dict(hit)
+
+    raw = await _http_fetch_raw(url)
+    if raw is not None:
+        return await _persist_raw_evidence(session, tenant, raw=raw, requested_url=url)
 
     stub = f"Offline public stub for {url} (no live fetch)."
     snap, span = await persist_fetch_evidence(
@@ -442,6 +505,7 @@ async def fetch_best_evidence(
 
     Prefers article/body pages over publisher SERPs and wiki/Crunchbase.
     Same-site path variants are skipped once that registrable domain is covered.
+    Fetches run in small parallel waves; DB persist stays sequential per URL.
     """
     company_dom = f"{_company_slug(company_name)}.com" if company_name else ""
     ordered = diversify_urls(urls, company_name=company_name or "", limit=max(len(urls), need + 6))
@@ -449,32 +513,6 @@ async def fetch_best_evidence(
     serp_urls = [u for u in ordered if url_looks_like_serp(u)]
     fetched: list[dict[str, Any]] = []
     covered: set[str] = set()
-
-    async def _try_url(url: str, *, accept_serp: bool) -> bool:
-        nonlocal fetched, covered
-        dom = registrable_domain(url)
-        if dom and dom in covered:
-            return False
-        if url_looks_like_serp(url) and not accept_serp:
-            return False
-        ev = await fetch_public_evidence(session, tenant, url=url)
-        if not ev.get("fetched"):
-            return False
-        body_text = str(ev.get("text") or ev.get("passage") or "")
-        final_url = str(ev.get("url") or url)
-        if url_looks_like_serp(final_url) and not accept_serp:
-            return False
-        if not accept_serp and not passage_usable_for_domain(body_text):
-            # Keep long pages even if chrome heuristics are noisy.
-            if int(ev.get("text_len") or 0) < 200:
-                return False
-        final_dom = registrable_domain(final_url)
-        if final_dom and final_dom in covered:
-            return False
-        fetched.append(ev)
-        if final_dom:
-            covered.add(final_dom)
-        return True
 
     def _enough() -> bool:
         rich = {
@@ -490,16 +528,73 @@ async def fetch_best_evidence(
         }
         return len(rich) >= need and len(preferred) >= min(3, need)
 
-    for url in article_urls[:24]:
-        await _try_url(url, accept_serp=False)
-        if _enough() or len(covered) >= need + 2:
-            break
+    async def _accept(ev: dict[str, Any], *, accept_serp: bool) -> bool:
+        nonlocal fetched, covered
+        if not ev.get("fetched"):
+            return False
+        body_text = str(ev.get("text") or ev.get("passage") or "")
+        final_url = str(ev.get("url") or "")
+        if url_looks_like_serp(final_url) and not accept_serp:
+            return False
+        if not accept_serp and not passage_usable_for_domain(body_text):
+            if int(ev.get("text_len") or 0) < 200:
+                return False
+        final_dom = registrable_domain(final_url)
+        if final_dom and final_dom in covered:
+            return False
+        fetched.append(ev)
+        if final_dom:
+            covered.add(final_dom)
+        return True
 
+    async def _wave(candidates: list[str], *, accept_serp: bool) -> None:
+        nonlocal fetched, covered
+        pending = [
+            u
+            for u in candidates
+            if not ((dom := registrable_domain(u)) and dom in covered)
+            and (accept_serp or not url_looks_like_serp(u))
+        ]
+        i = 0
+        while i < len(pending) and not _enough() and len(covered) < need + 2:
+            batch = [
+                u
+                for u in pending[i : i + _FETCH_WAVE_SIZE]
+                if not ((d := registrable_domain(u)) and d in covered)
+            ]
+            i += _FETCH_WAVE_SIZE
+            if not batch:
+                continue
+            # HTTP in parallel; cache hits skip network; DB persist stays serial.
+            prepared: list[tuple[str, dict[str, Any] | None]] = []
+            for u in batch:
+                cache_key = _fetch_cache_key(tenant.firm_id, u)
+                async with _FETCH_CACHE_LOCK:
+                    hit = _FETCH_CACHE.get(cache_key)
+                if hit is not None:
+                    prepared.append((u, dict(hit)))
+                else:
+                    prepared.append((u, None))
+            to_fetch = [u for u, ev in prepared if ev is None]
+            raws = await asyncio.gather(*[_http_fetch_raw(u) for u in to_fetch]) if to_fetch else []
+            raw_by_url = dict(zip(to_fetch, raws, strict=True))
+            for u, cached in prepared:
+                if cached is not None:
+                    await _accept(cached, accept_serp=accept_serp)
+                else:
+                    raw = raw_by_url.get(u)
+                    if raw is None:
+                        continue
+                    ev = await _persist_raw_evidence(
+                        session, tenant, raw=raw, requested_url=u
+                    )
+                    await _accept(ev, accept_serp=accept_serp)
+                if _enough() or len(covered) >= need + 2:
+                    return
+
+    await _wave(article_urls[:24], accept_serp=False)
     if len(fetched) < min(2, need):
-        for url in serp_urls[:8]:
-            await _try_url(url, accept_serp=True)
-            if len(fetched) >= need:
-                break
+        await _wave(serp_urls[:8], accept_serp=True)
 
     def _rank(e: dict[str, Any]) -> tuple[int, int, int]:
         u = str(e.get("url") or "")
@@ -697,6 +792,7 @@ async def research_domain_claims(
             company_name=company_name,
             domain_id=domain_id,
             deep=True,
+            angles_only=True,
             exclude_urls=already,
             website=website,
         )
@@ -804,6 +900,7 @@ async def research_domain_claims(
                 company_name=company_name,
                 domain_id=domain_id,
                 deep=True,
+                angles_only=True,
                 exclude_urls=already,
                 website=website,
             )

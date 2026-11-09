@@ -23,9 +23,9 @@ async def check_postgres(session: AsyncSession) -> dict[str, Any]:
 
 
 async def check_searxng() -> dict[str, Any]:
-    from thesis_api.services.search.searxng import SearxngAdapter
+    from thesis_api.services.search.searxng import shared_searxng_adapter
 
-    adapter = SearxngAdapter(settings.searxng_url)
+    adapter = shared_searxng_adapter(settings.searxng_url)
     health = await adapter.canary(firm_id="system")
     return {
         "ok": health.state == "ok",

@@ -46,6 +46,8 @@ async def run_worker() -> None:
             outbox_activities.outbox_dispatch_pending,
             outbox_activities.retention_scan_due,
         ],
+        # Match workflow domain batching (4) with headroom for finalize/outbox.
+        max_concurrent_activities=8,
     )
     logger.info("worker polling q.system at %s", settings.temporal_host)
     await worker.run()

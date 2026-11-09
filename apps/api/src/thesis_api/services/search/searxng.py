@@ -18,6 +18,20 @@ from thesis_api.services.search.normalize import canonicalize_url, dedupe_result
 
 SearchState = Literal["ok", "degraded", "unavailable"]
 
+# Process-wide adapter so cross-domain / deep-pass queries share TTL cache.
+_SHARED: SearxngAdapter | None = None
+_SHARED_URL: str | None = None
+
+
+def shared_searxng_adapter(base_url: str, *, timeout_s: float = 25.0) -> SearxngAdapter:
+    """Reuse one adapter per worker process (cache survives across domains)."""
+    global _SHARED, _SHARED_URL
+    url = (base_url or "").rstrip("/")
+    if _SHARED is None or _SHARED_URL != url:
+        _SHARED = SearxngAdapter(url, timeout_s=timeout_s, min_ok_results=1)
+        _SHARED_URL = url
+    return _SHARED
+
 
 @dataclass
 class SearchHealth:
@@ -53,6 +67,12 @@ class SearxngAdapter:
         self.min_ok_results = min_ok_results
         self.timeout_s = timeout_s
         self._cache: dict[str, _CacheEntry] = {}
+        self._client: httpx.AsyncClient | None = None
+
+    async def _http(self) -> httpx.AsyncClient:
+        if self._client is None or self._client.is_closed:
+            self._client = httpx.AsyncClient(timeout=self.timeout_s)
+        return self._client
 
     def cache_key(
         self,
@@ -110,12 +130,12 @@ class SearxngAdapter:
             params["time_range"] = time_range
 
         try:
-            async with httpx.AsyncClient(timeout=self.timeout_s) as client:
-                r = await client.get(f"{self.base_url}/search", params=params)
-                if r.status_code == 403:
-                    return self._unavailable("json_format_forbidden", json_enabled=False)
-                r.raise_for_status()
-                data = r.json()
+            client = await self._http()
+            r = await client.get(f"{self.base_url}/search", params=params)
+            if r.status_code == 403:
+                return self._unavailable("json_format_forbidden", json_enabled=False)
+            r.raise_for_status()
+            data = r.json()
         except Exception as exc:  # noqa: BLE001
             return self._unavailable(str(exc), json_enabled=False)
 

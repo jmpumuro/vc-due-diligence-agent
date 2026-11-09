@@ -23,7 +23,24 @@ from thesis_api.settings import settings
 
 
 def _live_enabled() -> bool:
-    return os.environ.get("LIVE_RLS", "1") not in {"0", "false", "False"}
+    # Opt-in for CI / hosts without Compose Postgres (LIVE_RLS=1 to enable).
+    return os.environ.get("LIVE_RLS", "0") not in {"0", "false", "False"}
+
+
+def _is_db_unreachable(exc: BaseException) -> bool:
+    name = type(exc).__name__
+    msg = str(exc).lower()
+    if "Connect" in name or "OperationalError" in name or name in {"gaierror", "OSError"}:
+        return True
+    needles = (
+        "could not connect",
+        "name resolution",
+        "nodename nor servname",
+        "connection refused",
+        "network is unreachable",
+        "temporary failure",
+    )
+    return any(n in msg for n in needles)
 
 
 async def _insert_assessment_claim(
@@ -181,21 +198,21 @@ async def _run_empty_guc() -> None:
 
 def test_thesis_app_role_cannot_see_other_firm_claims() -> None:
     if not _live_enabled():
-        pytest.skip("LIVE_RLS disabled")
+        pytest.skip("LIVE_RLS disabled (set LIVE_RLS=1 against Compose Postgres)")
     try:
         asyncio.run(_run_two_firm())
     except Exception as exc:  # noqa: BLE001
-        if "Connect" in type(exc).__name__ or "could not connect" in str(exc).lower():
+        if _is_db_unreachable(exc):
             pytest.skip(f"postgres unavailable: {exc}")
         raise
 
 
 def test_missing_firm_guc_sees_nothing_under_thesis_app() -> None:
     if not _live_enabled():
-        pytest.skip("LIVE_RLS disabled")
+        pytest.skip("LIVE_RLS disabled (set LIVE_RLS=1 against Compose Postgres)")
     try:
         asyncio.run(_run_empty_guc())
     except Exception as exc:  # noqa: BLE001
-        if "Connect" in type(exc).__name__ or "could not connect" in str(exc).lower():
+        if _is_db_unreachable(exc):
             pytest.skip(f"postgres unavailable: {exc}")
         raise

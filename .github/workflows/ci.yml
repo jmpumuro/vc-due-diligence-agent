@@ -17,6 +17,9 @@ jobs:
         with:
           python-version: "3.12"
       - name: Sync and test
+        env:
+          # Live RLS needs Compose Postgres; unit CI stays offline.
+          LIVE_RLS: "0"
         run: |
           uv sync --all-packages
           uv run pytest -q
