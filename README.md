@@ -35,69 +35,21 @@ Self-hosted Compose stack: partners use the Research UI; agents run on Temporal;
 </p>
 
 ```mermaid
-flowchart TB
-  subgraph Partners["Partner surfaces"]
-    UI["Research app · Next.js :3000"]
-    CON["Agent console"]
-  end
-
-  API(["API · FastAPI :8001"])
-  UI --> API
-  CON --> API
-
-  subgraph Spine["Temporal · CompanyScreeningWorkflow"]
-    direction LR
-    P["1 Plan"] --> R["2 Research"]
-    R --> V["3 Validate"]
-    V --> E["4 Evaluate"]
-    E --> C["5 Critic"]
-    C --> M["6 Memo"]
-    M --> A["7 Awaiting review"]
-  end
-
-  API -->|start / deepen / review| Spine
-
-  subgraph Tools["Research tools"]
-    SX[SearXNG]
-    SF[SafeFetch]
-    LLM["OpenAI · optional"]
-  end
-  R -.-> SX
-  R -.-> SF
-  M -.-> LLM
-
-  subgraph Levels["Diligence depth"]
-    L1["L1 · Initial public screen<br/>5 domains"]
-    L2["L2 · Full public workstreams<br/>11 domains"]
-    L3["L3 · Enhanced + data room<br/>12 domains"]
-  end
-  Spine --- Levels
-
-  subgraph Data["Data plane"]
-    PG[("Postgres + pgvector<br/>RLS · claims · reviews")]
-    S3[("SeaweedFS S3<br/>artifacts · dataroom")]
-    OB["Outbox → notifications"]
-  end
-  API --> PG
-  Spine --> PG
-  Spine --> S3
-  Spine --> OB
-
-  subgraph Gated["L3 gated · fail-closed"]
-    CL[ClamAV]
-    OCR["worker-docs OCR · q.docs"]
-  end
-  L3 -.-> Gated
-  OCR --> S3
-
-  subgraph Decide["Partner decides on frozen revision"]
-    D1["Advance"]
-    D2["Pass"]
-    D3["Request info"]
-    D4["Ask research"]
-  end
-  A --> Decide
-  Decide -->|decision| API
+flowchart LR
+  UI[Research app] --> API[FastAPI]
+  CON[Agent console] --> API
+  API --> T[Temporal screening]
+  T --> P[Plan]
+  P --> R[Research]
+  R --> V[Validate]
+  V --> E[Evaluate]
+  E --> C[Critic]
+  C --> M[Memo]
+  M --> A[Awaiting review]
+  R -.-> SX[SearXNG]
+  R -.-> SF[SafeFetch]
+  A --> D[Partner decision]
+  D --> API
 ```
 
 **Flow:** partner starts diligence → API enqueues Temporal screening → worker discovers/fetches public sources → writes claims & memo → partner decides on that revision (private docs stay ClamAV/OCR-gated).
