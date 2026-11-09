@@ -56,7 +56,7 @@ Status vocabulary matches the hand-off: Decided · Specified · Implemented · T
 
 - **Blocks:** Doc/spec drift during reviews
 - **Done when:** Living `docs/` and compose match errata resolutions (no `/api/v1/test/*`, `frm_demo`, etc.)
-- **Current drift:** Hand-off README lists resolutions; not all folded into edited master-plan copy.
+- **Current drift:** Hand-off README listed resolutions; living docs are `docs/domain-specification.md` + ADRs.
 
 ### REM-P1-04 — OFAC host (B3)
 
@@ -84,7 +84,7 @@ Status vocabulary matches the hand-off: Decided · Specified · Implemented · T
 
 ## Research-agent integration (2026-11-08)
 
-See `docs/research-agent-integration.md`. P0 foundations (identity resolution, lineage checks, contradiction records, sufficiency decisions, VoI planner, SearXNG normalize/cache/degrade) are being added as library modules under `thesis_contracts.research` and `thesis_api.services.*` without restarting the stack. FirstSignal: ideas only (no LICENSE). GPT Researcher & II-Researcher: Apache-2.0 patterns. Agent Search: MIT patterns.
+P0 foundations (identity resolution, lineage checks, contradiction records, sufficiency decisions, VoI planner, SearXNG normalize/cache/degrade) live under `thesis_contracts.research` and `thesis_api.services.*`.
 
 Existing REM-* items below remain release gates and are not discarded.
 

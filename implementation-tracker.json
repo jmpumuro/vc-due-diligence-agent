@@ -104,7 +104,7 @@
         "unit": {
           "status": "passed",
           "command": "uv run pytest apps/api/tests/test_research_p0.py -q",
-          "artifact": "included in 31 passed; docs/research-agent-integration.md"
+          "artifact": "included in pytest; packages/contracts + thesis_api.services"
         }
       },
       "not_applicable": {},
