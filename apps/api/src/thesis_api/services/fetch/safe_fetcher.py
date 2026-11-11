@@ -8,8 +8,9 @@ from __future__ import annotations
 
 import ipaddress
 import socket
+import ssl
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Iterable
 from urllib.parse import urlparse
 
 import httpx
@@ -43,6 +44,41 @@ class SafeFetchResult:
     body: bytes
     redirected: bool
     hops: tuple[str, ...]
+
+
+class PublicNetworkTransport(httpx.AsyncBaseTransport):
+    """Connect to the validated IP, preserving the original HTTP Host and TLS SNI.
+
+    Validation before a normal hostname request is insufficient: the HTTP client
+    could resolve the hostname a second time to a private address. No environment
+    proxies or hostname connection pools are used here.
+    """
+
+    def __init__(self) -> None:
+        # IP-keyed pools must never reuse a TLS connection across hostnames that
+        # share an address: certificate verification/SNI belongs to each host.
+        self._transport = httpx.AsyncHTTPTransport(
+            trust_env=False, verify=ssl.create_default_context(), http2=False,
+            limits=httpx.Limits(max_keepalive_connections=0)
+        )
+
+    async def handle_async_request(self, request: httpx.Request) -> httpx.Response:
+        validate_url(str(request.url))
+        hostname = request.url.host
+        addresses = resolve_and_validate_host(hostname)
+        headers = request.headers.copy()
+        headers["Host"] = request.url.netloc.decode("ascii")
+        pinned = httpx.Request(
+            request.method,
+            request.url.copy_with(host=addresses[0]),
+            headers=headers,
+            stream=request.stream,
+            extensions={**request.extensions, "sni_hostname": hostname},
+        )
+        return await self._transport.handle_async_request(pinned)
+
+    async def aclose(self) -> None:
+        await self._transport.aclose()
 
 
 def _is_disallowed_ip(ip: ipaddress.IPv4Address | ipaddress.IPv6Address) -> bool:
@@ -129,6 +165,8 @@ async def safe_fetch(
                 raise SafeFetchError("ROBOTS_DISALLOW", path)
 
     async with httpx.AsyncClient(
+        transport=PublicNetworkTransport(),
+        trust_env=False,
         timeout=timeout,
         follow_redirects=False,
         max_redirects=0,
@@ -170,7 +208,7 @@ async def safe_fetch(
                         chunks.append(chunk)
                     body = b"".join(chunks)
                     return SafeFetchResult(
-                        final_url=str(resp.url),
+                        final_url=current,
                         status_code=resp.status_code,
                         content_type=ct.split(";")[0].strip().lower(),
                         body=body,

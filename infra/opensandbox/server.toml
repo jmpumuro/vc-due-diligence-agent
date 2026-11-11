@@ -1,0 +1,39 @@
+[server]
+host = "127.0.0.1"
+port = 8095
+max_sandbox_timeout_seconds = 300
+
+[proxy]
+resolve_internal = false
+
+[runtime]
+type = "docker"
+execd_image = "opensandbox/execd@sha256:6cf7dba2f21f0b536e100563d841ac58a9f31c2b0a081b7ac76796a24d6f47e2"
+
+[docker]
+network_mode = "bridge"
+publish_host = "127.0.0.1"
+host_ip = "127.0.0.1"
+port_range_min = 45000
+port_range_max = 45100
+no_new_privileges = true
+pids_limit = 256
+drop_capabilities = ["AUDIT_WRITE", "MKNOD", "NET_ADMIN", "NET_RAW", "SYS_ADMIN", "SYS_MODULE", "SYS_PTRACE", "SYS_TIME", "SYS_TTY_CONFIG"]
+sandbox_env = {}
+sandbox_binds = []
+
+[egress]
+image = "opensandbox/egress@sha256:db7345d567b0970f384b8e3fa7a93a71b7f43d4b16bb2009de34096e9a87b3b5"
+mode = "dns+nft"
+disable_ipv6 = true
+readiness_timeout_seconds = 45
+
+[storage]
+allowed_host_paths = []
+
+[store]
+type = "sqlite"
+path = "var/opensandbox/control.db"
+
+[log]
+level = "WARNING"

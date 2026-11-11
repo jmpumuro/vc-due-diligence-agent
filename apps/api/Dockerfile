@@ -15,9 +15,13 @@ COPY fixtures/d6-site /app/fixtures/d6-site
 RUN sed -i '/\[tool\.uv\.sources\]/,/^$/d' /app/apps/api/pyproject.toml
 
 WORKDIR /app/apps/api
+ARG THESIS_SANDBOX=false
 RUN uv pip install --system --no-cache /app/packages/contracts \
   && uv pip install --system --no-cache -e . \
   && uv pip install --system --no-cache argon2-cffi email-validator temporalio
+RUN if [ "$THESIS_SANDBOX" = "true" ]; then \
+      uv pip install --system --no-cache --require-hashes -r requirements-sandbox.txt; \
+    fi
 
 ENV PYTHONPATH=/app/apps/api/src
 EXPOSE 8000

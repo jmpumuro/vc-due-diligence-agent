@@ -5,11 +5,33 @@ from __future__ import annotations
 from datetime import datetime
 from decimal import Decimal
 
-from sqlalchemy import BigInteger, Boolean, DateTime, Integer, Numeric, String, Text, func
+from sqlalchemy import (
+    BigInteger,
+    Boolean,
+    DateTime,
+    ForeignKey,
+    Integer,
+    Numeric,
+    String,
+    Text,
+    func,
+)
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from thesis_api.db.models import Base
+
+
+class ResearchActivityResultRow(Base):
+    __tablename__ = "research_activity_results"
+
+    operation_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    firm_id: Mapped[str] = mapped_column(String(64), index=True)
+    assessment_id: Mapped[str] = mapped_column(
+        UUID(as_uuid=False), ForeignKey("assessments.id", ondelete="CASCADE")
+    )
+    result: Mapped[dict] = mapped_column(JSONB)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
 class EvidenceSnapshotRow(Base):

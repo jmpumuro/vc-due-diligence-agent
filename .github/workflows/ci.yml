@@ -4,10 +4,23 @@ on:
   push:
     branches: [main, master]
   pull_request:
+  workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: thesis
+          POSTGRES_PASSWORD: thesis-test
+          POSTGRES_DB: thesis
+        ports:
+          - 55435:5432
+        options: >-
+          --health-cmd "pg_isready -U thesis -d thesis"
+          --health-interval 5s --health-timeout 5s --health-retries 20
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
@@ -21,7 +34,7 @@ jobs:
           # Live RLS needs Compose Postgres; unit CI stays offline.
           LIVE_RLS: "0"
         run: |
-          uv sync --all-packages
+          uv sync --all-packages --extra sandbox
           uv run pytest -q
           uv run python scripts/run_research_eval.py
       - name: Licence gate
@@ -31,3 +44,10 @@ jobs:
           test -f CONTRIBUTING.md
           test -f SECURITY.md
           uv run python scripts/licence_gate.py
+      - name: Research retry persistence and tenant isolation
+        env:
+          DATABASE_URL: postgresql+asyncpg://thesis:thesis-test@127.0.0.1:55435/thesis
+          LIVE_RLS: "1"
+        run: |
+          (cd apps/api && uv run alembic upgrade head)
+          uv run pytest -q apps/api/tests/test_research_retries_live.py apps/api/tests/test_two_firm_rls_live.py

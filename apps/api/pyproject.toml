@@ -19,6 +19,11 @@ dependencies = [
   "temporalio>=1.7",
 ]
 
+[project.optional-dependencies]
+sandbox = [
+    "opensandbox==1.2.0",
+]
+
 [tool.uv.sources]
 thesis-contracts = { workspace = true }
 

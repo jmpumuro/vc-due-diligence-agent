@@ -1,0 +1,7 @@
+{
+  "http_fetch": "passed",
+  "duration_seconds": 10.84,
+  "image": "sha256:059bb1cab3a51ad28529e1b8e808fbe2282d31953ca799e4aa229d2bd033251a",
+  "sdk": "1.2.0",
+  "browser": "passed"
+}

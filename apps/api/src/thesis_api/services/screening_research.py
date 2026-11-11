@@ -14,12 +14,18 @@ from urllib.parse import quote_plus
 from uuid import UUID, uuid4
 
 from sqlalchemy.ext.asyncio import AsyncSession
+from thesis_contracts.base import DomainId
+from thesis_contracts.grounding import ground_numeric_statement, trust_for_grounding
+from thesis_contracts.public_fetch import PublicFetchRequest
+from thesis_contracts.research import Claim, ContradictionRecord
 
 from thesis_api.services.claims_store import insert_claim
 from thesis_api.services.contradictions_store import insert_contradiction
 from thesis_api.services.corroboration import SourceDocument, rank_and_corroborate
 from thesis_api.services.evidence_store import insert_span, persist_fetch_evidence
-from thesis_api.services.fetch.safe_fetcher import SafeFetchError, safe_fetch
+from thesis_api.services.fetch.public_executor import execute_public_fetch
+from thesis_api.services.fetch.safe_fetcher import SafeFetchError
+from thesis_api.services.fetch.sandbox_executor import SandboxExecutionError
 from thesis_api.services.search.normalize import canonicalize_url, registrable_domain
 from thesis_api.services.search.searxng import shared_searxng_adapter
 from thesis_api.services.source_quality import (
@@ -34,15 +40,13 @@ from thesis_api.services.source_quality import (
 )
 from thesis_api.settings import settings
 from thesis_api.tenant import TenantContext
-from thesis_contracts.base import DomainId
-from thesis_contracts.grounding import ground_numeric_statement, trust_for_grounding
-from thesis_contracts.research import Claim, ContradictionRecord
 
 logger = logging.getLogger("thesis_screening_research")
 
 # Firm-scoped fetch cache so parallel domains reuse company-site / news pages.
 _FETCH_CACHE: dict[str, dict[str, Any]] = {}
 _FETCH_CACHE_LOCK = asyncio.Lock()
+_FETCH_CACHE_MAX_ENTRIES = 64
 _SEARCH_QUERY_CONCURRENCY = 4
 _FETCH_WAVE_SIZE = 4
 
@@ -394,7 +398,7 @@ def _fetch_cache_key(firm_id: str, url: str) -> str:
 async def _http_fetch_raw(url: str) -> dict[str, Any] | None:
     """Network-only fetch (no DB). Safe to run concurrently."""
     try:
-        result = await safe_fetch(url, max_bytes=900_000)
+        result = await execute_public_fetch(PublicFetchRequest(url=url))
         text = _html_to_text(result.body)
         passage = text[:500] if len(text) >= 80 else f"Retrieved public page {result.final_url}"
         return {
@@ -403,14 +407,17 @@ async def _http_fetch_raw(url: str) -> dict[str, Any] | None:
             "passage": passage,
             "text": text[:6000],
             "status_code": result.status_code,
-            "body": result.body[:300_000],
+            "body": result.body,
             "content_type": result.content_type or "text/html",
             "text_len": len(text),
         }
+    except SandboxExecutionError:
+        raise
     except SafeFetchError as exc:
-        logger.info("safe_fetch blocked/failed %s: %s", url, exc)
-    except Exception as exc:  # noqa: BLE001
-        logger.warning("safe_fetch error %s: %s", url, exc)
+        logger.info("public fetch blocked/failed: %s", exc.code)
+    except Exception:  # noqa: BLE001
+        # URLs, upstream error text, and validation errors may contain credentials.
+        logger.warning("public fetch failed")
     return None
 
 
@@ -446,8 +453,12 @@ async def _persist_raw_evidence(
     cache_key = _fetch_cache_key(tenant.firm_id, requested_url)
     final_key = _fetch_cache_key(tenant.firm_id, str(raw["url"]))
     async with _FETCH_CACHE_LOCK:
-        _FETCH_CACHE[cache_key] = out
-        _FETCH_CACHE[final_key] = out
+        # Cache network bytes only. DB identifiers from this transaction may be
+        # rolled back, or not yet visible to another domain's transaction.
+        _FETCH_CACHE[cache_key] = dict(raw)
+        _FETCH_CACHE[final_key] = dict(raw)
+        while len(_FETCH_CACHE) > _FETCH_CACHE_MAX_ENTRIES:
+            _FETCH_CACHE.pop(next(iter(_FETCH_CACHE)))
     return out
 
 
@@ -461,8 +472,8 @@ async def fetch_public_evidence(
     cache_key = _fetch_cache_key(tenant.firm_id, url)
     async with _FETCH_CACHE_LOCK:
         hit = _FETCH_CACHE.get(cache_key)
-        if hit is not None:
-            return dict(hit)
+    if hit is not None:
+        return await _persist_raw_evidence(session, tenant, raw=dict(hit), requested_url=url)
 
     raw = await _http_fetch_raw(url)
     if raw is not None:
@@ -579,16 +590,11 @@ async def fetch_best_evidence(
             raws = await asyncio.gather(*[_http_fetch_raw(u) for u in to_fetch]) if to_fetch else []
             raw_by_url = dict(zip(to_fetch, raws, strict=True))
             for u, cached in prepared:
-                if cached is not None:
-                    await _accept(cached, accept_serp=accept_serp)
-                else:
-                    raw = raw_by_url.get(u)
-                    if raw is None:
-                        continue
-                    ev = await _persist_raw_evidence(
-                        session, tenant, raw=raw, requested_url=u
-                    )
-                    await _accept(ev, accept_serp=accept_serp)
+                raw = cached if cached is not None else raw_by_url.get(u)
+                if raw is None:
+                    continue
+                ev = await _persist_raw_evidence(session, tenant, raw=raw, requested_url=u)
+                await _accept(ev, accept_serp=accept_serp)
                 if _enough() or len(covered) >= need + 2:
                     return
 

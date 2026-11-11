@@ -3,15 +3,19 @@ from __future__ import annotations
 from typing import Any
 
 from temporalio import activity
+from thesis_contracts.public_fetch import PublicFetchRequest
+from thesis_contracts.research import Claim, ContradictionRecord
 
 from thesis_api.db.session import SessionLocal
 from thesis_api.services.claims_store import insert_claim
 from thesis_api.services.contradictions_store import insert_contradiction
 from thesis_api.services.corroboration import SourceDocument, rank_and_corroborate
-from thesis_api.services.fetch.safe_fetcher import SafeFetchError, safe_fetch
+from thesis_api.services.fetch.public_executor import execute_public_fetch
+from thesis_api.services.fetch.safe_fetcher import SafeFetchError
+from thesis_api.services.fetch.sandbox_executor import SandboxExecutionError
 from thesis_api.services.progress_store import append_progress_event
+from thesis_api.services.research_activity import research_heartbeat
 from thesis_api.tenant import TenantContext
-from thesis_contracts.research import Claim, ContradictionRecord
 
 
 @activity.defn(name="ping")
@@ -23,7 +27,8 @@ async def ping() -> str:
 async def safe_fetch_url(url: str, max_bytes: int = 5_000_000) -> dict[str, Any]:
     """HTTPX SafeFetcher — network only inside activities."""
     try:
-        result = await safe_fetch(url, max_bytes=max_bytes)
+        async with research_heartbeat():
+            result = await execute_public_fetch(PublicFetchRequest(url=url, max_bytes=min(max_bytes, 900_000)))
         return {
             "ok": True,
             "final_url": result.final_url,
@@ -33,13 +38,15 @@ async def safe_fetch_url(url: str, max_bytes: int = 5_000_000) -> dict[str, Any]
             .sha256(result.body)
             .hexdigest()[:16],
             "byte_length": len(result.body),
-            "redirected": result.redirected,
+            "redirected": len(result.hops) > 1,
             "hops": list(result.hops),
             # Body intentionally omitted from activity result to avoid Temporal payload bloat
             # and accidental secret leakage into workflow history.
         }
+    except SandboxExecutionError:
+        raise
     except SafeFetchError as exc:
-        return {"ok": False, "error_code": exc.code, "message": str(exc)}
+        return {"ok": False, "error_code": exc.code}
 
 
 @activity.defn(name="playwright_fetch_url")
@@ -47,7 +54,8 @@ async def playwright_fetch_url(url: str) -> dict[str, Any]:
     from thesis_api.services.fetch.playwright_fetch import playwright_fetch
 
     try:
-        result = await playwright_fetch(url)
+        async with research_heartbeat():
+            result = await playwright_fetch(url)
         return {
             "ok": True,
             "final_url": result.final_url,
@@ -56,10 +64,12 @@ async def playwright_fetch_url(url: str) -> dict[str, Any]:
             "title": result.title,
             "html_length": len(result.html),
         }
+    except SandboxExecutionError:
+        raise
     except SafeFetchError as exc:
-        return {"ok": False, "error_code": exc.code, "message": str(exc)}
-    except Exception as exc:  # noqa: BLE001
-        return {"ok": False, "error_code": "PLAYWRIGHT_ERROR", "message": str(exc)}
+        return {"ok": False, "error_code": exc.code}
+    except Exception:  # noqa: BLE001
+        return {"ok": False, "error_code": "PLAYWRIGHT_ERROR"}
 
 
 @activity.defn(name="persist_claim")

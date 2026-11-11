@@ -20,7 +20,22 @@ from thesis_api.temporal_app.workflows import (
 logger = logging.getLogger("thesis_worker")
 
 
+async def _reconcile_sandboxes() -> None:
+    from thesis_api.services.fetch.sandbox_reaper import reap_expired
+
+    while True:
+        await asyncio.sleep(30)
+        try:
+            await reap_expired(settings)
+        except Exception:  # noqa: BLE001
+            logger.error("sandbox reconciliation failed; server TTL remains active")
+
+
 async def run_worker() -> None:
+    if settings.research_execution_backend == "opensandbox":
+        from thesis_api.services.fetch.sandbox_reaper import reap_expired
+
+        await reap_expired(settings)
     client = await Client.connect(settings.temporal_host)
     worker = Worker(
         client,
@@ -34,7 +49,6 @@ async def run_worker() -> None:
         activities=[
             activities.ping,
             activities.safe_fetch_url,
-            activities.playwright_fetch_url,
             activities.persist_claim,
             activities.persist_contradiction,
             activities.emit_domain_progress,
@@ -50,7 +64,16 @@ async def run_worker() -> None:
         max_concurrent_activities=8,
     )
     logger.info("worker polling q.system at %s", settings.temporal_host)
-    await worker.run()
+    reconcile = (
+        asyncio.create_task(_reconcile_sandboxes())
+        if settings.research_execution_backend == "opensandbox" else None
+    )
+    try:
+        await worker.run()
+    finally:
+        if reconcile is not None:
+            reconcile.cancel()
+            await asyncio.gather(reconcile, return_exceptions=True)
 
 
 def main() -> None:

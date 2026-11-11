@@ -63,6 +63,11 @@ uv run pytest -q
 
 Historical hand-off fixtures/prototypes live under `vc-dd-agent-handoff/` (see its README).
 
+Public HTTP and browser research can run in disposable OpenSandbox environments.
+See [setup and verification](docs/sandbox-research.md) and
+[ADR-018](docs/adr/0018-research-execution-boundary.md). The backend is optional
+and defaults to off; browser research also requires an explicit opt-in.
+
 ## Rules that stay in force
 
 - Real integrations only (no MSW / fake `DEMO_MODE` network stubs)

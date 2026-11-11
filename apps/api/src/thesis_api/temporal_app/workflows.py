@@ -8,7 +8,12 @@ from temporalio import workflow
 from temporalio.common import RetryPolicy
 
 with workflow.unsafe.imports_passed_through():
-    from thesis_api.temporal_app import activities, docs_activities, outbox_activities, screening_activities
+    from thesis_api.temporal_app import (
+        activities,
+        docs_activities,
+        outbox_activities,
+        screening_activities,
+    )
 
 # Parallel domain research — preserves evidence quality; caps SearXNG/fetch load.
 _DOMAIN_CONCURRENCY = 4
@@ -30,10 +35,13 @@ class CompanyScreeningWorkflow:
 
     def __init__(self) -> None:
         self._cancelled = False
+        self._research_handles: list[Any] = []
 
     @workflow.signal
     def cancel_assessment(self) -> None:
         self._cancelled = True
+        for handle in self._research_handles:
+            handle.cancel()
 
     @workflow.query
     def progress(self) -> dict[str, Any]:
@@ -81,17 +89,34 @@ class CompanyScreeningWorkflow:
             batch = domains[i : i + _DOMAIN_CONCURRENCY]
 
             async def _research(domain_id: str) -> tuple[str, str]:
-                result = await workflow.execute_activity(
+                handle = workflow.start_activity(
                     screening_activities.screening_research_domain,
                     args=[firm_id, user_id, assessment_id, domain_id, company_name, level],
                     start_to_close_timeout=research_timeout,
                     retry_policy=retry,
+                    heartbeat_timeout=timedelta(seconds=20),
+                    cancellation_type=workflow.ActivityCancellationType.WAIT_CANCELLATION_COMPLETED,
                 )
+                self._research_handles.append(handle)
+                try:
+                    result = await handle
+                finally:
+                    self._research_handles.remove(handle)
                 gate = (result.get("gate") or {}).get("gate_result") or "insufficient"
                 return domain_id, gate
 
             # Domains are independent claims — run a bounded parallel batch.
-            outcomes = await asyncio.gather(*[_research(d) for d in batch])
+            tasks = [asyncio.create_task(_research(d)) for d in batch]
+            try:
+                outcomes = await asyncio.gather(*tasks)
+            except BaseException:
+                for handle in self._research_handles:
+                    handle.cancel()
+                await asyncio.gather(*tasks, return_exceptions=True)
+                if self._cancelled:
+                    await set_state("CANCELLED")
+                    return {"ok": False, "cancelled": True}
+                raise
             for domain_id, gate in outcomes:
                 domain_gates[domain_id] = gate
 

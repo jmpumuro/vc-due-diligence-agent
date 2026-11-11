@@ -1,0 +1,18 @@
+{
+  "uid": 10000,
+  "blocked": {
+    "metadata": true,
+    "private": true,
+    "host": true,
+    "other-public": true,
+    "vault": true,
+    "execd": true,
+    "ipv6-loopback": true,
+    "ipv6-private": true
+  },
+  "no_docker_socket": true,
+  "no_cross_job_file": true,
+  "no_application_secrets": true,
+  "tmp_limit_bytes": 100663296,
+  "root_readonly": true
+}

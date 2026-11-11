@@ -33,6 +33,7 @@ def main(argv: list[str] | None = None) -> int:
     sub = parser.add_subparsers(dest="cmd", required=True)
     seed_p = sub.add_parser("seed-demo")
     seed_p.add_argument("--reset", action="store_true")
+    sub.add_parser("reap-sandboxes", help="Terminate expired sandboxes owned by this deployment.")
     purge_p = sub.add_parser(
         "purge-research",
         help="Delete assessments/claims/evidence (keeps demo auth users).",
@@ -45,6 +46,12 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.cmd == "seed-demo":
         return asyncio.run(_seed(args.reset))
+    if args.cmd == "reap-sandboxes":
+        from thesis_api.services.fetch.sandbox_reaper import reap_expired
+        from thesis_api.settings import settings
+
+        print({"expired_sandboxes_removed": asyncio.run(reap_expired(settings))})
+        return 0
     if args.cmd == "purge-research":
         return asyncio.run(_purge(firm_id=None if args.all_firms else DEMO_FIRM))
     return 1

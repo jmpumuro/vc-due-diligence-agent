@@ -1,0 +1,7 @@
+{
+  "credential_injected": true,
+  "env_secret_absent": true,
+  "other_path_uncredentialed": true,
+  "revocation": "passed",
+  "metadata_redacted": true
+}

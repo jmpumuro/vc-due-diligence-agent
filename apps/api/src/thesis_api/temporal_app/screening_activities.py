@@ -8,18 +8,22 @@ from uuid import UUID, uuid4
 
 from sqlalchemy import select
 from temporalio import activity
+from thesis_contracts.lifecycle import transition
+from thesis_contracts.review import ReviewTarget
 
 from thesis_api.db.models import AssessmentRow
 from thesis_api.db.session import SessionLocal
-from thesis_api.services.llm_gateway import ExternalAINotAuthorized, public_complete
-from thesis_api.services.outbox import enqueue_outbox
-from thesis_api.services.progress_store import append_progress_event
-from thesis_api.services.review_store import open_review_target
 from thesis_api.services.assessment_view import (
     build_measures_from_gates_and_claims,
     requests_from_assessment,
     risks_from_assessment,
 )
+from thesis_api.services.llm_gateway import ExternalAINotAuthorized, public_complete
+from thesis_api.services.outbox import enqueue_outbox
+from thesis_api.services.progress_store import append_progress_event
+from thesis_api.services.research_activity import research_heartbeat
+from thesis_api.services.research_retries import completed_result, operation_key, remember_result
+from thesis_api.services.review_store import open_review_target
 from thesis_api.services.screening import (
     AGENT_PIPELINE,
     build_screening_memo,
@@ -31,8 +35,6 @@ from thesis_api.services.screening_research import research_domain_claims
 from thesis_api.settings import settings
 from thesis_api.tenant import TenantContext
 from thesis_api.tenant_rls import activate_tenant_rls
-from thesis_contracts.lifecycle import transition
-from thesis_contracts.review import ReviewTarget
 
 logger = logging.getLogger("thesis_screening")
 
@@ -114,7 +116,7 @@ async def _public_claim_statement(
         t = (p or "").strip()
         if len(t) < 40:
             continue
-        if t.startswith("Offline public stub") or t.startswith("Retrieved public page"):
+        if t.startswith(("Offline public stub", "Retrieved public page")):
             continue
         cleaned.append(t[:900])
     if cleaned:
@@ -216,8 +218,9 @@ async def screening_set_state(
     to_state: str,
     expected_revision: int | None = None,
 ) -> dict[str, Any]:
-    from thesis_api.services.workflow_reconcile import spine_rank
     from thesis_contracts.lifecycle import can_transition
+
+    from thesis_api.services.workflow_reconcile import spine_rank
 
     tenant = TenantContext(firm_id=firm_id, user_id=user_id, roles=("operator",))
     async with SessionLocal() as session:
@@ -297,9 +300,26 @@ async def screening_research_domain(
     company_name: str,
     level: int,
 ) -> dict[str, Any]:
+    async with research_heartbeat():
+        return await _screening_research_domain(
+            firm_id, user_id, assessment_id, domain_id, company_name, level
+        )
+
+
+async def _screening_research_domain(
+    firm_id: str, user_id: str, assessment_id: str, domain_id: str,
+    company_name: str, level: int,
+) -> dict[str, Any]:
     tenant = TenantContext(firm_id=firm_id, user_id=user_id, roles=("operator",))
+    info = activity.info()
+    operation = operation_key(firm_id, info.workflow_id, info.workflow_run_id, info.activity_id)
     async with SessionLocal() as session:
         await activate_tenant_rls(session, firm_id)
+        # Serialize duplicate attempts, then replay the committed result. Evidence,
+        # claims, and this result commit in the same DB transaction.
+        prior = await completed_result(session, firm_id, operation)
+        if prior is not None:
+            return prior
         row = (
             await session.execute(select(AssessmentRow).where(AssessmentRow.id == assessment_id))
         ).scalar_one_or_none()
@@ -386,8 +406,7 @@ async def screening_research_domain(
                 ),
             },
         )
-        await session.commit()
-        return {
+        result = {
             "ok": True,
             "domain_id": domain_id,
             "claim_id": str(stored.claim_id),
@@ -403,6 +422,9 @@ async def screening_research_domain(
             "corroboration": research.get("corroboration"),
             "gate": gate,
         }
+        await remember_result(session, firm_id, assessment_id, operation, result)
+        await session.commit()
+        return result
 
 
 @activity.defn(name="screening_finalize_memo")

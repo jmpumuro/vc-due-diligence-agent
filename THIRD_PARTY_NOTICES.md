@@ -16,6 +16,17 @@ Thesis is licensed under Apache-2.0. See `LICENSE` and `NOTICE`.
 | SeaweedFS | Optional object store image | See upstream licence. |
 | ClamAV (`clamav/clamav` image) | Optional malware scan service | See upstream / image licence. |
 | Tesseract OCR | Optional `worker-docs` image | Apache-2.0 (engine); confirm distribution terms for language data. |
+| OpenSandbox SDK/server 1.2.0 | Optional public-research execution | Apache-2.0; installed packages, not vendored source. Server/SDK dependencies are locked separately. |
+| OpenSandbox execd v1.1.0 / egress v1.1.7 | Optional execution and credential proxy | Apache-2.0 upstream project; exact image digests are pinned in `infra/opensandbox/server.toml`. |
+| Playwright 1.58.0 | Optional Chromium automation | Apache-2.0; Chromium and OS packages retain their own notices in the built image. |
+
+The Chromium seccomp profile is downloaded from Microsoft Playwright's v1.58.0
+source and checked against a fixed SHA-256 by `infra/opensandbox/prepare.py`.
+It is not vendored in this repository. Upstream source and licence:
+https://github.com/microsoft/playwright/tree/v1.58.0 (Apache-2.0).
+Research-image Python dependencies and control-plane dependencies use separate
+hashed requirement locks. These pins do not close the existing project-wide
+licence audit or imply image signing/provenance verification.
 
 ## Pattern sources (ideas / clean-room unless noted)
 

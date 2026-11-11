@@ -1,6 +1,7 @@
-"""Isolated Playwright fetch with SafeFetcher-equivalent network policy.
+"""Opt-in Playwright fetch requiring an operator-run SSRF-enforcing proxy.
 
-Browser subresources and redirects are gated by the same SSRF rules.
+Application checks gate subresources/redirects; the proxy must enforce actual
+destination addresses. This module alone does not provide host isolation.
 Requires playwright only when invoked (optional dependency for CI without browsers).
 """
 
@@ -14,6 +15,7 @@ from thesis_api.services.fetch.safe_fetcher import (
     SafeFetchError,
     validate_url,
 )
+from thesis_api.settings import settings
 
 
 @dataclass(frozen=True)
@@ -45,6 +47,31 @@ async def playwright_fetch(
     max_html_chars: int = 1_500_000,
 ) -> PlaywrightFetchResult:
     """Render a JS-heavy page under SSRF-equivalent egress controls."""
+    if not settings.browser_enabled:
+        raise SafeFetchError("BROWSER_DISABLED", "browser research is opt-in")
+    if settings.research_execution_backend == "opensandbox":
+        from thesis_contracts.public_fetch import PublicFetchRequest
+
+        from thesis_api.services.fetch.sandbox_executor import get_executor
+
+        result = await get_executor().fetch(
+            PublicFetchRequest(url=url, max_bytes=min(max_html_chars, 900_000)), render=True
+        )
+        return PlaywrightFetchResult(
+            final_url=result.final_url, status_code=result.status_code,
+            content_type=result.content_type, html=result.body.decode("utf-8"), title=None,
+        )
+    proxy = urlparse(settings.browser_egress_proxy_url)
+    if (
+        proxy.scheme not in {"http", "https"}
+        or not proxy.hostname
+        or proxy.username is not None
+        or proxy.password is not None
+        or proxy.path not in {"", "/"}
+        or proxy.query
+        or proxy.fragment
+    ):
+        raise SafeFetchError("BROWSER_PROXY_REQUIRED", "configure a trusted SSRF-enforcing proxy")
     validate_url(url)
     try:
         from playwright.async_api import async_playwright
@@ -57,7 +84,9 @@ async def playwright_fetch(
     async with async_playwright() as p:
         browser = await p.chromium.launch(
             headless=True,
-            args=["--disable-dev-shm-usage", "--no-sandbox"],
+            chromium_sandbox=True,
+            proxy={"server": settings.browser_egress_proxy_url},
+            args=["--disable-dev-shm-usage"],
         )
         try:
             context = await browser.new_context(

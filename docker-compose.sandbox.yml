@@ -1,0 +1,37 @@
+# Optional override. The sandbox control plane runs on a dedicated Docker host,
+# outside the Thesis network. Never mount its Docker socket in API/worker services.
+services:
+  worker:
+    build:
+      args:
+        THESIS_SANDBOX: "true"
+    environment:
+      RESEARCH_EXECUTION_BACKEND: opensandbox
+      SANDBOX_ENDPOINT: ${SANDBOX_ENDPOINT:?Set an authenticated HTTPS control-plane endpoint}
+      SANDBOX_API_KEY: ${SANDBOX_API_KEY:?Set the trusted control-plane API key}
+      SANDBOX_IMAGE: ${SANDBOX_IMAGE:?Set a pinned research image digest}
+      SANDBOX_OWNER: ${SANDBOX_OWNER:-thesis-research}
+      SANDBOX_CONCURRENCY: "2"
+
+  worker-browser:
+    profiles: ["sandbox"]
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+      args:
+        THESIS_SANDBOX: "true"
+    command: ["python", "-m", "thesis_api.worker_browser"]
+    environment:
+      TEMPORAL_HOST: temporal:7233
+      RESEARCH_EXECUTION_BACKEND: opensandbox
+      BROWSER_ENABLED: "true"
+      SANDBOX_ENDPOINT: ${SANDBOX_ENDPOINT:?Set an authenticated HTTPS control-plane endpoint}
+      SANDBOX_API_KEY: ${SANDBOX_API_KEY:?Set the trusted control-plane API key}
+      SANDBOX_IMAGE: ${SANDBOX_IMAGE:?Set a pinned research image digest}
+      SANDBOX_OWNER: ${SANDBOX_OWNER:-thesis-research}
+      SANDBOX_CONCURRENCY: "2"
+    depends_on:
+      temporal:
+        condition: service_started
+    networks: [thesis]
+    restart: unless-stopped

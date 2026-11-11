@@ -10,6 +10,12 @@ Status vocabulary matches the hand-off: Decided · Specified · Implemented · T
 
 ## Priority table
 
+The optional OpenSandbox public-tool backend, host-side Credential Vault
+provisioning, network/resource containment, lifecycle cleanup, and retry
+persistence are tracked in [ADR-018](adr/0018-research-execution-boundary.md).
+Local live checks and setup instructions are in [sandbox research](sandbox-research.md).
+This work does not close the independent application release gates below.
+
 | ID | Priority | Issue | When to address | Status |
 | --- | --- | --- | --- | --- |
 | REM-P0-01 | P0 | Private-document access controls and external AI transmission restrictions (D1) | Before private-document processing / Level 3 model steps | Specified · `PolicyEnforcedProvider.client_for` sole path; no silent OpenAI |
